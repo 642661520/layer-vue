@@ -55,7 +55,7 @@
     <div v-if="resize" class="vue-layer-resize"></div>
     <div v-if="lbresize" class="vue-layer-lbresize"></div>
     <div ref="content" class="vue-layer-content" :style="{ height: contentheight + 'px', overflow: overflow }">
-      <slot></slot>
+      <slot>{{content}}</slot>
     </div>
   </div>
 </template>
@@ -108,7 +108,8 @@ export default {
     min: { type: Function },
     restore: { type: Function },
     destroyOnClose: { type: [Number, Boolean], default: false },
-    amin: { type: Number, default: 0 }
+    amin: { type: Number, default: 0 },
+    content:{}
   },
   watch: {
     visible: function (newvalue) {

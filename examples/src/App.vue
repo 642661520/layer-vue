@@ -1,6 +1,7 @@
+// app.vue
 <template>
   <div id="app">
-    <VueLayer></VueLayer>
+    <VueLayer :content="a"></VueLayer>
   </div>
 </template>
 
@@ -8,13 +9,14 @@
 import VueLayer from "../../src/lib/vuelayer.vue";
 export default {
   components: {
-    VueLayer,
+    VueLayer
   },
   name: "app",
   data() {
-    return {};
+    return {
+      a:{a:123,b:456}
+    };
   },
 };
 </script>
-
 <style></style>
