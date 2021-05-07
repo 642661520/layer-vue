@@ -1,7 +1,7 @@
 {
   "name": "layer-vue",
   "description": "A Vue.js project",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "'finalsummer' <'642661520de@gmail.com'>",
   "license": "MIT",
   "private": false,
@@ -40,5 +40,10 @@
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.9.1"
   },
-  "keywords":["layer","vue","layer-vue","finalsummer"]
+  "keywords": [
+    "layer",
+    "vue",
+    "layer-vue",
+    "finalsummer"
+  ]
 }
