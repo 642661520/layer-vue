@@ -1,6 +1,6 @@
-import VueLayer from './vuelayer.vue';
-VueLayer.install = function(Vue) {
-  Vue.component(VueLayer.name, VueLayer);
+import Layer from './layer.vue';
+Layer.install = function(Vue) {
+  Vue.component(Layer.name, Layer);
 };
 
-export default VueLayer;
+export default Layer;

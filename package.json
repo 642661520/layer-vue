@@ -1,11 +1,11 @@
 {
-  "name": "@finalsummer/vuelayer",
+  "name": "layer-vue",
   "description": "A Vue.js project",
-  "version": "1.0.10",
+  "version": "0.0.1",
   "author": "'finalsummer' <'642661520de@gmail.com'>",
   "license": "MIT",
   "private": false,
-  "main": "dist/vuelayer.js",
+  "main": "dist/layer.js",
   "types": "types/index.d.ts",
   "files": [
     "dist",
@@ -39,5 +39,6 @@
     "vue-template-compiler": "^2.4.4",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.9.1"
-  }
+  },
+  "keywords":["layer","vue","layer-vue","finalsummer"]
 }

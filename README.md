@@ -1,10 +1,13 @@
-[![npm](https://img.shields.io/npm/dw/@finalsummer/vuelayer.svg?style=flat-square)](https://www.npmjs.com/package/@finalsummer/vuelayer)[![npm](https://img.shields.io/bundlephobia/minzip/@finalsummer/vuelayer.svg)](https://www.npmjs.com/package/@finalsummer/vuelayer)[![npm](https://img.shields.io/npm/l/@finalsummer/vuelayer.svg)](https://www.npmjs.com/package/@finalsummer/vuelayer)[![npm](https://badge.fury.io/js/%40finalsummer%2Fvuelayer.svg)](https://www.npmjs.com/package/@finalsummer/vuelayer)
+[![npm](https://img.shields.io/npm/dw/layer-vue.svg?style=flat-square)](https://www.npmjs.com/package/layer-vue)
+[![npm](https://img.shields.io/bundlephobia/minzip/layer-vue.svg)](https://www.npmjs.com/package/layer-vue)
+[![npm](https://img.shields.io/npm/l/layer-vue.svg)](https://www.npmjs.com/package/layer-vue)
+[![npm](https://badge.fury.io/js/layer-vue.svg)](https://www.npmjs.com/package/layer-vue)
 
-# @finalsummer/vuelayer
+# layer-vue
 ## 安装
 
 ```
-npm install @finalsummer/vuelayer
+npm install layer-vue
 ```
 
 ## 快速启动
@@ -15,8 +18,8 @@ npm install @finalsummer/vuelayer
 // mian.js
 import Vue from 'vue';
 import App from './App.vue';
-import VueLayer from '@finalsummer/vuelayer';
-import '@finalsummer/vuelayer/dist/index.css';
+import Layer from 'layer-vue';
+import 'layer-vue/dist/index.css';
 Vue.config.productionTip = false
 new Vue({render: h => h(App)}).$mount('#app')
 ```
@@ -27,7 +30,7 @@ new Vue({render: h => h(App)}).$mount('#app')
 // App.vue
 <template>
   <div id="app">
-    <VueLayer></VueLayer>
+    <Layer></Layer>
   </div>
 </template>
 <script>
@@ -50,8 +53,8 @@ export default {
 title支持三种类型的值，若你传入的是普通的字符串，如*title :'我是标题'*；如果你不想显示标题栏，你可以*title: false*
 
 ```vue
-<VueLayer title="我是标题"></VueLayer>
-<VueLayer :title="title"></VueLayer>
+<Layer title="我是标题"></Layer>
+<Layer :title="title"></Layer>
 ```
 
 ### content - 内容
@@ -61,15 +64,15 @@ title支持三种类型的值，若你传入的是普通的字符串，如*title
 类型：String/Array/Number，默认：null
 
 ```vue
-<VueLayer content="我是内容区"></VueLayer>
-<VueLayer :content="content"></VueLayer>
+<Layer content="我是内容区"></Layer>
+<Layer :content="content"></Layer>
 ```
 
 #### 插槽方式
 
 ```vue
-<VueLayer>我是内容区</VueLayer>
-<VueLayer>{{content}}</VueLayer>
+<Layer>我是内容区</Layer>
+<Layer>{{content}}</Layer>
 ```
 
 ### area - 宽高
