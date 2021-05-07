@@ -1,0 +1,62 @@
+{
+  "name": "@finalsummer/vuelayer",
+  "description": "A Vue.js project",
+  "version": "1.0.8",
+  "author": "'finalsummer' <'642661520de@gmail.com'>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "vue-cli-service serve",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lib": "vue-cli-service build --target lib --name VueLyer --dest lib packages/layer/index.js",
+    "lint": "vue-cli-service lint"
+  },
+  "main": "./lib/vue-layer.umd.min.js",
+  "dependencies": {},
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^4.5.12",
+    "@vue/cli-plugin-eslint": "^4.5.12",
+    "@vue/cli-service": "^4.5.12",
+    "babel-eslint": "^10.1.0",
+    "core-js": "^3.9.1",
+    "css-loader": "^5.2.0",
+    "element-ui": "^2.15.1",
+    "eslint": "^7.23.0",
+    "eslint-plugin-vue": "^7.8.0",
+    "less": "^4.1.1",
+    "less-loader": "^7.3.0",
+    "vue": "^2.6.12",
+    "vue-template-compiler": "^2.6.12"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "rules": {
+      "vue/no-mutating-props": 0
+    },
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ],
+  "keywords": [
+    "vue",
+    "layer",
+    "VueLayer"
+  ]
+}
