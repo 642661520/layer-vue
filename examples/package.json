@@ -1,16 +1,10 @@
 {
-  "name": "@finalsummer/vuelayer",
-  "description": "A Vue.js project",
-  "version": "1.0.7",
-  "author": "'finalsummer' <'642661520de@gmail.com'>",
+  "name": "examples",
+  "description": "a examples",
+  "version": "1.0.0",
+  "author": "finalsummer <642661520de@gmail.com>",
   "license": "MIT",
-  "private": false,
-  "main": "dist/vuelayer.js",
-  "types": "types/index.d.ts",
-  "files": [
-    "dist",
-    "types"
-  ],
+  "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
@@ -29,12 +23,9 @@
     "babel-preset-env": "^1.6.0",
     "babel-preset-stage-3": "^6.24.1",
     "cross-env": "^5.0.5",
-    "cross-spawn": "^7.0.3",
     "css-loader": "^0.28.7",
     "file-loader": "^1.1.4",
-    "vue-class-component": "^7.2.6",
     "vue-loader": "^13.0.5",
-    "vue-property-decorator": "^9.1.2",
     "vue-template-compiler": "^2.4.4",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.9.1"
