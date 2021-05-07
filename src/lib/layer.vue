@@ -1,5 +1,6 @@
 <template>
   <div
+    v-cloak
     οndragstart="return false;"
     v-if="destroyOnClose ? (visible === undefined ? defaultvisible : visible) : true"
     v-show="visible === undefined ? defaultvisible : visible"
@@ -373,8 +374,10 @@ export default {
   updated() {},
   mounted() {
     this.$nextTick(() => {
+      this.$refs.content.children[0].style.display = "none";
       if (this.visible || this.visible === undefined) {
         this.init();
+        this.$refs.content.children[0].style.display = "";
       }
     });
   },
@@ -593,6 +596,9 @@ export default {
 };
 </script>
 <style>
+[v-cloak] {
+  display: none;
+}
 .layer-vue {
   position: fixed;
   display: inline-block;
