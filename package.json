@@ -45,5 +45,9 @@
     "vue",
     "layer-vue",
     "finalsummer"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/642661520/vuelayer.git"
+  },
 }
