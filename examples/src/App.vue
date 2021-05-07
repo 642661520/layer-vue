@@ -1,22 +1,35 @@
 // app.vue
 <template>
   <div id="app">
-    <VueLayer :content="a"></VueLayer>
+    <Layer :settop='settop' :maxmin="[1,1]" :moveEnd="function(){log('moveend')}"
+    :success="success"><div class="adada">1231321</div></Layer>
   </div>
 </template>
-
 <script>
-import VueLayer from "../../src/lib/vuelayer.vue";
+
+import Layer from "../../src/lib/layer.vue";
 export default {
   components: {
-    VueLayer
+    Layer
   },
   name: "app",
   data() {
     return {
-      a:{a:123,b:456}
-    };
+    zindex: 100
+    }
   },
+  methods: {
+    // 置顶函数
+    settop() {
+      this.zindex = this.zindex + 1;
+      return this.zindex;
+    },
+    log(value){
+      return console.log(value)
+    },
+    success(a){
+      this.log(a)
+    }
+  }
 };
 </script>
-<style></style>

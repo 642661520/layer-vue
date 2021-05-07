@@ -1,4 +1,3 @@
-export * from './vuelayer'
-
-import * as VueLayer from './vuelayer'
-export default VueLayer
+export * from './layer'
+import * as Layer from './layer'
+export default Layer

@@ -108,3 +108,109 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
 | 值      | 备注           |
 | :------ | :------------- |
 | anim: 0 | 平滑放大。默认 |
+
+### closeBtn - 关闭按钮
+
+类型：Number/Boolean，默认：true
+
+不显示，则*closeBtn: 0*
+
+### maxmin - 最大最小化。
+
+类型：Array，默认：[0, 0]
+
+默认不显示最大小化按钮。需要显示配置*maxmin: [1,1]*即可
+
+### resize - 是否右下允许拉伸
+
+类型：Number/Boolean，默认：true
+
+默认情况下，你可以在弹层右下角拖动来拉伸尺寸。如果对指定的弹层屏蔽该功能，设置 false即可。
+
+### lbresize - 是否左下允许拉伸
+
+类型：Number/Boolean，默认：true
+
+默认情况下，你可以在弹层左下角拖动来拉伸尺寸。如果对指定的弹层屏蔽该功能，设置 false即可。
+
+### zIndex - 层叠顺序
+
+类型：Number，默认：1
+
+一般用于解决和其它组件的层叠冲突，不能和settop一起使用。
+
+### settop-窗口置顶
+
+类型：Function，默认：null
+
+当你的页面有很多很多 layer 窗口，你需要像 Window 窗体那样，点击某个窗口，该窗体就置顶在上面，那么 settop 可以来轻松实现。
+
+实现方法如下：
+
+```vue
+// app.vue
+<template>
+  <div id="app">
+    <VueLayer :settop='settop'></VueLayer>
+  </div>
+</template>
+<script>
+export default {
+  name: "app",
+  data() {
+    return {
+    // 设置初始zindex值
+    zindex: 100
+    }
+  },
+  methods: {
+    // 置顶函数
+    settop() {
+      this.zindex = this.zindex + 1;
+      return this.zindex;
+    }
+  },
+};
+</script>
+
+```
+
+### move - 触发拖动的元素
+
+类型：String/Boolean，默认：'.layui-layer-title'
+
+默认是触发标题区域拖拽。如果你想单独定义，指向元素的选择器或者DOM即可。如*move: '.mine-move'*。你还配置设定*move: false*来禁止拖拽。
+
+### moveOut - 是否允许拖拽到窗口外
+
+类型：*Array*，默认：[0, 0, 0, 0]（上，右，下，左）
+
+默认只能在窗口内拖拽，如果你想让拖到窗外，那么设定*moveOut: [1, 1, 1, 1]*即可。
+
+### moveEnd - 拖动完毕后的回调方法
+
+类型：Function，默认：null
+
+默认不会触发moveEnd，如果你需要，设定*moveEnd: function(){}*即可。
+
+### success - 层弹出后的成功回调方法
+
+类型：Function，默认：null
+
+当你需要在层创建完毕时即执行一些语句，可以通过该回调。
+
+### destroyOnClose-关闭后销毁元素
+
+类型：Boolean，默认：false
+
+### cancel - destroyOnClose为false时关闭按钮触发的回调
+
+类型：Function，默认：null
+
+### end -destroyOnClose为true时关闭按钮触发的回调
+
+类型：Function，默认：null
+
+### full/min/restore -分别代表最大化、最小化、还原 后触发的回调
+
+类型：Function，默认：null
