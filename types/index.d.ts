@@ -1,3 +1,3 @@
-export * from './layer'
-import * as Layer from './layer'
-export default Layer
+export * from './layer-vue'
+import * as LayerVue from './layer-vue'
+export default LayerVue

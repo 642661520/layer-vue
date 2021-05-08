@@ -62,7 +62,6 @@
 </template>
 <script>
 export default {
-  name: "layer",
   data() {
     return {
       // 默认开启
@@ -374,10 +373,16 @@ export default {
   updated() {},
   mounted() {
     this.$nextTick(() => {
-      this.$refs.content.children[0].style.display = "none";
+      let display=''
+      if(this.$refs.content.children.length){
+        display=this.$refs.content.children[0].style.display
+this.$refs.content.children[0].style.display = "none";
+      }
       if (this.visible || this.visible === undefined) {
         this.init();
-        this.$refs.content.children[0].style.display = "";
+              if(this.$refs.content.children.length){
+this.$refs.content.children[0].style.display = display;
+      }
       }
     });
   },
@@ -595,70 +600,3 @@ export default {
   },
 };
 </script>
-<style>
-[v-cloak] {
-  display: none;
-}
-.layer-vue {
-  position: fixed;
-  display: inline-block;
-  background-color: #fff;
-  box-shadow: 1px 1px 50px rgb(0 0 0 / 30%);
-  top: 0;
-  left: 0;
-  overflow: hidden;
-  border-radius: 2px;
-}
-.layer-vue-title {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  box-sizing: border-box;
-  width: 100%;
-  height: 42px;
-  user-select: none;
-  padding: 0 80px 1px 20px;
-  line-height: 42px;
-  border-bottom: 1px solid #f0f0f0;
-}
-.layer-vue-tools {
-  user-select: none;
-  position: absolute;
-  top: 0;
-  right: 0;
-  cursor: pointer;
-}
-
-.layer-vue-tools span {
-  display: inline-block;
-  width: 30px;
-  text-align: center;
-  line-height: 42px;
-}
-.layer-vue-tools span:hover {
-  color: #008afc;
-}
-.layer-vue-resize {
-  user-select: none;
-  position: absolute;
-  cursor: se-resize;
-  width: 10px;
-  height: 10px;
-  bottom: 0px;
-  right: 0px;
-  z-index: 1;
-}
-.layer-vue-lbresize {
-  user-select: none;
-  position: absolute;
-  cursor: sw-resize;
-  width: 10px;
-  height: 10px;
-  bottom: 0px;
-  left: 0px;
-  z-index: 1;
-}
-.layer-vue-content {
-  position: relative;
-}
-</style>

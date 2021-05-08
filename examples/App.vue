@@ -1,22 +1,21 @@
 // app.vue
 <template>
   <div id="app">
-    <Layer :settop='settop' :maxmin="[1,1]" :moveEnd="function(){log('moveend')}"
-    :success="success"><div class="adada">1231321</div></Layer>
+    <button @click="log">打开</button>
+    <sui-layer></sui-layer>
+    <SuiLayer></SuiLayer>
   </div>
 </template>
 <script>
-
-import Layer from "../../src/lib/layer.vue";
 export default {
-  components: {
-    Layer
-  },
   name: "app",
   data() {
     return {
     zindex: 100
     }
+  },
+  created(){
+    console.log();
   },
   methods: {
     // 置顶函数
@@ -24,8 +23,8 @@ export default {
       this.zindex = this.zindex + 1;
       return this.zindex;
     },
-    log(value){
-      return console.log(value)
+    log(){
+      this.$Layer.open({x:388,y:1})
     },
     success(a){
       this.log(a)

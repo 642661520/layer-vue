@@ -1,7 +1,7 @@
-import Vue from "vue";
-
-/** VueLayer Component */
-export declare class Layer extends Vue {
+import { LayerVueComponent } from './component'
+export const version: string
+/** Layer Component */
+export declare class Layer extends LayerVueComponent {
   title: String | Boolean;
   content: String | Array<any> | Number;
   area: String | Array<any> | Number;
