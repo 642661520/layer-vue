@@ -1,7 +1,7 @@
 {
   "name": "layer-vue",
   "description": "A Vue.js project",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "author": "'finalsummer' <'642661520de@gmail.com'>",
   "license": "MIT",
   "private": false,
@@ -18,6 +18,9 @@
     "last 2 versions",
     "not ie <= 8"
   ],
+  "peerDependencies": {
+    "vue": "^2.5.11"
+  },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",

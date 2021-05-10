@@ -6,18 +6,29 @@
     <button @click="close2">close2</button>
     <button @click="close3">close3</button>
     <!-- <sui-layer></sui-layer> -->
-    <div id="test">test<Test></Test></div>
+    <div>
+      <div>
+        <div id="test">test<Test></Test></div>
+      </div>
+    </div>
+
     <div id="test2">test2</div>
-    <SuiLayer :visible.sync="visible" :maxmin='[1,1]' >1231<div id="test">test<Test></Test></div></SuiLayer>
+    <LayerVue :maxmin="[1, 1]" :content='[1,2]'></LayerVue>
+    <LayerVue :visible.sync="visible" :maxmin="[1, 1]"
+      >1231
+      <div>test<Test></Test>
+      <input type="text" name="" id="">
+      </div
+    ></LayerVue>
   </div>
 </template>
 <script>
 import Test from "./test.vue";
-let span=document.createElement("span")
-span.innerHTML="<div>13123</div>"
+let span = document.createElement("span");
+span.innerHTML = "<div>13123</div>";
 export default {
-  components:{
-Test
+  components: {
+    Test,
   },
 
   name: "app",
@@ -26,7 +37,7 @@ Test
   data() {
     return {
       zindex: 100,
-      visible:true,
+      visible: true,
     };
   },
   created() {
@@ -35,15 +46,15 @@ Test
   methods: {
     // 置顶函数
     log() {
-console.log(this.layer1);
-
       this.layer1 = this.$Layer({
-        maxmin:[1,1],
+        destroyOnClose: true,
+        maxmin: [1, 1],
         area: [599, 655],
         offset: "r",
         settop: true,
-        content:document.getElementById('test')
-        // content:13213
+        // content:document.getElementById('test')
+        // content: span,
+        content:1
         // content: {
         //   component: Test,
         //   parent: this,
@@ -51,9 +62,9 @@ console.log(this.layer1);
         // },
       });
     },
-     log2() {
+    log2() {
       this.layer2 = this.$Layer({
-        destroyOnClose:false,
+        destroyOnClose: true,
         area: [766, 355],
         offset: "1",
         settop: true,
@@ -70,12 +81,13 @@ console.log(this.layer1);
     },
     close() {
       this.$Layer.close(this.layer1);
-    },close2() {
+    },
+    close2() {
       this.$Layer.close(this.layer2);
     },
-    close3(){
-      this.visible=!this.visible
-    }
+    close3() {
+      this.visible = !this.visible;
+    },
   },
 };
 </script>

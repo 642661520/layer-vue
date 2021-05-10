@@ -3,8 +3,8 @@
     v-cloak
     οndragstart="return false;"
     :data-id="id"
-    v-if="destroyOnClose ? (visible === undefined ? defaultvisible : visible) : true"
-    v-show="visible === undefined ? defaultvisible : visible"
+    v-if="destroyOnClose ? defaultvisible : true"
+    v-show="destroyOnClose ? true : defaultvisible"
     class="layer-vue"
     :id="'layer-vue-' + id"
     :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn }"
@@ -59,7 +59,7 @@ const c = {
   lbrz: ".layer-vue-lbresize",
 };
 export default {
-  name: "SuiLayer",
+  name: "LayerVue",
   data() {
     return {
       // 默认开启
@@ -80,6 +80,7 @@ export default {
       overflow: "hidden",
       id: Math.random() + Math.random(),
       model: undefined,
+      display: undefined,
     };
   },
   props: {
@@ -88,7 +89,7 @@ export default {
     offset: { type: [String, Array, Number], default: "auto" },
     settop: { type: Boolean, default: false },
     moveOut: { type: Array, default: () => [0, 0, 0, 0] },
-    visible: {},
+    visible: { visible: [Number, Boolean], default: true },
     zindex: { type: Number, default: 1 },
     closeBtn: { type: [Number, Boolean], default: true },
     maxmin: { type: Array, default: () => [0, 0] },
@@ -113,20 +114,7 @@ export default {
   },
   watch: {
     visible: function (newvalue) {
-      if (newvalue) {
-        if (this.settop) {
-          const zindex = this.$LayerOptions.settop();
-          this.zIndex = zindex;
-        } else {
-          this.zIndex = this.zindex;
-        }
-        this.$nextTick(() => {
-          this.init();
-          this.success && this.success(this);
-        });
-      } else {
-        this.amininit();
-      }
+      this.defaultvisible = newvalue;
     },
     defaultvisible: function (newvalue) {
       if (newvalue) {
@@ -140,6 +128,8 @@ export default {
           this.init();
           this.success && this.success(this);
         });
+      } else {
+        this.amininit();
       }
     },
   },
@@ -158,27 +148,28 @@ export default {
   mounted() {
     this.amininit();
     this.$nextTick(() => {
-      let display = "";
       if (this.content && this.content.component) {
         let instance = new this.content.component({
           parent: this.content.parent,
           propsData: this.content.data,
         });
         instance.vm = instance.$mount();
+        this.$LayerOptions.instances[this.id].Vuecomponent = instance;
         document[v.gid]("layer-vue-" + this.id)
           [v.qs](".layer-vue-content")
           [v.ac](instance.vm.$el);
       }
-
       if (this.$refs.content.children.length) {
-        display = this.$refs.content.children[0].style.display;
-        this.$refs.content.children[0].style.display = "none";
+        this.display = this.$refs.content.children[0].style.display;
       }
       if (this.visible || this.visible === undefined) {
-        this.init();
-        if (this.$refs.content.children.length) {
-          this.$refs.content.children[0].style.display = display;
+        if (this.settop) {
+          const zindex = this.$LayerOptions.settop();
+          this.zIndex = zindex;
+        } else {
+          this.zIndex = this.zindex;
         }
+        this.init();
       }
     });
   },
@@ -186,6 +177,7 @@ export default {
     window.onresize = null;
   },
   methods: {
+    // 动画初始化函数
     amininit() {
       this.overflow = "hidden";
       if (this.amin === 0) {
@@ -197,7 +189,13 @@ export default {
         this.y = y;
       }
     },
+    // 初始化函数
     init() {
+      if (this.$refs.content.children.length) {
+        if (this.display === "none" || getComputedStyle(this.$refs.content.children[0]).display === "none") {
+          this.$refs.content.children[0].style.display = "block";
+        }
+      }
       this.transition = t;
       const { height, width } = this.areainit();
       const { x, y } = this.offsetinit(this.offset, width, height);
@@ -206,13 +204,14 @@ export default {
       this.x = x;
       this.y = y;
     },
+    // 高宽初始化函数
     areainit() {
       let height = 0;
       let width = 0;
       if (this.area instanceof Array) {
-        width = this.Transformation(this.area[0], [v.cw]);
+        width = this.tf(this.area[0], [v.cw]);
         if (this.area[1]) {
-          height = this.Transformation(this.area[1], [v.ch]) + (this.title ? 42 : 0);
+          height = this.tf(this.area[1], [v.ch]) + (this.title ? 42 : 0);
         } else {
           height = this.$refs.content ? this.$refs.content.scrollHeight : 0 + 42;
         }
@@ -220,7 +219,7 @@ export default {
         if (this.area === "auto") {
           width = this.$refs.content ? this.$refs.content.scrollWidth : 0;
         } else {
-          width = this.Transformation(this.area, [v.cw]);
+          width = this.tf(this.area, [v.cw]);
         }
         height = this.$refs.content ? this.$refs.content.scrollHeight : 0 + 42;
       }
@@ -242,6 +241,7 @@ export default {
       }
       return { height, width };
     },
+    // 偏移量初始化函数
     offsetinit(offset, width, height, amin = false) {
       let x = 0;
       let y = 0;
@@ -255,11 +255,11 @@ export default {
       }
       if (offset instanceof Array) {
         if (offset[1]) {
-          x = this.Transformation(offset[1], [v.cw]);
+          x = this.tf(offset[1], [v.cw]);
         } else {
           x = (de[v.cw] - width) * 0.5;
         }
-        y = this.Transformation(offset[0], [v.ch]);
+        y = this.tf(offset[0], [v.ch]);
       } else if (typeof offset === "number") {
         y = offset;
         x = (de[v.cw] - width) * 0.5;
@@ -314,7 +314,8 @@ export default {
       }
       return { x, y };
     },
-    Transformation(value, client) {
+    // 长度处理函数
+    tf(value, client) {
       let name = 0;
       if (typeof value === "number") {
         name = value;
@@ -328,37 +329,93 @@ export default {
       return name;
     },
     // 关闭窗口函数
-    closeLayer(appid = "app") {
+    closeLayer(el, appid = "app") {
+      // 获取窗口DOM元素
+      const layerDOM = d[v.gid]("layer-vue-" + this.id);
+      const warn = () => console.log("[layer-warn]:No layer with id ：layer-vue-" + this.id + "found");
+      // 判断当前layer窗口打开模式（true：以$layer.open()打开，false:以组件形式）
       if (this.model) {
+        // 隐藏窗口
         this.defaultvisible = false;
-        this.amininit();
-      } else {
-        this.$emit("update:visible", false);
+        // this.visible=false
+        // 窗口配置项，关闭后则为null
+        const instances = this.$LayerOptions.instances[this.id];
+        // 判断窗口配置项是否存在
+        if (instances) {
+          // 判断内容区是否是DOM
+          if (instances.instance.ishtml) {
+            // 判断窗口DOM元素是否存在
+            if (layerDOM) {
+              // 获取内容区外层DOM
+              const content = layerDOM[v.qs](".layer-vue-content");
+              // 判断内容区是否是新建DOM
+              if (instances.instance.isnewDOM) {
+                // 删除新建DOM
+                content.removeChild(content.children[0]);
+              } else {
+                // 判断窗口父元素是否存在，以元素选择器获取的dom有缓存，需要以父元素判断其是否被删除
+                if (layerDOM.parentNode) {
+                  // 还原内容区位置
+                  const parentDiv = layerDOM.parentNode;
+                  content.children[0].style.display = this.display;
+                  parentDiv.insertBefore(content.children[0], layerDOM);
+                  parentDiv.removeChild(layerDOM);
+                  delete this.$LayerOptions.instances[this.id];
+                  // 销毁窗口回调
+                  this.end && this.end();
+                } else {
+                  // 窗口不存在或已经关闭
+                  warn();
+                }
+                return;
+              }
+            } else {
+              // 窗口不存在或已经关闭
+              warn();
+              return;
+            }
+            // 判断子组件是否存在
+          } else if (instances.Vuecomponent) {
+            // destroyOnClose为真 卸载子组件
+            if (this.destroyOnClose) {
+              instances.Vuecomponent.$destroy();
+            } else {
+              // 隐藏窗口
+              this.defaultvisible = false;
+              this.cancel && this.cancel();
+              return;
+            }
+          }
+        }
+        let node = d.body;
+        // 判断#app是否存在
+        if (d[v.gid](appid)) {
+          node = d[v.gid](appid);
+        }
+        // 判断layer窗口是否存在
+        if (layerDOM) {
+          // 删除layerDOM
+          node.removeChild(layerDOM);
+          delete this.$LayerOptions.instances[this.id];
+          this.end && this.end();
+        } else {
+          warn();
+        }
+      }
+      // 静态组件模式
+      else {
+        // 隐藏窗口
+        this.defaultvisible = false;
+        // 若传入了visible，则更新visible为false
+        if (this.visible) {
+          this.$emit("update:visible", false);
+        }
+        // 执行回调
         if (this.destroyOnClose) {
           this.end && this.end();
         } else {
           this.cancel && this.cancel();
         }
-      }
-      const instances = this.$LayerOptions.instances[this.id];
-      if (instances) {
-        if (instances.Vuecomponent) {
-          instances.Vuecomponent.$destroy();
-        }
-        if (instances.instance.ishtml && d[v.gid]("layer-vue-" + this.id)) {
-          let parentDiv = d[v.gid]("layer-vue-" + this.id).parentNode;
-          parentDiv.insertBefore(d[v.qs]('[data-id="' + this.id + '"]')[v.qs](".layer-vue-content").children[0], d[v.gid]("layer-vue-" + this.id));
-        }
-      }
-      let node = d.body;
-      if (d[v.gid](appid)) {
-        node = d[v.gid](appid);
-      }
-      if (d[v.gid]("layer-vue-" + this.id)) {
-        node.removeChild(d[v.gid]("layer-vue-" + this.id));
-        delete this.$LayerOptions.instances[this.id];
-      } else {
-        console.warn("[layer-warn]:未找到id为：layer-vue-" + this.id + " 的layer窗口");
       }
     },
     getthis() {

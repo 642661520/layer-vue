@@ -1,9 +1,11 @@
-[![npm](https://img.shields.io/npm/dw/layer-vue.svg?style=flat-square)](https://www.npmjs.com/package/layer-vue)
-[![npm](https://img.shields.io/bundlephobia/minzip/layer-vue.svg)](https://www.npmjs.com/package/layer-vue)
-[![npm](https://img.shields.io/npm/l/layer-vue.svg)](https://www.npmjs.com/package/layer-vue)
-[![npm](https://badge.fury.io/js/layer-vue.svg)](https://www.npmjs.com/package/layer-vue)
+[![npm](https://img.shields.io/npm/dw/layer-vue.svg?style=flat-square)](https://www.npmjs.com/package/layer-vue)[![npm](https://img.shields.io/bundlephobia/minzip/layer-vue.svg)](https://www.npmjs.com/package/layer-vue)[![npm](https://img.shields.io/npm/l/layer-vue.svg)](https://www.npmjs.com/package/layer-vue)[![npm](https://badge.fury.io/js/layer-vue.svg)](https://www.npmjs.com/package/layer-vue)
 
 # layer-vue
+
+## 简介
+
+基于Vue框架的可移动可调整大小的非模态弹出层，效果类似于Layui中的Layer窗口，或者说是Window 窗体。基于Vue和React的UI库中，没有一款可移动非模态弹出层，如果你需要在页面中弹出一个窗口后依旧需要操作其他内容，那么layer-vue可以为你解决这一问题。
+
 ## 安装
 
 ```
@@ -18,33 +20,51 @@ npm install layer-vue
 // mian.js
 import Vue from 'vue';
 import App from './App.vue';
-import Layer from 'layer-vue';
+import LayerVue from 'layer-vue';
 import 'layer-vue/dist/index.css';
-Vue.config.productionTip = false
+Vue.use(LayerVue,{
+    //此项设置置顶窗口的初始值，默认为100，一般无需配置，和其他组件冲突时可在此配置
+    zindex:100
+})
 new Vue({render: h => h(App)}).$mount('#app')
 ```
 
-## 调用
+## 使用
+
+### 1.组件模式
 
 ```vue
 // App.vue
 <template>
   <div id="app">
-    <Layer></Layer>
+    <LayerVue></LayerVue>
   </div>
 </template>
 <script>
-export default {
-  name: "app",
-  data() {
-    return {};
-  },
-};
+export default { name: "app"};
 </script>
-<style></style>
 ```
 
-## 基础参数
+### 2.函数模式
+
+```vue
+// App.vue
+<script>
+export default { 
+    name: "app",
+    methods:{
+        openlayer(){
+         //函数返回值是窗口ID
+        this.layerid=this.$Layer.open({*配置项*}) //等价于 this.$Layer({*配置项*})
+        }
+    }
+};
+</script>
+```
+
+
+
+## 配置项
 
 ### title - 标题
 
@@ -55,25 +75,57 @@ title支持三种类型的值，若你传入的是普通的字符串，如*title
 ```vue
 <Layer title="我是标题"></Layer>
 <Layer :title="title"></Layer>
+this.$Layer({title:'我是标题'})
 ```
 
 ### content - 内容
 
-#### 标签方式
+#### 组件模式
 
-类型：String/Array/Number，默认：null
+##### 标签方式
+
+类型：String/Number/Boolean，默认：null
 
 ```vue
 <Layer content="我是内容区"></Layer>
 <Layer :content="content"></Layer>
 ```
 
-#### 插槽方式
+##### 插槽方式
+
+类型：VueDOM/DOM/String/Boolean/Number，默认：null
 
 ```vue
-<Layer>我是内容区</Layer>
+<Layer><div></div></Layer>
 <Layer>{{content}}</Layer>
 ```
+
+#### 函数模式
+
+类型：VueDOM/DOM/String/Number/Boolean，默认：null
+
+```JS
+let span = document.createElement("span");
+span.innerHTML = "<div>13123</div>";
+this.$Layer({
+    	// String/Boolean/Number
+    	content:1,
+    	// DOM
+        // content:document.getElementById('test'),
+        // content: span
+    	// VueDOM
+        // content: {
+    	//子组件名称
+        //   component: Test,
+    	//layer和子组件关联，此项固定填写this
+        //   parent: this,
+    	//子组件数据
+        //   data: { id: 3 },
+        // },
+      });
+```
+
+
 
 ### area - 宽高
 
@@ -141,39 +193,9 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
 
 ### settop-窗口置顶
 
-类型：Function，默认：null
+类型：Boolean，默认：false
 
 当你的页面有很多很多 layer 窗口，你需要像 Window 窗体那样，点击某个窗口，该窗体就置顶在上面，那么 settop 可以来轻松实现。
-
-实现方法如下：
-
-```vue
-// app.vue
-<template>
-  <div id="app">
-    <VueLayer :settop='settop'></VueLayer>
-  </div>
-</template>
-<script>
-export default {
-  name: "app",
-  data() {
-    return {
-    // 设置初始zindex值
-    zindex: 100
-    }
-  },
-  methods: {
-    // 置顶函数
-    settop() {
-      this.zindex = this.zindex + 1;
-      return this.zindex;
-    }
-  },
-};
-</script>
-
-```
 
 ### move - 触发拖动的元素
 
@@ -214,3 +236,9 @@ export default {
 ### full/min/restore -分别代表最大化、最小化、还原 后触发的回调
 
 类型：Function，默认：null
+
+## 作者
+
+summer
+
+642661520de@gmail.com
