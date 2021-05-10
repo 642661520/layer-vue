@@ -1,4 +1,3 @@
-// app.vue
 <template>
   <div id="app">
     <button @click="log">打开</button>
@@ -9,7 +8,7 @@
     <!-- <sui-layer></sui-layer> -->
     <div id="test">test<Test></Test></div>
     <div id="test2">test2</div>
-    <SuiLayer :visible.sync="visible"><div id="test">test<Test></Test></div></SuiLayer>
+    <SuiLayer :visible.sync="visible" :maxmin='[1,1]' >1231<div id="test">test<Test></Test></div></SuiLayer>
   </div>
 </template>
 <script>
@@ -36,12 +35,15 @@ Test
   methods: {
     // 置顶函数
     log() {
+console.log(this.layer1);
+
       this.layer1 = this.$Layer({
+        maxmin:[1,1],
         area: [599, 655],
         offset: "r",
         settop: true,
-        // content:document.getElementById('test')
-        content:span
+        content:document.getElementById('test')
+        // content:13213
         // content: {
         //   component: Test,
         //   parent: this,

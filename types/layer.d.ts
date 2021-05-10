@@ -24,3 +24,12 @@ export declare class Layer extends LayerVueComponent {
   min: Function;
   restore: Function;
 }
+export interface LayerVueBoxOptions {
+}
+export interface LayerVueBox {
+}
+declare module 'vue/types/vue' {
+  interface Vue {
+    $open: LayerVueBox
+  }
+}

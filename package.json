@@ -6,11 +6,6 @@
   "license": "MIT",
   "private": false,
   "main": "lib/layer-vue.js",
-  "types": "types/index.d.ts",
-  "files": [
-    "dist",
-    "types"
-  ],
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server  --open --hot  examples/main.js",
     "build": "cross-env NODE_ENV=production webpack --progress"
