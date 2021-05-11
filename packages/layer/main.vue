@@ -1,40 +1,46 @@
 <template>
-    <div
-      v-cloak
-      οndragstart="return false;"
-      :data-id="id"
-      v-if="destroyOnClose ? defaultvisible : true"
-      v-show="destroyOnClose ? true : defaultvisible"
-      class="layer-vue"
-      :id="'layer-vue-' + id"
-      :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn }"
-      v-drag="{ getthis }"
-      :style="{
-        '--mch': this.defaultskin.maxmin.colorHover,
-        '--cch': this.defaultskin.close.colorHover,
-        '--mbch': this.defaultskin.maxmin.backgroundColorHover,
-        '--cbch': this.defaultskin.close.backgroundColorHover,
-        width: width + 'px',
-        height: height + 'px',
-        transform: 'translate(' + x + 'px,' + y + 'px)',
-        'z-index': zIndex,
-        transition: transition,
-      }"
-    >
-      <div v-if="title !== false" class="layer-vue-title" :title="title" :style="{ height: titleheight + 'px', 'line-height': titleheight + 'px' }">
-        {{ title }}
-      </div>
-      <div class="layer-vue-tools" :style="{'margin-top':titleheight*0.2 + 'px', height: titleheight*0.6 + 'px', 'line-height': titleheight*0.6 + 'px' }">
-        <span v-show="maxmin[1]" class="layer-vue-min"><i class="iconfont" :class="{ 'icon-min': !minbtn, 'icon-restore': minbtn }"></i></span>
-        <span v-show="maxmin[0] && !minbtn" class="layer-vue-max"><i class="iconfont" :class="{ 'icon-max': !maxbtn, 'icon-restore': maxbtn }"></i></span>
-        <span v-show="closeBtn" class="layer-vue-close" @click="closeLayer"><i class="iconfont icon-close"></i></span>
-      </div>
-      <div v-if="resize" class="layer-vue-resize"></div>
-      <div v-if="lbresize" class="layer-vue-lbresize"></div>
-      <div ref="content" class="layer-vue-content" :style="{ height: contentheight + 'px', overflow: overflow }">
-        <slot>{{ !model ? content : null }}</slot>
-      </div>
+  <div
+    v-cloak
+    οndragstart="return false;"
+    :data-id="id"
+    v-if="destroyOnClose ? defaultvisible : true"
+    v-show="destroyOnClose ? true : defaultvisible"
+    class="layer-vue"
+    :id="'layer-vue-' + id"
+    :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn }"
+    v-drag="{ getthis }"
+    :style="{
+      '--mch': this.defaultskin.maxmin.colorHover,
+      '--cch': this.defaultskin.close.colorHover,
+      '--mbch': this.defaultskin.maxmin.backgroundColorHover,
+      '--cbch': this.defaultskin.close.backgroundColorHover,
+      width: width + 'px',
+      height: height + 'px',
+      transform: 'translate(' + x + 'px,' + y + 'px)',
+      'z-index': zIndex,
+      transition: transition,
+    }"
+  >
+    <div v-if="title !== false" class="layer-vue-title" :title="title" :style="{
+          'background-color': this.defaultskin.title.backgroundColor,
+          color:this.defaultskin.title.color,
+       height: titleheight + 'px', 'line-height': titleheight + 'px' }">
+      {{ title }}
     </div>
+    <div class="layer-vue-tools" :style="{ height: titleheight + 'px', 'line-height': titleheight + 'px' }">
+      <span v-show="maxmin[1]" class="layer-vue-min"><i class="iconfont" :class="{ 'icon-min': !minbtn, 'icon-restore': minbtn }"></i></span>
+      <span v-show="maxmin[0] && !minbtn" class="layer-vue-max"><i class="iconfont" :class="{ 'icon-max': !maxbtn, 'icon-restore': maxbtn }"></i></span>
+      <span v-show="closeBtn" class="layer-vue-close" @click="closeLayer"><i class="iconfont icon-close"></i></span>
+    </div>
+    <div v-if="resize" class="layer-vue-resize"></div>
+    <div v-if="lbresize" class="layer-vue-lbresize"></div>
+    <div ref="content" class="layer-vue-content" :style="{ 
+      'background-color': this.defaultskin.content.backgroundColor,
+          color:this.defaultskin.content.color,
+      height: contentheight + 'px', overflow: overflow }">
+      <slot>{{ !model ? content : null }}</slot>
+    </div>
+  </div>
 </template>
 <script>
 const t = "all 0.2s";
@@ -62,15 +68,12 @@ const c = {
   rz: ".layer-vue-resize",
   lbrz: ".layer-vue-lbresize",
 };
-const mergeoptions = (options, def)=>{
+const mergeoptions = (options, def) => {
   for (let key in def) {
-    console.log(options[key] );
-      
     if (options[key] === undefined) {
-
       options[key] = def[key];
-    } else if(typeof options[key] ==='object'){
-      mergeoptions(options[key],def[key])
+    } else if (typeof options[key] === "object") {
+      mergeoptions(options[key], def[key]);
     }
   }
   return options;
@@ -152,7 +155,7 @@ export default {
   computed: {
     contentheight: function () {
       return this.height - (this.title ? this.titleheight : 0);
-    }
+    },
   },
   watch: {
     visible: function (newvalue) {
@@ -176,9 +179,6 @@ export default {
     },
   },
   created() {
-    if(this.skin){
-    this.defaultskin=mergeoptions(this.skin,this.defaultskin);
-    }
     window[v.add]("resize", this.resizefun);
     if (this.visible || this.visible === undefined) {
       if (this.settop) {
@@ -191,6 +191,14 @@ export default {
     }
   },
   mounted() {
+    console.log('mounted');
+    
+    if(this.$LayerOptions.skin){
+      this.defaultskin = mergeoptions(this.$LayerOptions.skin, this.defaultskin);
+    }
+    if (this.skin) {
+      this.defaultskin = mergeoptions(this.skin, this.defaultskin);
+    }
     this.amininit();
     this.$nextTick(() => {
       if (this.content && this.content.component) {
@@ -232,7 +240,6 @@ export default {
         return;
       }
       this.init();
-      console.log(this.transition);
     },
     // 动画初始化函数
     amininit() {

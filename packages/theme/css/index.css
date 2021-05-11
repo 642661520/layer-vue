@@ -5,7 +5,6 @@
 .layer-vue {
   position: fixed;
   display: inline-block;
-  background-color: #fff;
   box-shadow: 1px 1px 50px rgb(0 0 0 / 30%);
   top: 0;
   left: 0;

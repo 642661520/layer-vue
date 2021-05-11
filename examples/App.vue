@@ -14,12 +14,12 @@
     </div>
 
     <div id="test2">test2</div>
-    <LayerVue :maxmin="[1, 1]" :content='{a:1}' :titleheight='30'></LayerVue>
+    <LayerVue :maxmin="[1, 1]" :content="{ a: 1 }" :titleheight="30"></LayerVue>
     <LayerVue :visible.sync="visible" :maxmin="[1, 1]"
       >1231
-      <div>test<Test></Test>
-      <input type="text" name="" id="">
-      </div
+      <div>
+        test<Test></Test>
+        <input type="text" name="" id="" /></div
     ></LayerVue>
   </div>
 </template>
@@ -33,12 +33,13 @@ export default {
   },
 
   name: "app",
-  layer1: null,
-  layer2: null,
+
   data() {
     return {
       zindex: 100,
       visible: true,
+      layer1: null,
+      layer2: null,
     };
   },
   created() {
@@ -48,26 +49,26 @@ export default {
     // 置顶函数
     log() {
       this.layer1 = this.$Layer({
-         skin: {
-        title: {
-          backgroundColor: "#fff",
-          color: "#000",
+        skin: {
+          title: {
+            backgroundColor: "#bfa",
+            color: "#333",
+          },
+          content: {
+            backgroundColor: "#fff",
+            color: "#000",
+          },
+          maxmin: {
+            backgroundColorHover: "#6666",
+            colorHover: "#008afc",
+          },
+          close: {
+            backgroundColorHover: "#543",
+            colorHover: "#123",
+          },
         },
-        content: {
-          backgroundColor: "#fff",
-          color: "#000",
-        },
-        maxmin: {
-          backgroundColorHover: "#6666",
-          colorHover: "#008afc",
-        },
-        close: {
-          backgroundColorHover: "#543",
-          colorHover: "#123",
-        },
-      },
         destroyOnClose: true,
-        titleheight:30,
+        titleheight: 30,
         maxmin: [1, 1],
         area: [599, 655],
         offset: "r",
@@ -108,9 +109,9 @@ export default {
     close3() {
       this.visible = !this.visible;
     },
-    restore(){
-      this.$Layer.restore(this.layer1)
-    }
+    restore() {
+      this.$Layer.restore(this.layer1);
+    },
   },
 };
 </script>

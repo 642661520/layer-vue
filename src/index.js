@@ -226,10 +226,10 @@ const install = function (Vue, options) {
       };
     }
   });
-  // document.getElementById("layer-vue-" + this.id).style.backgroundColor
   Vue.prototype.$Layer = LayerBox(Vue);
   Vue.prototype.$LayerOptions = {
     zindex: options && options.zindex ? options.zindex : 100,
+    skin:options && options.skin ? options.skin : undefined,
     settop: () => {
       Vue.prototype.$LayerOptions.zindex =
         Vue.prototype.$LayerOptions.zindex + 1;

@@ -2,6 +2,7 @@ import layerVue, { c, p, v, d, de, n, t } from "./main.vue";
 layerVue.install = function(Vue) {
   Vue.component(layerVue.name, layerVue);
 };
+// TODO 2个问题：1.ID，2.自定义皮肤。
 const LayerBox = function(Vue) {
   const LayerBoxConstructor = Vue.extend(layerVue);
   const Layer = function(options) {
@@ -44,16 +45,15 @@ const LayerBox = function(Vue) {
           // 查找组件是否已经被挂载
         let eleid = Vue.prototype.$LayerOptions.instances.findIndex(value => {
           if (value) {
-            return (
-              value.instance.content.component === options.content.component
-            );
+            return value.instance.id === options.id;
           }
         });
+          console.log(eleid);
           if (eleid >= 0) {
           if (!options.destroyOnClose) {
             Vue.prototype.$LayerOptions.instances[eleid].instance.defaultvisible = true;
           }
-          return eleid;
+          // return eleid;
         }
         } else {
           console.log("[layer warn]:Incorrect content type");
@@ -61,7 +61,11 @@ const LayerBox = function(Vue) {
       }
     }
     let id = Vue.prototype.$LayerOptions.instances.length;
-    options.id = id;
+    if (options.id === undefined) {
+      options.id = id;
+    } else {
+      id= options.id;
+    }
     options.model = 1;
     if (!options.appid) {
       options.appid = "app";
@@ -95,6 +99,7 @@ const LayerBox = function(Vue) {
             options.content;
           break;
         case "object":
+          break;
         case "array":
         default:
           console.log("[layer warn]:Incorrect content type");
