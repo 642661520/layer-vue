@@ -1,36 +1,40 @@
 <template>
-  <div
-    v-cloak
-    οndragstart="return false;"
-    :data-id="id"
-    v-if="destroyOnClose ? defaultvisible : true"
-    v-show="destroyOnClose ? true : defaultvisible"
-    class="layer-vue"
-    :id="'layer-vue-' + id"
-    :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn }"
-    v-drag="{ getthis }"
-    :style="{
-      width: width + 'px',
-      height: height + 'px',
-      transform: 'translate(' + x + 'px,' + y + 'px)',
-      'z-index': zIndex,
-      transition: transition,
-    }"
-  >
-    <div v-if="title !== false" class="layer-vue-title" :title="title">
-      {{ title }}
+    <div
+      v-cloak
+      οndragstart="return false;"
+      :data-id="id"
+      v-if="destroyOnClose ? defaultvisible : true"
+      v-show="destroyOnClose ? true : defaultvisible"
+      class="layer-vue"
+      :id="'layer-vue-' + id"
+      :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn }"
+      v-drag="{ getthis }"
+      :style="{
+        '--mch': this.defaultskin.maxmin.colorHover,
+        '--cch': this.defaultskin.close.colorHover,
+        '--mbch': this.defaultskin.maxmin.backgroundColorHover,
+        '--cbch': this.defaultskin.close.backgroundColorHover,
+        width: width + 'px',
+        height: height + 'px',
+        transform: 'translate(' + x + 'px,' + y + 'px)',
+        'z-index': zIndex,
+        transition: transition,
+      }"
+    >
+      <div v-if="title !== false" class="layer-vue-title" :title="title" :style="{ height: titleheight + 'px', 'line-height': titleheight + 'px' }">
+        {{ title }}
+      </div>
+      <div class="layer-vue-tools" :style="{'margin-top':titleheight*0.2 + 'px', height: titleheight*0.6 + 'px', 'line-height': titleheight*0.6 + 'px' }">
+        <span v-show="maxmin[1]" class="layer-vue-min"><i class="iconfont" :class="{ 'icon-min': !minbtn, 'icon-restore': minbtn }"></i></span>
+        <span v-show="maxmin[0] && !minbtn" class="layer-vue-max"><i class="iconfont" :class="{ 'icon-max': !maxbtn, 'icon-restore': maxbtn }"></i></span>
+        <span v-show="closeBtn" class="layer-vue-close" @click="closeLayer"><i class="iconfont icon-close"></i></span>
+      </div>
+      <div v-if="resize" class="layer-vue-resize"></div>
+      <div v-if="lbresize" class="layer-vue-lbresize"></div>
+      <div ref="content" class="layer-vue-content" :style="{ height: contentheight + 'px', overflow: overflow }">
+        <slot>{{ !model ? content : null }}</slot>
+      </div>
     </div>
-    <div class="layer-vue-tools">
-      <span v-if="maxmin[1]" class="layer-vue-min">-</span>
-      <span v-if="maxmin[0]" class="layer-vue-max">口</span>
-      <span v-if="closeBtn" class="layer-vue-close" @click="closeLayer">X</span>
-    </div>
-    <div v-if="resize" class="layer-vue-resize"></div>
-    <div v-if="lbresize" class="layer-vue-lbresize"></div>
-    <div ref="content" class="layer-vue-content" :style="{ height: contentheight + 'px', overflow: overflow }">
-      <slot></slot>
-    </div>
-  </div>
 </template>
 <script>
 const t = "all 0.2s";
@@ -58,6 +62,20 @@ const c = {
   rz: ".layer-vue-resize",
   lbrz: ".layer-vue-lbresize",
 };
+const mergeoptions = (options, def)=>{
+  for (let key in def) {
+    console.log(options[key] );
+      
+    if (options[key] === undefined) {
+
+      options[key] = def[key];
+    } else if(typeof options[key] ==='object'){
+      mergeoptions(options[key],def[key])
+    }
+  }
+  return options;
+};
+
 export default {
   name: "LayerVue",
   data() {
@@ -81,6 +99,28 @@ export default {
       id: Math.random() + Math.random(),
       model: undefined,
       display: undefined,
+      defaultskin: {
+        title: {
+          backgroundColor: "#fff",
+          color: "#000",
+        },
+        content: {
+          backgroundColor: "#fff",
+          color: "#000",
+        },
+        maxmin: {
+          backgroundColor: "#fff",
+          color: "#000",
+          backgroundColorHover: "#6666",
+          colorHover: "#008afc",
+        },
+        close: {
+          backgroundColor: "#fff",
+          color: "#000",
+          backgroundColorHover: "#f00",
+          colorHover: "#fff",
+        },
+      },
     };
   },
   props: {
@@ -106,11 +146,13 @@ export default {
     destroyOnClose: { type: [Number, Boolean], default: false },
     amin: { type: Number, default: 0 },
     content: {},
+    titleheight: { type: Number, default: 42 },
+    skin: { type: Object },
   },
   computed: {
     contentheight: function () {
-      return this.height - (this.title ? 42 : 0);
-    },
+      return this.height - (this.title ? this.titleheight : 0);
+    }
   },
   watch: {
     visible: function (newvalue) {
@@ -134,7 +176,10 @@ export default {
     },
   },
   created() {
-    window[v.add]("resize", this.init);
+    if(this.skin){
+    this.defaultskin=mergeoptions(this.skin,this.defaultskin);
+    }
+    window[v.add]("resize", this.resizefun);
     if (this.visible || this.visible === undefined) {
       if (this.settop) {
         const zindex = this.$LayerOptions.settop();
@@ -174,9 +219,21 @@ export default {
     });
   },
   beforeDestroy() {
-    window.onresize = null;
+    console.log("beforeDestroy");
+    window.removeEventListener("resize", this.resizefun);
   },
   methods: {
+    resizefun() {
+      if (this.minbtn) {
+        return;
+      }
+      if (this.maxbtn) {
+        this.width = de[v.cw];
+        return;
+      }
+      this.init();
+      console.log(this.transition);
+    },
     // 动画初始化函数
     amininit() {
       this.overflow = "hidden";
@@ -191,6 +248,8 @@ export default {
     },
     // 初始化函数
     init() {
+      this.maxbtn = false;
+      this.minbtn = false;
       if (this.$refs.content.children.length) {
         if (this.display === "none" || getComputedStyle(this.$refs.content.children[0]).display === "none") {
           this.$refs.content.children[0].style.display = "block";
@@ -211,9 +270,9 @@ export default {
       if (this.area instanceof Array) {
         width = this.tf(this.area[0], [v.cw]);
         if (this.area[1]) {
-          height = this.tf(this.area[1], [v.ch]) + (this.title ? 42 : 0);
+          height = this.tf(this.area[1], [v.ch]) + (this.title ? this.titleheight : 0);
         } else {
-          height = this.$refs.content ? this.$refs.content.scrollHeight : 0 + 42;
+          height = this.$refs.content ? this.$refs.content.scrollHeight : 0 + this.titleheight;
         }
       } else {
         if (this.area === "auto") {
@@ -221,7 +280,7 @@ export default {
         } else {
           width = this.tf(this.area, [v.cw]);
         }
-        height = this.$refs.content ? this.$refs.content.scrollHeight : 0 + 42;
+        height = this.$refs.content ? this.$refs.content.scrollHeight : 0 + this.titleheight;
       }
       if (width > de[v.cw] && de[v.cw] > this.minwidth) {
         width = de[v.cw];
@@ -353,13 +412,14 @@ export default {
                 // 删除新建DOM
                 content.removeChild(content.children[0]);
               } else {
-                // 判断窗口父元素是否存在，以元素选择器获取的dom有缓存，需要以父元素判断其是否被删除
+                // 判断窗口父元素是否存在
                 if (layerDOM.parentNode) {
                   // 还原内容区位置
                   const parentDiv = layerDOM.parentNode;
                   content.children[0].style.display = this.display;
                   parentDiv.insertBefore(content.children[0], layerDOM);
                   parentDiv.removeChild(layerDOM);
+                  this.$destroy();
                   delete this.$LayerOptions.instances[this.id];
                   // 销毁窗口回调
                   this.end && this.end();
@@ -378,6 +438,7 @@ export default {
           } else if (instances.Vuecomponent) {
             // destroyOnClose为真 卸载子组件
             if (this.destroyOnClose) {
+              this.$destroy();
               instances.Vuecomponent.$destroy();
             } else {
               // 隐藏窗口

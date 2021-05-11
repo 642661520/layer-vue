@@ -54,9 +54,13 @@ export default {
     name: "app",
     methods:{
         openlayer(){
-         //函数返回值是窗口ID
-        this.layerid=this.$Layer.open({*配置项*}) //等价于 this.$Layer({*配置项*})
-        }
+         	//函数返回值是窗口ID
+        	this.layerid=this.$Layer.open({*配置项*}) //等价于 this.$Layer({*配置项*})
+        },
+        closelayer(){
+            //关闭窗口，传入窗口ID
+            this.$Layer.close(this.layerid)
+		}
     }
 };
 </script>
@@ -65,6 +69,34 @@ export default {
 
 
 ## 配置项
+
+### visible-显示状态
+
+类型：Number/Boolean，默认：true
+
+仅组件模式下，支持该配置。
+
+```vue
+// App.vue
+<template>
+  <div id="app">
+      //需要添加.sync修饰符进行双向绑定，否则点击右上角关闭窗口后，无法同时修改传入的visible值
+    <LayerVue :visible.sync=‘visible’></LayerVue>
+  </div>
+</template>
+<script>
+export default { 
+    name: "app"，
+  	data() {
+    	return {
+      		visible: true,
+   		};
+  	},
+} 
+</script>
+```
+
+
 
 ### title - 标题
 

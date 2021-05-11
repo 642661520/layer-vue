@@ -106,7 +106,7 @@ const install = function (Vue, options) {
               el[v.qs](that.move).style.cursor = 'not-allowed';
             }
             if (that.minbtn) {
-              that.maxbtn = false;
+              that.minbtn = false;
             } else {
               l.x = that.x;
               l.y = that.y;
@@ -147,11 +147,10 @@ const install = function (Vue, options) {
               l.width = that.width;
               l.height = that.height;
             }
-
             that.x = l.x;
-            that.y = de[v.ch] - 42;
-            that.height = 42;
-            that.width = that.minwidth;
+            that.y = de[v.ch] - that.titleheight;
+            that.height = that.titleheight;
+            that.width = 200;
             that.min && that.min();
           } else {
             that.x = l.x;
@@ -227,6 +226,7 @@ const install = function (Vue, options) {
       };
     }
   });
+  // document.getElementById("layer-vue-" + this.id).style.backgroundColor
   Vue.prototype.$Layer = LayerBox(Vue);
   Vue.prototype.$LayerOptions = {
     zindex: options && options.zindex ? options.zindex : 100,

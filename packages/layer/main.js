@@ -9,7 +9,14 @@ const LayerBox = function(Vue) {
   };
   Layer.open = options => {
     let instance = new LayerBoxConstructor();
-    instance.ishtml = false;
+    // 强制删除传入的visible属性
+    delete options.visible;
+    // const { skin } = Vue.prototype.$LayerOptions
+    // if (options.skin) {
+    //   options.skin=  mergeoptions(options.skin, skin)
+    // } else {
+    //   options.skin=skin
+    // }
     // 判断内容区类型
     if (typeof options.content === "object") {
       // DOM类型
@@ -24,11 +31,17 @@ const LayerBox = function(Vue) {
           }
           // 新创建DOM
         } else {
+          // 新创建DOM 打开时绑定状态
           instance.isnewDOM = true;
         }
+        // DOM类型绑定状态
         instance.ishtml = true;
-      } else {
-        options.content.component = Vue.extend(options.content.component);
+      }
+      else {
+        // 根据component判断内容区是否为Vue组件
+        if (options.content.component) {
+          options.content.component = Vue.extend(options.content.component);
+          // 查找组件是否已经被挂载
         let eleid = Vue.prototype.$LayerOptions.instances.findIndex(value => {
           if (value) {
             return (
@@ -36,13 +49,14 @@ const LayerBox = function(Vue) {
             );
           }
         });
-        if (eleid >= 0) {
-          if (options.destroyOnClose === false) {
-            Vue.prototype.$LayerOptions.instances[
-              eleid
-            ].instance.defaultvisible = true;
+          if (eleid >= 0) {
+          if (!options.destroyOnClose) {
+            Vue.prototype.$LayerOptions.instances[eleid].instance.defaultvisible = true;
           }
           return eleid;
+        }
+        } else {
+          console.log("[layer warn]:Incorrect content type");
         }
       }
     }
@@ -72,10 +86,6 @@ const LayerBox = function(Vue) {
       }
       instance.vm.$el[v.qs](".layer-vue-content").appendChild(options.content);
     } else {
-      if (typeof options.content === "object") {
-      } else if (typeof options.content === "boolean") {
-        instance.vm.$el[v.qs](".layer-vue-content").innerHTML = options.content;
-      }
       switch (typeof options.content) {
         case "function":
         case "number":
@@ -85,10 +95,9 @@ const LayerBox = function(Vue) {
             options.content;
           break;
         case "object":
-          break;
+        case "array":
         default:
           console.log("[layer warn]:Incorrect content type");
-
           break;
       }
       if (d[v.qs]("#" + options.appid)) {
@@ -108,6 +117,18 @@ const LayerBox = function(Vue) {
     const instances = Vue.prototype.$LayerOptions.instances[id];
     if (instances) {
       instances.instance.closeLayer();
+    } else {
+      console.log("[layer-warn]:No layer with id ：layer-vue-" + id + "found");
+    }
+  };
+  Layer.restore = id => {
+    if (id === undefined) {
+      console.log("[layer-warn]:The id is undefined");
+      return;
+    }
+    const instances = Vue.prototype.$LayerOptions.instances[id];
+    if (instances) {
+      instances.instance.init();
     } else {
       console.log("[layer-warn]:No layer with id ：layer-vue-" + id + "found");
     }

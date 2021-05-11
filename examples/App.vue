@@ -5,6 +5,7 @@
     <button @click="log2">打开2</button>
     <button @click="close2">close2</button>
     <button @click="close3">close3</button>
+    <button @click="restore">还原</button>
     <!-- <sui-layer></sui-layer> -->
     <div>
       <div>
@@ -13,7 +14,7 @@
     </div>
 
     <div id="test2">test2</div>
-    <LayerVue :maxmin="[1, 1]" :content='[1,2]'></LayerVue>
+    <LayerVue :maxmin="[1, 1]" :content='{a:1}' :titleheight='30'></LayerVue>
     <LayerVue :visible.sync="visible" :maxmin="[1, 1]"
       >1231
       <div>test<Test></Test>
@@ -47,19 +48,38 @@ export default {
     // 置顶函数
     log() {
       this.layer1 = this.$Layer({
+         skin: {
+        title: {
+          backgroundColor: "#fff",
+          color: "#000",
+        },
+        content: {
+          backgroundColor: "#fff",
+          color: "#000",
+        },
+        maxmin: {
+          backgroundColorHover: "#6666",
+          colorHover: "#008afc",
+        },
+        close: {
+          backgroundColorHover: "#543",
+          colorHover: "#123",
+        },
+      },
         destroyOnClose: true,
+        titleheight:30,
         maxmin: [1, 1],
         area: [599, 655],
         offset: "r",
         settop: true,
         // content:document.getElementById('test')
         // content: span,
-        content:1
-        // content: {
-        //   component: Test,
-        //   parent: this,
-        //   data: { id: 3 },
-        // },
+        // content:1
+        content: {
+          component: Test,
+          parent: this,
+          data: { id: 3 },
+        },
       });
     },
     log2() {
@@ -88,6 +108,9 @@ export default {
     close3() {
       this.visible = !this.visible;
     },
+    restore(){
+      this.$Layer.restore(this.layer1)
+    }
   },
 };
 </script>

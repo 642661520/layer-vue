@@ -1,3 +1,4 @@
+@import './font-class.css';
 [v-cloak] {
   display: none;
 }
@@ -17,10 +18,8 @@
   overflow: hidden;
   box-sizing: border-box;
   width: 100%;
-  height: 42px;
   user-select: none;
   padding: 0 80px 1px 20px;
-  line-height: 42px;
   border-bottom: 1px solid #f0f0f0;
 }
 .layer-vue-tools {
@@ -35,11 +34,8 @@
   display: inline-block;
   width: 30px;
   text-align: center;
-  line-height: 42px;
 }
-.layer-vue-tools span:hover {
-  color: #008afc;
-}
+
 .layer-vue-resize {
   user-select: none;
   position: absolute;
@@ -62,4 +58,12 @@
 }
 .layer-vue-content {
   position: relative;
+}
+.layer-vue-min:hover,.layer-vue-max:hover {
+  background-color: var(--mbch);
+  color: var(--mch);
+}
+.layer-vue-close:hover{
+  background-color: var(--cbch);
+  color: var(--cch);
 }
