@@ -1,10 +1,10 @@
-import layerVue, { c, p, v, d, de, n, t,merge } from "./main.vue";
-layerVue.install = function(Vue) {
-  Vue.component(layerVue.name, layerVue);
+import LayerVue, { c, p, v, d, de, n, t,merge } from "./main.vue";
+LayerVue.install = function(Vue) {
+  Vue.component(LayerVue.name, LayerVue);
 };
 const version = '0.1.0';
 const LayerBox = function (Vue) {
-  const LayerBoxConstructor = Vue.extend(layerVue);
+  const LayerBoxConstructor = Vue.extend(LayerVue);
   const Layer = function(options) {
     return Layer.open(options);
   };
@@ -146,4 +146,4 @@ const LayerBox = function (Vue) {
 };
 
 export default LayerBox;
-export { layerVue, c, p, v, d, de, n, t,merge,version };
+export { LayerVue, c, p, v, d, de, n, t,merge,version };

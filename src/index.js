@@ -1,4 +1,4 @@
-import LayerBox, {layerVue,c,p,v,d,de,n,t,merge,version} from "../packages/layer/main";
+import LayerBox, {LayerVue,c,p,v,d,de,n,t,merge,version} from "../packages/layer/main";
 import "../packages/theme/css/index.css";
 const skin = {
   shadowColor:'rgb(0 0 0 / 30%)',
@@ -31,7 +31,7 @@ const install = function (Vue, options) {
     'background:#41b883 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
     'background:transparent'
   )
-  Vue.component(layerVue.name, layerVue);
+  Vue.component(LayerVue.name, LayerVue);
   Vue.directive('drag', {
     bind: function (el, binding) {
       const l = {};
@@ -273,3 +273,8 @@ export default {
   LayerBox,
   install
 };
+window.LayerVue={
+  version: version,
+  LayerBox,
+  install
+}

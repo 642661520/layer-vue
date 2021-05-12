@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
-import SummerUI from '../src/index'
+// import LayerVue from '../src/index'
 import './index.css'
-Vue.use(SummerUI, { zindex: 200, skin: { title: { color: '#0f0', } } })
-console.log(SummerUI,Vue.prototype);
+Vue.use(LayerVue, { zindex: 200, skin: { title: { color: '#0f0', } } })
+console.log(LayerVue,Vue.prototype);
 
 Vue.config.productionTip = false
 new Vue({
