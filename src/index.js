@@ -1,6 +1,36 @@
-import LayerBox, {layerVue,c,p,v,d,de,n,t} from "../packages/layer/main";
+import LayerBox, {layerVue,c,p,v,d,de,n,t,merge,version} from "../packages/layer/main";
 import "../packages/theme/css/index.css";
+const skin = {
+  shadowColor:'rgb(0 0 0 / 30%)',
+  title: {
+    backgroundColor: "#fff",
+    color: "#000",
+    borderColor:"#f0f0f0",
+  },
+  content: {
+    backgroundColor: "#fff",
+    color: "#000",
+  },
+  maxmin: {
+    backgroundColor: "#fff",
+    color: "#000",
+    backgroundColorHover: "#6666",
+    colorHover: "#008afc",
+  },
+  close: {
+    backgroundColor: "#fff",
+    color: "#000",
+    backgroundColorHover: "#f00",
+    colorHover: "#fff",
+  },
+}
 const install = function (Vue, options) {
+  console.log(
+    `%c layer-vue %c v${version} %c`,
+    'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
+    'background:#41b883 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
+    'background:transparent'
+  )
   Vue.component(layerVue.name, layerVue);
   Vue.directive('drag', {
     bind: function (el, binding) {
@@ -18,7 +48,7 @@ const install = function (Vue, options) {
       // 置顶事件
       el[v.d] = () => {
         if (that.settop) {
-          that.zIndex = that.$LayerOptions.settop();
+          that.zIndex = that[c.l].o.settop();
         }
       };
       el[v.add]('transitionend', e => {
@@ -226,20 +256,20 @@ const install = function (Vue, options) {
       };
     }
   });
-  Vue.prototype.$Layer = LayerBox(Vue);
-  Vue.prototype.$LayerOptions = {
+  Vue[c.p][c.l] = LayerBox(Vue);
+  Vue[c.p][c.l].o = {
     zindex: options && options.zindex ? options.zindex : 100,
-    skin:options && options.skin ? options.skin : undefined,
+    skin:options && options.skin ? merge(options.skin,skin):skin,
     settop: () => {
-      Vue.prototype.$LayerOptions.zindex =
-        Vue.prototype.$LayerOptions.zindex + 1;
-      return Vue.prototype.$LayerOptions.zindex;
+      Vue[c.p][c.l].o.zindex =
+        Vue[c.p][c.l].o.zindex + 1;
+      return Vue[c.p][c.l].o.zindex;
     },
     instances: []
   };
 };
 export default {
-  version: "0.0.1",
+  version: version,
   LayerBox,
   install
 };

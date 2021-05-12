@@ -12,9 +12,7 @@
 npm install layer-vue
 ```
 
-## 快速启动
-
-### 全局引入
+## 全局引入
 
 ```js
 // mian.js
@@ -24,7 +22,11 @@ import LayerVue from 'layer-vue';
 import 'layer-vue/dist/index.css';
 Vue.use(LayerVue,{
     //此项设置置顶窗口的初始值，默认为100，一般无需配置，和其他组件冲突时可在此配置
-    zindex:100
+    zindex:100,
+    //全局配置窗口皮肤
+    skin：{
+    	//具体参数参见配置项：skin
+	}
 })
 new Vue({render: h => h(App)}).$mount('#app')
 ```
@@ -157,7 +159,15 @@ this.$Layer({
       });
 ```
 
+### id-唯一标识
 
+类型：String，默认：空字符
+
+id只在函数模式下可用，组件模式下本身只会弹出一个窗口。设置该值后，不管内容区是什么类型，都只允许同时弹出一个。
+
+内容区为非DOM元素时，默认每执行一次open函数，就会创建一个新的窗口，可设置id屏蔽多个窗口弹出。
+
+另外如需设置destroyOnClose时，必须设置id，否则destroyOnClose不可更改。
 
 ### area - 宽高
 
@@ -199,7 +209,7 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
 
 不显示，则*closeBtn: 0*
 
-### maxmin - 最大最小化。
+### maxmin - 最大最小化
 
 类型：Array，默认：[0, 0]
 
@@ -229,6 +239,79 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
 
 当你的页面有很多很多 layer 窗口，你需要像 Window 窗体那样，点击某个窗口，该窗体就置顶在上面，那么 settop 可以来轻松实现。
 
+### skin-自定义皮肤
+
+类型：Object，默认：
+
+```js
+{
+  //标题栏
+  title: {
+     //标题栏背景色
+    backgroundColor: "#fff",
+     //标题栏文本色
+    color: "#000",
+  },
+  //内容区
+  content: {
+	//内容区背景色
+    backgroundColor: "#fff",
+    //内容区文本色   
+    color: "#000",
+  },
+  //最大化最小化按钮
+  maxmin: {
+    //最大化最小化按钮背景色
+    backgroundColor: "#fff",
+    //最大化最小化按钮
+    color: "#000",
+    //鼠标移入时最大化最小化按钮文本色
+    backgroundColorHover: "#6666",
+    //鼠标移入时最大化最小化按钮
+    colorHover: "#008afc",
+  },
+  //关闭按钮
+  close: {
+    //关闭按钮背景色
+    backgroundColor: "#fff",
+    //关闭按钮文本色
+    color: "#000",
+    //鼠标移入时关闭按钮背景色
+    backgroundColorHover: "#f00",
+    //鼠标移入时关闭按钮文本色
+    colorHover: "#fff",
+  },
+}
+```
+
+Layer提供了灵活的皮肤配置方案，只需配置需要修改的内容，不修改的无需传递。
+
+#### 1.全局配置
+
+```js
+// mian.js
+import Vue from 'vue';
+import App from './App.vue';
+import LayerVue from 'layer-vue';
+import 'layer-vue/dist/index.css';
+Vue.use(LayerVue,{
+    //此项设置置顶窗口的初始值，默认为100，一般无需配置，和其他组件冲突时可在此配置
+    zindex:100,
+    //全局配置窗口皮肤
+    skin：{
+  		maxmin: {
+   			backgroundColorHover: "#6666",
+  		},
+  		close: {
+    		backgroundColor: "#fff",
+  		},
+	}
+})
+new Vue({render: h => h(App)}).$mount('#app')
+```
+
+
+
 ### move - 触发拖动的元素
 
 类型：String/Boolean，默认：'.layui-layer-title'
@@ -253,17 +336,25 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
 
 当你需要在层创建完毕时即执行一些语句，可以通过该回调。
 
-### destroyOnClose-关闭后销毁元素
+### destroyOnClose-关闭后销毁窗口
 
-类型：Boolean，默认：false
+类型：Boolean，默认：true
 
-### cancel - destroyOnClose为false时关闭按钮触发的回调
+默认关闭窗口时会销毁窗口，如需再次打开时保留上次内容区的内容，可设置destroyOnClose为false，在函数模式下，需和id配合使用，否则设置无效。
+
+若内容区在打开窗口前已经是html上的dom元素，那么destroyOnClose为true时，内容区不会被销毁，只会回到原本的位置。
+
+### cancel - 关闭窗口时触发的回调
 
 类型：Function，默认：null
 
-### end -destroyOnClose为true时关闭按钮触发的回调
+无论窗口是否销毁，都会执行cancel ，执行顺序在窗口销毁前。
+
+### end -窗口销毁后触发的回调
 
 类型：Function，默认：null
+
+只有窗口销毁后才会执行
 
 ### full/min/restore -分别代表最大化、最小化、还原 后触发的回调
 

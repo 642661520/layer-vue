@@ -2,18 +2,21 @@
   <div
     v-cloak
     οndragstart="return false;"
+    :data-index="index"
     :data-id="id"
-    v-if="destroyOnClose ? defaultvisible : true"
-    v-show="destroyOnClose ? true : defaultvisible"
+    v-if="destroyOnClose ? defvisible : true"
+    v-show="destroyOnClose ? true : defvisible"
     class="layer-vue"
-    :id="'layer-vue-' + id"
+    :id="'layer-vue-' + index"
     :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn }"
     v-drag="{ getthis }"
     :style="{
-      '--mch': this.defaultskin.maxmin.colorHover,
-      '--cch': this.defaultskin.close.colorHover,
-      '--mbch': this.defaultskin.maxmin.backgroundColorHover,
-      '--cbch': this.defaultskin.close.backgroundColorHover,
+      '--mch': this.defskin.maxmin.colorHover,
+      '--cch': this.defskin.close.colorHover,
+      '--mbch': this.defskin.maxmin.backgroundColorHover,
+      '--cbch': this.defskin.close.backgroundColorHover,
+      'background-color': this.defskin.title.backgroundColor,
+      'box-shadow': '1px 1px 50px ' + this.defskin.shadowColor,
       width: width + 'px',
       height: height + 'px',
       transform: 'translate(' + x + 'px,' + y + 'px)',
@@ -21,10 +24,18 @@
       transition: transition,
     }"
   >
-    <div v-if="title !== false" class="layer-vue-title" :title="title" :style="{
-          'background-color': this.defaultskin.title.backgroundColor,
-          color:this.defaultskin.title.color,
-       height: titleheight + 'px', 'line-height': titleheight + 'px' }">
+    <div
+      v-if="title !== false"
+      class="layer-vue-title"
+      :title="title"
+      :style="{
+        'background-color': this.defskin.title.backgroundColor,
+        color: this.defskin.title.color,
+        'border-bottom': '1px solid ' + this.defskin.title.borderColor,
+        height: titleheight + 'px',
+        'line-height': titleheight + 'px',
+      }"
+    >
       {{ title }}
     </div>
     <div class="layer-vue-tools" :style="{ height: titleheight + 'px', 'line-height': titleheight + 'px' }">
@@ -34,10 +45,16 @@
     </div>
     <div v-if="resize" class="layer-vue-resize"></div>
     <div v-if="lbresize" class="layer-vue-lbresize"></div>
-    <div ref="content" class="layer-vue-content" :style="{ 
-      'background-color': this.defaultskin.content.backgroundColor,
-          color:this.defaultskin.content.color,
-      height: contentheight + 'px', overflow: overflow }">
+    <div
+      ref="content"
+      class="layer-vue-content"
+      :style="{
+        'background-color': this.defskin.content.backgroundColor,
+        color: this.defskin.content.color,
+        height: contentheight + 'px',
+        overflow: overflow,
+      }"
+    >
       <slot>{{ !model ? content : null }}</slot>
     </div>
   </div>
@@ -67,13 +84,16 @@ const c = {
   min: ".layer-vue-min",
   rz: ".layer-vue-resize",
   lbrz: ".layer-vue-lbresize",
+  p: "prototype",
+  l: "$Layer",
+  c: "content",
 };
-const mergeoptions = (options, def) => {
+const merge = (options, def) => {
   for (let key in def) {
     if (options[key] === undefined) {
       options[key] = def[key];
     } else if (typeof options[key] === "object") {
-      mergeoptions(options[key], def[key]);
+      merge(options[key], def[key]);
     }
   }
   return options;
@@ -84,7 +104,7 @@ export default {
   data() {
     return {
       // 默认开启
-      defaultvisible: true,
+      defvisible: true,
       // 最大化按钮
       maxbtn: false,
       minbtn: false,
@@ -99,31 +119,10 @@ export default {
       zIndex: 1,
       transition: "none",
       overflow: "hidden",
-      id: Math.random() + Math.random(),
+      index: Math.random() + Math.random(),
       model: undefined,
       display: undefined,
-      defaultskin: {
-        title: {
-          backgroundColor: "#fff",
-          color: "#000",
-        },
-        content: {
-          backgroundColor: "#fff",
-          color: "#000",
-        },
-        maxmin: {
-          backgroundColor: "#fff",
-          color: "#000",
-          backgroundColorHover: "#6666",
-          colorHover: "#008afc",
-        },
-        close: {
-          backgroundColor: "#fff",
-          color: "#000",
-          backgroundColorHover: "#f00",
-          colorHover: "#fff",
-        },
-      },
+      defskin: {},
     };
   },
   props: {
@@ -146,11 +145,12 @@ export default {
     full: { type: Function },
     min: { type: Function },
     restore: { type: Function },
-    destroyOnClose: { type: [Number, Boolean], default: false },
+    destroyOnClose: { type: [Number, Boolean], default: true },
     amin: { type: Number, default: 0 },
     content: {},
     titleheight: { type: Number, default: 42 },
     skin: { type: Object },
+    id: { default: undefined },
   },
   computed: {
     contentheight: function () {
@@ -159,12 +159,12 @@ export default {
   },
   watch: {
     visible: function (newvalue) {
-      this.defaultvisible = newvalue;
+      this.defvisible = newvalue;
     },
-    defaultvisible: function (newvalue) {
+    defvisible: function (newvalue) {
       if (newvalue) {
         if (this.settop) {
-          const zindex = this.$LayerOptions.settop();
+          const zindex = this[c.l].o.settop();
           this.zIndex = zindex;
         } else {
           this.zIndex = this.zindex;
@@ -179,10 +179,11 @@ export default {
     },
   },
   created() {
+    this.defskin = this[c.l].o.skin;
     window[v.add]("resize", this.resizefun);
     if (this.visible || this.visible === undefined) {
       if (this.settop) {
-        const zindex = this.$LayerOptions.settop();
+        const zindex = this[c.l].o.settop();
         this.zIndex = zindex;
       } else {
         this.zIndex = this.zindex;
@@ -191,13 +192,8 @@ export default {
     }
   },
   mounted() {
-    console.log('mounted');
-    
-    if(this.$LayerOptions.skin){
-      this.defaultskin = mergeoptions(this.$LayerOptions.skin, this.defaultskin);
-    }
     if (this.skin) {
-      this.defaultskin = mergeoptions(this.skin, this.defaultskin);
+      this.defskin = merge(this.skin, this.defskin);
     }
     this.amininit();
     this.$nextTick(() => {
@@ -207,8 +203,8 @@ export default {
           propsData: this.content.data,
         });
         instance.vm = instance.$mount();
-        this.$LayerOptions.instances[this.id].Vuecomponent = instance;
-        document[v.gid]("layer-vue-" + this.id)
+        this[c.l].o.instances[this.index].Vuecomponent = instance;
+        document[v.gid]("layer-vue-" + this.index)
           [v.qs](".layer-vue-content")
           [v.ac](instance.vm.$el);
       }
@@ -217,7 +213,7 @@ export default {
       }
       if (this.visible || this.visible === undefined) {
         if (this.settop) {
-          const zindex = this.$LayerOptions.settop();
+          const zindex = this[c.l].o.settop();
           this.zIndex = zindex;
         } else {
           this.zIndex = this.zindex;
@@ -227,7 +223,6 @@ export default {
     });
   },
   beforeDestroy() {
-    console.log("beforeDestroy");
     window.removeEventListener("resize", this.resizefun);
   },
   methods: {
@@ -396,16 +391,26 @@ export default {
     },
     // 关闭窗口函数
     closeLayer(el, appid = "app") {
+      // 隐藏窗口
+      this.defvisible = false;
+      if (!this.model) {
+        // 若传入了visible，则更新visible为false
+        if (this.visible) {
+          this.$emit("update:visible", false);
+        }
+      }
+      this.cancel && this.cancel();
+      if (!this.destroyOnClose) {
+        return;
+      }
       // 获取窗口DOM元素
-      const layerDOM = d[v.gid]("layer-vue-" + this.id);
-      const warn = () => console.log("[layer-warn]:No layer with id ：layer-vue-" + this.id + "found");
+      const layerDOM = d[v.gid]("layer-vue-" + this.index);
+      const warn = () => console.log("[layer-warn]:No layer with id ：layer-vue-" + this.index + "found");
       // 判断当前layer窗口打开模式（true：以$layer.open()打开，false:以组件形式）
       if (this.model) {
-        // 隐藏窗口
-        this.defaultvisible = false;
         // this.visible=false
         // 窗口配置项，关闭后则为null
-        const instances = this.$LayerOptions.instances[this.id];
+        const instances = this[c.l].o.instances[this.index];
         // 判断窗口配置项是否存在
         if (instances) {
           // 判断内容区是否是DOM
@@ -427,7 +432,7 @@ export default {
                   parentDiv.insertBefore(content.children[0], layerDOM);
                   parentDiv.removeChild(layerDOM);
                   this.$destroy();
-                  delete this.$LayerOptions.instances[this.id];
+                  delete this[c.l].o.instances[this.index];
                   // 销毁窗口回调
                   this.end && this.end();
                 } else {
@@ -443,16 +448,7 @@ export default {
             }
             // 判断子组件是否存在
           } else if (instances.Vuecomponent) {
-            // destroyOnClose为真 卸载子组件
-            if (this.destroyOnClose) {
-              this.$destroy();
-              instances.Vuecomponent.$destroy();
-            } else {
-              // 隐藏窗口
-              this.defaultvisible = false;
-              this.cancel && this.cancel();
-              return;
-            }
+            instances.Vuecomponent.$destroy();
           }
         }
         let node = d.body;
@@ -464,32 +460,19 @@ export default {
         if (layerDOM) {
           // 删除layerDOM
           node.removeChild(layerDOM);
-          delete this.$LayerOptions.instances[this.id];
-          this.end && this.end();
+          this.$destroy();
+          delete this[c.l].o.instances[this.index];
         } else {
           warn();
+          return;
         }
       }
-      // 静态组件模式
-      else {
-        // 隐藏窗口
-        this.defaultvisible = false;
-        // 若传入了visible，则更新visible为false
-        if (this.visible) {
-          this.$emit("update:visible", false);
-        }
-        // 执行回调
-        if (this.destroyOnClose) {
-          this.end && this.end();
-        } else {
-          this.cancel && this.cancel();
-        }
-      }
+      this.end && this.end();
     },
     getthis() {
       return this;
     },
   },
 };
-export { c, p, v, d, de, n, t };
+export { c, p, v, d, de, n, t, merge };
 </script>

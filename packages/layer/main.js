@@ -1,23 +1,40 @@
-import layerVue, { c, p, v, d, de, n, t } from "./main.vue";
+import layerVue, { c, p, v, d, de, n, t,merge } from "./main.vue";
 layerVue.install = function(Vue) {
   Vue.component(layerVue.name, layerVue);
 };
-// TODO 2个问题：1.ID，2.自定义皮肤。
-const LayerBox = function(Vue) {
+const version = '0.1.0';
+const LayerBox = function (Vue) {
   const LayerBoxConstructor = Vue.extend(layerVue);
   const Layer = function(options) {
     return Layer.open(options);
   };
   Layer.open = options => {
+  // id
+    if (options.id) {
+      let index = Vue[c.p][c.l].o.instances.findIndex(value => {
+        if (value) {
+          return value.instance.id === options.id;
+        }
+      });
+        if (index >= 0) {
+        if (!options.destroyOnClose) {
+          Vue[c.p][c.l].o.instances[index].instance.defvisible = true;
+        }
+        return index;
+        }
+    } else {
+      options.destroyOnClose=true
+    }
     let instance = new LayerBoxConstructor();
     // 强制删除传入的visible属性
     delete options.visible;
-    // const { skin } = Vue.prototype.$LayerOptions
-    // if (options.skin) {
-    //   options.skin=  mergeoptions(options.skin, skin)
-    // } else {
-    //   options.skin=skin
-    // }
+    // 合并全局皮肤配置到默认配置
+    const { skin } = Vue[c.p][c.l].o
+    if (options.skin) {
+      options.skin=  merge(options.skin, skin)
+    } else {
+      options.skin=skin
+    }
     // 判断内容区类型
     if (typeof options.content === "object") {
       // DOM类型
@@ -26,9 +43,8 @@ const LayerBox = function(Vue) {
         if (options.content.parentNode) {
           // 根据其父元素的calss判断是不是是已经打开的layer窗口
           if (options.content.parentNode.className.indexOf("layer-vue") >= 0) {
-            console.log(options.content.parentNode);
             // 返回打开窗口的id
-            return options.content.parentNode.parentNode.dataset.id;
+            return options.content.parentNode.parentNode.dataset.index;
           }
           // 新创建DOM
         } else {
@@ -42,29 +58,16 @@ const LayerBox = function(Vue) {
         // 根据component判断内容区是否为Vue组件
         if (options.content.component) {
           options.content.component = Vue.extend(options.content.component);
-          // 查找组件是否已经被挂载
-        let eleid = Vue.prototype.$LayerOptions.instances.findIndex(value => {
-          if (value) {
-            return value.instance.id === options.id;
-          }
-        });
-          console.log(eleid);
-          if (eleid >= 0) {
-          if (!options.destroyOnClose) {
-            Vue.prototype.$LayerOptions.instances[eleid].instance.defaultvisible = true;
-          }
-          // return eleid;
-        }
         } else {
           console.log("[layer warn]:Incorrect content type");
         }
       }
     }
-    let id = Vue.prototype.$LayerOptions.instances.length;
-    if (options.id === undefined) {
-      options.id = id;
+    let index = Vue[c.p][c.l].o.instances.length;
+    if (options.index === undefined) {
+      options.index = index;
     } else {
-      id= options.id;
+      index= options.index;
     }
     options.model = 1;
     if (!options.appid) {
@@ -75,7 +78,7 @@ const LayerBox = function(Vue) {
         instance[prop] = options[prop];
       }
     }
-    instance.id = id;
+    instance.index = index;
     instance.vm = instance.$mount();
     if (instance.ishtml) {
       if (options.content.parentNode) {
@@ -111,35 +114,36 @@ const LayerBox = function(Vue) {
         d.body.appendChild(instance.vm.$el);
       }
     }
-    Vue.prototype.$LayerOptions.instances.push({ id, instance });
-    return id;
+    Vue[c.p][c.l].o.instances.push({ index, instance });
+    return index;
   };
-  Layer.close = id => {
-    if (id === undefined) {
-      console.log("[layer-warn]:The id is undefined");
+  Layer.close = index => {
+    if (index === undefined) {
+      console.log("[layer-warn]:The index is undefined");
       return;
     }
-    const instances = Vue.prototype.$LayerOptions.instances[id];
+    const instances = Vue[c.p][c.l].o.instances[index];
     if (instances) {
       instances.instance.closeLayer();
     } else {
-      console.log("[layer-warn]:No layer with id ：layer-vue-" + id + "found");
+      console.log("[layer-warn]:No layer with index ：layer-vue-" + index + " found");
     }
   };
-  Layer.restore = id => {
-    if (id === undefined) {
-      console.log("[layer-warn]:The id is undefined");
+  Layer.restore = index => {
+    if (index === undefined) {
+      console.log("[layer-warn]:The index is undefined");
       return;
     }
-    const instances = Vue.prototype.$LayerOptions.instances[id];
+    const instances = Vue[c.p][c.l].o.instances[index];
     if (instances) {
       instances.instance.init();
     } else {
-      console.log("[layer-warn]:No layer with id ：layer-vue-" + id + "found");
+      console.log("[layer-warn]:No layer with index ：layer-vue-" + index + " found");
     }
   };
+  Layer.version = version;
   return Layer;
 };
 
 export default LayerBox;
-export { layerVue, c, p, v, d, de, n, t };
+export { layerVue, c, p, v, d, de, n, t,merge,version };
