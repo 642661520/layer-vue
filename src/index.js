@@ -273,8 +273,3 @@ export default {
   LayerBox,
   install
 };
-window.LayerVue={
-  version: version,
-  LayerBox,
-  install
-}

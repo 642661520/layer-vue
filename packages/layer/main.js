@@ -2,13 +2,13 @@ import LayerVue, { c, p, v, d, de, n, t,merge } from "./main.vue";
 LayerVue.install = function(Vue) {
   Vue.component(LayerVue.name, LayerVue);
 };
-const version = '0.1.0';
+const version = '0.1.1';
 const LayerBox = function (Vue) {
   const LayerBoxConstructor = Vue.extend(LayerVue);
   const Layer = function(options) {
     return Layer.open(options);
   };
-  Layer.open = options => {
+  Layer.open = (options={}) => {
   // id
     if (options.id) {
       let index = Vue[c.p][c.l].o.instances.findIndex(value => {

@@ -19,7 +19,7 @@ npm install layer-vue
 import Vue from 'vue';
 import App from './App.vue';
 import LayerVue from 'layer-vue';
-import 'layer-vue/dist/index.css';
+import 'layer-vue/lib/index.css';
 Vue.use(LayerVue,{
     //此项设置置顶窗口的初始值，默认为100，一般无需配置，和其他组件冲突时可在此配置
     zindex:100,
@@ -107,8 +107,8 @@ export default {
 title支持三种类型的值，若你传入的是普通的字符串，如*title :'我是标题'*；如果你不想显示标题栏，你可以*title: false*
 
 ```vue
-<Layer title="我是标题"></Layer>
-<Layer :title="title"></Layer>
+<LayerVue title="我是标题"></LayerVue>
+<LayerVue :title="title"></LayerVue>
 this.$Layer({title:'我是标题'})
 ```
 
@@ -121,8 +121,8 @@ this.$Layer({title:'我是标题'})
 类型：String/Number/Boolean，默认：null
 
 ```vue
-<Layer content="我是内容区"></Layer>
-<Layer :content="content"></Layer>
+<LayerVue content="我是内容区"></LayerVue>
+<LayerVue :content="content"></LayerVue>
 ```
 
 ##### 插槽方式
@@ -130,8 +130,8 @@ this.$Layer({title:'我是标题'})
 类型：VueDOM/DOM/String/Boolean/Number，默认：null
 
 ```vue
-<Layer><div></div></Layer>
-<Layer>{{content}}</Layer>
+<LayerVue><div></div></LayerVue>
+<LayerVue>{{content}}</LayerVue>
 ```
 
 #### 函数模式
@@ -245,12 +245,16 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
 
 ```js
 {
+  //窗口阴影
+  shadowColor:'rgb(0 0 0 / 30%)',
   //标题栏
   title: {
      //标题栏背景色
     backgroundColor: "#fff",
      //标题栏文本色
     color: "#000",
+     //标题栏和内容区分割线颜色
+    borderColor:"#f0f0f0",
   },
   //内容区
   content: {
@@ -293,7 +297,7 @@ Layer提供了灵活的皮肤配置方案，只需配置需要修改的内容，
 import Vue from 'vue';
 import App from './App.vue';
 import LayerVue from 'layer-vue';
-import 'layer-vue/dist/index.css';
+import 'layer-vue/lib/index.css';
 Vue.use(LayerVue,{
     //此项设置置顶窗口的初始值，默认为100，一般无需配置，和其他组件冲突时可在此配置
     zindex:100,
@@ -310,7 +314,26 @@ Vue.use(LayerVue,{
 new Vue({render: h => h(App)}).$mount('#app')
 ```
 
+#### 2.单独配置
 
+##### 组件模式
+
+```vue
+<LayerVue :skin='{maxmin: {backgroundColorHover: "#6666",}}'></LayerVue>
+```
+
+##### 函数模式
+
+```js
+this.$Layer({
+	skin：{
+  		close: {
+    		backgroundColor: "#fff",
+  		},
+	}
+	//...其他配置
+})
+```
 
 ### move - 触发拖动的元素
 
@@ -362,6 +385,6 @@ new Vue({render: h => h(App)}).$mount('#app')
 
 ## 作者
 
-summer
+finalsummer
 
 642661520de@gmail.com
