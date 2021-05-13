@@ -31,15 +31,15 @@ const install = function (Vue, options) {
     'background:#41b883 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
     'background:transparent'
   )
-  Vue.component(LayerVue.name, LayerVue);
-  Vue.directive('drag', {
+  Vue[c.t](LayerVue.name, LayerVue);
+  Vue.directive('layer', {
     bind: function (el, binding) {
       const l = {};
       const that = binding.value.getthis();
       const f = (callback) => {
         d[v.up] = e => {
           e.preventDefault();
-          that.transition = t
+          that.transition = n;
           callback && callback()
           d[v.move] = null;
           d[v.up] = null;
@@ -53,7 +53,8 @@ const install = function (Vue, options) {
       };
       el[v.add]('transitionend', e => {
         if (e.propertyName === 'width') {
-          that.overflow = 'auto'
+          that.overflow = 'auto';
+          that.transition = n;
         }
       });
       // 窗口移动事件
@@ -130,6 +131,7 @@ const install = function (Vue, options) {
       // 最大化按钮
       if (el[v.qs](c.max)) {
         el[v.qs](c.max)[v.on] = () => {
+          that.transition=t
           that.maxbtn = !that.maxbtn;
           if (that.maxbtn) {
             if (that.move) {
@@ -164,6 +166,7 @@ const install = function (Vue, options) {
       // 最小化按钮
       if (el[v.qs]([c.min])) {
         el[v.qs]([c.min])[v.on] = () => {
+          that.transition=t
           that.minbtn = !that.minbtn;
           if (that.minbtn) {
             if (that.move) {
@@ -192,68 +195,74 @@ const install = function (Vue, options) {
         };
       }
       // 右下拉伸
-      el[v.qs]([c.rz])[v.d]= e1 => {
-        e1.preventDefault();
-        that.transition = n
-        const { width, height, x, y, minwidth, minheight } = that;
-        const clientX = e1.clientX;
-        const clientY = e1.clientY;
-        d[v.move] = e2 => {
-          e2.preventDefault();
-          let moveX = e2.clientX - clientX;
-          let moveY = e2.clientY - clientY;
-          l.width = p(width) + p(moveX);
-          l.height = p(height) + p(moveY);
-          if (l.width <= minwidth) {
-            l.width = minwidth;
-          }
-          if (l.width + x >= de[v.cw]) {
-            l.width = de[v.cw] - x;
-          }
-          if (l.height <= minheight) {
-            l.height = minheight;
-          }
-          if (l.height + y >= de[v.ch]) {
-            l.height = de[v.ch] - y;
-          }
-          that.width = l.width;
-          that.height = l.height;
+      if (el[v.qs]([c.rz])) {
+        el[v.qs]([c.rz])[v.d]= e1 => {
+          e1.preventDefault();
+          that.transition = n
+          const { width, height, x, y, minwidth, minheight } = that;
+          const clientX = e1.clientX;
+          const clientY = e1.clientY;
+          d[v.move] = e2 => {
+            e2.preventDefault();
+            let moveX = e2.clientX - clientX;
+            let moveY = e2.clientY - clientY;
+            l.width = p(width) + p(moveX);
+            l.height = p(height) + p(moveY);
+            if (l.width <= minwidth) {
+              l.width = minwidth;
+            }
+            if (l.width + x >= de[v.cw]) {
+              l.width = de[v.cw] - x;
+            }
+            if (l.height <= minheight) {
+              l.height = minheight;
+            }
+            if (l.height + y >= de[v.ch]) {
+              l.height = de[v.ch] - y;
+            }
+            that.width = l.width;
+            that.height = l.height;
+            that.resizing && that.resizing()
+          };
+          f(that.resizeEnd)
         };
-        f()
-      };
+      }
       // 左下拉伸
-      el[v.qs]([c.lbrz])[v.d]= e1 => {
-        e1.preventDefault();
-        that.transition = n
-        const { minwidth, minheight,width,height,x } = that;
-        const clientX = e1.clientX;
-        const clientY = e1.clientY;
-        d[v.move] = e2 => {
-          e2.preventDefault();
-          let moveX = e2.clientX - clientX;
-          let moveY = e2.clientY - clientY;
-          l.width = p(width) - p(moveX);
-          l.height = p(height) + p(moveY);
-          let newX = p(x) + p(moveX);
-          if (l.width <= minwidth) {
-            l.width = minwidth;
-          }
-          if (l.width + newX >= x + width) {
-            newX = x + width - l.width ;
-          }
-          if (l.height <= minheight) {
-            l.height = minheight;
-          }
-          if (!p(that.moveOut[3]) && newX <= 0) {
-            newX= 0;
-            l.width = x + width;
-          }
-          that.width = l.width;
-          that.height = l.height;
-          that.x=newX;
+      if (el[v.qs]([c.lbrz])) {
+        el[v.qs]([c.lbrz])[v.d]= e1 => {
+          e1.preventDefault();
+          that.transition = n
+          const { minwidth, minheight,width,height,x } = that;
+          const clientX = e1.clientX;
+          const clientY = e1.clientY;
+          d[v.move] = e2 => {
+            e2.preventDefault();
+            let moveX = e2.clientX - clientX;
+            let moveY = e2.clientY - clientY;
+            l.width = p(width) - p(moveX);
+            l.height = p(height) + p(moveY);
+            let newX = p(x) + p(moveX);
+            if (l.width <= minwidth) {
+              l.width = minwidth;
+            }
+            if (l.width + newX >= x + width) {
+              newX = x + width - l.width ;
+            }
+            if (l.height <= minheight) {
+              l.height = minheight;
+            }
+            if (!p(that.moveOut[3]) && newX <= 0) {
+              newX= 0;
+              l.width = x + width;
+            }
+            that.width = l.width;
+            that.height = l.height;
+            that.x = newX;
+            that.resizing && that.resizing();
+          };
+          f(that.resizeEnd)
         };
-        f()
-      };
+      }
     }
   });
   Vue[c.p][c.l] = LayerBox(Vue);
@@ -270,6 +279,11 @@ const install = function (Vue, options) {
 };
 export default {
   version: version,
+  LayerBox,
+  install
+};
+export  {
+  version,
   LayerBox,
   install
 };

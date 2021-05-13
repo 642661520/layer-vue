@@ -6,6 +6,9 @@
     <button @click="close2">close2</button>
     <button @click="close3">close3</button>
     <button @click="restore">还原</button>
+    <button @click="reset = !reset">重置</button>
+    <button @click="aaaa" >关闭全部</button>
+    <button @click="close" >关闭全部</button>
     <!-- <sui-layer></sui-layer> -->
     <div>
       <div>
@@ -14,8 +17,8 @@
     </div>
 
     <div id="test2">test2</div>
-    <!-- <LayerVue :maxmin="[1, 1]" :content="{ a: 1 }" :titleheight="30" :skin="{content:{color:'#58a'}}" :end='end' :cancel='cancel' :destroyOnClose='false'></LayerVue> -->
-    <LayerVue :visible.sync="visible" :maxmin="[1, 1]" :end="end" :cancel="cancel" :content="1" :destroyOnClose="false"></LayerVue>
+    <LayerVue :maxmin="[1, 1]" :content="{ a: 1 }" :titleheight="30" :skin="{ content: { color: '#58a' } }" :end="end" :cancel="cancel" :destroyOnClose="false"></LayerVue>
+    <LayerVue :visible.sync="visible" :maxmin="[1, 1]" :end="end" :cancel="cancel" :resize="[0, 1]" :destroyOnClose="false" :reset="reset"><div>1</div></LayerVue>
   </div>
 </template>
 <script>
@@ -35,6 +38,7 @@ export default {
       visible: true,
       layer1: null,
       layer2: null,
+      reset: true,
     };
   },
   created() {
@@ -43,7 +47,7 @@ export default {
   methods: {
     // 置顶函数
     log() {
-      this.layer1 = this.$Layer({
+      this.layer1 = this.$layer({
         // id:'213',
         skin: {
           title: {
@@ -66,7 +70,7 @@ export default {
         destroyOnClose: false,
         titleheight: 30,
         maxmin: [1, 1],
-        area: [599, 655],
+        // area: [599, 655],
         offset: "r",
         settop: true,
         // content:document.getElementById('test'),
@@ -86,45 +90,48 @@ export default {
       });
     },
     log2() {
-      this.layer2 = this.$Layer({
+      this.layer2 = this.$layer({
         destroyOnClose: false,
         area: [766, 355],
         offset: "1",
         settop: true,
-        content: document.getElementById("test"),
+        // content: document.getElementById("test"),
         end: () => {
           console.log("end");
         },
         cancel: () => {
           console.log("cancel");
         },
-        // content: {
-        //   component: Test,
-        //   parent: this,
-        //   data: { id: 3 },
-        // },
+        content: {
+          component: Test,
+          parent: this,
+          data: { id: 3 },
+        },
       });
     },
     success(a) {
       this.log(a);
     },
     close() {
-      this.$Layer.close(this.layer1);
+      this.$layer.close(this.layer1);
     },
     close2() {
-      this.$Layer.close(this.layer2);
+      this.$layer.close(this.layer2);
     },
     close3() {
       this.visible = !this.visible;
     },
     restore() {
-      this.$Layer.restore(this.layer1);
+      this.$layer.reset(this.layer1);
     },
     end: () => {
       console.log("end");
     },
     cancel: () => {
       console.log("cancel");
+    },
+    aaaa(){
+      this.$layer.closeAll();
     },
   },
 };

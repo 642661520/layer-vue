@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>test</title>
+  <link rel="stylesheet" href="./lib/index.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="./lib/layer-vue.js"></script>
+  <!-- 引入样式 -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+  <div id="app">
+    <layer-vue></layer-vue>
+  </div>
+  <script>
+    console.log(LayerVue);
+    console.log(Vue.prototype);
+    
+    Vue.use(LayerVue,{skin:{title:{color:'#44a'}}})
+    new Vue({
+      el:'#app',
+      data() {
+        return {
+        }
+      },
+      mounted() {
+        this.$Layer({resize:[0,1]});
+      },
+    });
+  </script>
+</body>
+</html>

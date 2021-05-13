@@ -6,13 +6,13 @@
 
 基于Vue框架的可移动可调整大小的非模态弹出层，效果类似于Layui中的Layer窗口，或者说是Window 窗体。基于Vue和React的UI库中，没有一款可移动非模态弹出层，如果你需要在页面中弹出一个窗口后依旧需要操作其他内容，那么layer-vue可以为你解决这一问题。
 
-## 安装
+## 安装使用
+
+### npm安装
 
 ```
-npm install layer-vue
+npm install layer-vue -s
 ```
-
-## 全局引入
 
 ```js
 // mian.js
@@ -31,15 +31,48 @@ Vue.use(LayerVue,{
 new Vue({render: h => h(App)}).$mount('#app')
 ```
 
+### CDN 方式
+
+```html
+<body>
+  <div id="app"></div>
+    <!-- 引入 layer-vue.css -->
+	<link rel="stylesheet" href="//unpkg.com/layer-vue/lib/index.css">
+	<!-- 引入Vue.js-->
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<!-- 引入 layer-vue.js -->
+	<script src="//unpkg.com/layer-vue/lib/layer-vue.js"></script>
+    <script>
+    <!-- 挂载layer组件 -->    
+    Vue.use(LayerVue,{
+    //此项设置置顶窗口的初始值，默认为100，一般无需配置，和其他组件冲突时可在此配置
+    zindex:100,
+    //全局配置窗口皮肤
+    skin：{
+    	//具体参数参见配置项：skin
+	}
+})
+    new Vue({
+      el:'#app',
+      mounted() {
+        this.$layer();
+      },
+    });
+  </script>
+</body>
+```
+
 ## 使用
 
-### 1.组件模式
+### 1.组件
 
 ```vue
 // App.vue
 <template>
   <div id="app">
     <LayerVue></LayerVue>
+    <!-- 或 -->
+    <layer-vue></layer-vue>
   </div>
 </template>
 <script>
@@ -47,7 +80,7 @@ export default { name: "app"};
 </script>
 ```
 
-### 2.函数模式
+### 2.方法
 
 ```vue
 // App.vue
@@ -57,18 +90,20 @@ export default {
     methods:{
         openlayer(){
          	//函数返回值是窗口ID
-        	this.layerid=this.$Layer.open({*配置项*}) //等价于 this.$Layer({*配置项*})
+        	this.layerid=this.$layer.open({*配置项*}) //等价于 this.$layer({*配置项*})
+        },
+        resetlayer(){
+            //重置窗口大小和位置
+          	this.$layer.reset(this.layerid)
         },
         closelayer(){
             //关闭窗口，传入窗口ID
-            this.$Layer.close(this.layerid)
-		}
+            this.$layer.close(this.layerid)
+		},
     }
 };
 </script>
 ```
-
-
 
 ## 配置项
 
@@ -76,7 +111,7 @@ export default {
 
 类型：Number/Boolean，默认：true
 
-仅组件模式下，支持该配置。
+仅组件模式下，支持该配置。重新打开后会重置窗口大小及位置。
 
 ```vue
 // App.vue
@@ -98,7 +133,13 @@ export default {
 </script>
 ```
 
+### destroyOnClose-关闭后销毁窗口
 
+类型：Boolean，默认：true
+
+默认关闭窗口时会销毁窗口，如需再次打开时保留上次内容区的内容，可设置destroyOnClose为false，在函数模式下，需和id配合使用，否则设置无效。
+
+若内容区在打开窗口前已经是html上的dom元素，那么destroyOnClose为true时，内容区不会被销毁，只会回到原本的位置。
 
 ### title - 标题
 
@@ -109,12 +150,12 @@ title支持三种类型的值，若你传入的是普通的字符串，如*title
 ```vue
 <LayerVue title="我是标题"></LayerVue>
 <LayerVue :title="title"></LayerVue>
-this.$Layer({title:'我是标题'})
+this.$layer({title:'我是标题'})
 ```
 
 ### content - 内容
 
-#### 组件模式
+#### 组件
 
 ##### 标签方式
 
@@ -134,14 +175,14 @@ this.$Layer({title:'我是标题'})
 <LayerVue>{{content}}</LayerVue>
 ```
 
-#### 函数模式
+#### 方法
 
 类型：VueDOM/DOM/String/Number/Boolean，默认：null
 
 ```JS
 let span = document.createElement("span");
 span.innerHTML = "<div>13123</div>";
-this.$Layer({
+this.$layer({
     	// String/Boolean/Number
     	content:1,
     	// DOM
@@ -215,17 +256,11 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
 
 默认不显示最大小化按钮。需要显示配置*maxmin: [1,1]*即可
 
-### resize - 是否右下允许拉伸
+### resize - 是否允许拉伸
 
-类型：Number/Boolean，默认：true
+类型：Number/Boolean，默认：[1,1]（右下角，左下角）
 
-默认情况下，你可以在弹层右下角拖动来拉伸尺寸。如果对指定的弹层屏蔽该功能，设置 false即可。
-
-### lbresize - 是否左下允许拉伸
-
-类型：Number/Boolean，默认：true
-
-默认情况下，你可以在弹层左下角拖动来拉伸尺寸。如果对指定的弹层屏蔽该功能，设置 false即可。
+默认情况下，你可以在弹层右下角和左下角拖动来拉伸尺寸。如果对指定的弹层屏蔽该功能，设置 [0,0]即可。
 
 ### zIndex - 层叠顺序
 
@@ -316,16 +351,16 @@ new Vue({render: h => h(App)}).$mount('#app')
 
 #### 2.单独配置
 
-##### 组件模式
+##### 组件
 
 ```vue
 <LayerVue :skin='{maxmin: {backgroundColorHover: "#6666",}}'></LayerVue>
 ```
 
-##### 函数模式
+##### 方法
 
 ```js
-this.$Layer({
+this.$layer({
 	skin：{
   		close: {
     		backgroundColor: "#fff",
@@ -347,25 +382,19 @@ this.$Layer({
 
 默认只能在窗口内拖拽，如果你想让拖到窗外，那么设定*moveOut: [1, 1, 1, 1]*即可。
 
-### moveEnd - 拖动完毕后的回调方法
+### reset -重置窗口大小和定位
 
-类型：Function，默认：null
+类型：Boolean，默认：null
 
-默认不会触发moveEnd，如果你需要，设定*moveEnd: function(){}*即可。
+组件模式下，在模版中传入reset初始值，之后通过对reset值取反进行重置窗口大小，通过方法创建layer窗口时，无需设置reset，可直接通过全局方法$layer.reset进行重置。
+
+## 回调函数
 
 ### success - 层弹出后的成功回调方法
 
 类型：Function，默认：null
 
 当你需要在层创建完毕时即执行一些语句，可以通过该回调。
-
-### destroyOnClose-关闭后销毁窗口
-
-类型：Boolean，默认：true
-
-默认关闭窗口时会销毁窗口，如需再次打开时保留上次内容区的内容，可设置destroyOnClose为false，在函数模式下，需和id配合使用，否则设置无效。
-
-若内容区在打开窗口前已经是html上的dom元素，那么destroyOnClose为true时，内容区不会被销毁，只会回到原本的位置。
 
 ### cancel - 关闭窗口时触发的回调
 
@@ -379,9 +408,55 @@ this.$Layer({
 
 只有窗口销毁后才会执行
 
+### moveEnd - 拖动完毕后的回调方法
+
+类型：Function，默认：null
+
+默认不会触发moveEnd，如果你需要，设定*moveEnd: function(){}*即可。
+
+### resizing - 监听窗口拉伸动作
+
+类型：Function，默认：null
+
+当你拖拽弹层右下角对窗体进行尺寸调整时，如果你设定了该回调，则会执行。
+
+### resizeEnd - 拉伸完毕后的回调方法
+
+类型：Function，默认：null
+
+默认不会触发resizeEnd，如果你需要，设定*moveEnd: function(){}*即可。
+
 ### full/min/restore -分别代表最大化、最小化、还原 后触发的回调
 
 类型：Function，默认：null
+
+## 全局方法
+
+### $layer.open(options)
+
+参数见上述配置项，返回值为窗口标识（index）
+
+打开layer窗口的核心方法，语法糖：$layer
+
+### $layer.close(index)
+
+参数：窗口标识
+
+关闭layer窗口的方法
+
+### $layer.reset(index)
+
+参数：窗口标识
+
+重置layer窗口大小和定位的方法
+
+### $layer.closeAll()
+
+参数：无
+
+关闭所有layer窗口的方法
+
+
 
 ## 作者
 
