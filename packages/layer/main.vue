@@ -188,6 +188,10 @@ export default {
     },
   },
   created() {
+    console.log(this.visible);
+    if(!this.visible){
+      this.defvisible=this.visible
+    }
     this.defskin = this[c.l].o.skin;
     window[v.add]("resize", this.resizefun);
     if (this.visible || this.visible === undefined) {

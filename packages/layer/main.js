@@ -2,7 +2,7 @@ import LayerVue, { c, p, v, d, de, n, t,merge } from "./main.vue";
 LayerVue.install = function(Vue) {
   Vue[c.t](LayerVue.name, LayerVue);
 };
-const version = '0.1.2';
+const version = '0.1.3';
 const LayerBox = function (Vue) {
   const LayerBoxConstructor = Vue.extend(LayerVue);
   const layer = function(options) {
