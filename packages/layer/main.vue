@@ -149,14 +149,14 @@ export default {
     restore: { type: Function },
     resizing: { type: Function },
     resizeEnd: { type: Function },
-    destroyOnClose: { type: [Number, Boolean], default: true },
+    destroyOnClose: { type: [Number, Boolean], default: false },
     amin: { type: Number, default: 0 },
     content: {},
     titleheight: { type: Number, default: 42 },
     skin: { type: Object },
     id: { default: undefined },
     reset: { typeof: Boolean },
-    el:{}
+    el: {},
   },
   computed: {
     contentheight: function () {
@@ -184,14 +184,14 @@ export default {
       }
     },
     reset: function () {
-      this.resetfun()
+      this.resetfun();
     },
   },
   created() {
-    console.log(this.visible);
-    if(!this.visible){
-      this.defvisible=this.visible
+    if (!this.visible) {
+      this.defvisible = this.visible;
     }
+    console.log(this.destroyOnClose);
     this.defskin = this[c.l].o.skin;
     window[v.add]("resize", this.resizefun);
     if (this.visible || this.visible === undefined) {
@@ -204,10 +204,10 @@ export default {
     }
   },
   mounted() {
-    if(!this.model){
+    if (!this.model) {
       console.log(this.$layer.o.instances);
-      this.index=this.$layer.o.instances.length
-      this.$layer.o.instances.push({index:this.index,instance:this})
+      this.index = this.$layer.o.instances.length;
+      this.$layer.o.instances.push({ index: this.index, instance: this });
     }
     if (this.skin) {
       this.defskin = merge(this.skin, this.defskin);
@@ -225,8 +225,12 @@ export default {
           [v.qs](".layer-vue-content")
           [v.ac](instance.vm.$el);
       }
-      if (this.$refs[c.c].children.length) {
-        this.display = this.$refs[c.c].children[0].style.display;
+      try {
+        if (this.$refs[c.c].children.length) {
+            this.display = this.$refs[c.c].children[0].style.display;
+          }
+      } catch (error) {
+        console.log('[layer warn]:not find children');
       }
       if (this.visible || this.visible === undefined) {
         if (this.settop) {
@@ -281,7 +285,7 @@ export default {
         }
       }
     },
-    resetfun(){
+    resetfun() {
       this.x = this.initdata.x;
       this.y = this.initdata.y;
       this.width = this.initdata.width;
@@ -445,7 +449,7 @@ export default {
     close() {
       console.log(this.el);
       console.log(this.index);
-      
+
       // 隐藏窗口
       this.defvisible = false;
       if (!this.model) {
@@ -515,7 +519,7 @@ export default {
         if (layerDOM) {
           // 删除layerDOM
           console.log(node);
-          
+
           node.removeChild(layerDOM);
           this.$destroy();
           delete this[c.l].o.instances[this.index];

@@ -15,7 +15,9 @@
 </head>
 <body>
   <div id="app">
-    <layer-vue></layer-vue>
+    <layer-vue  :visible.sync='visible'  :title='state' :area='[720, 405]' :destroyOnClose='false'>
+
+    </layer-vue>
   </div>
   <script>
     console.log(LayerVue);
@@ -26,10 +28,12 @@
       el:'#app',
       data() {
         return {
+          state:'123',
+          visible:false
         }
       },
       mounted() {
-        this.$Layer({resize:[0,1]});
+        // this.$layer({resize:[0,1]});
       },
     });
   </script>

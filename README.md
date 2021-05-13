@@ -43,7 +43,7 @@ new Vue({render: h => h(App)}).$mount('#app')
 	<!-- 引入 layer-vue.js -->
 	<script src="//unpkg.com/layer-vue/lib/layer-vue.js"></script>
     <script>
-    <!-- 挂载layer组件 -->    
+    //挂载layer组件    
     Vue.use(LayerVue,{
     //此项设置置顶窗口的初始值，默认为100，一般无需配置，和其他组件冲突时可在此配置
     zindex:100,
@@ -118,12 +118,12 @@ export default {
 <template>
   <div id="app">
       //需要添加.sync修饰符进行双向绑定，否则点击右上角关闭窗口后，无法同时修改传入的visible值
-    <LayerVue :visible.sync=‘visible’></LayerVue>
+    <LayerVue :visible.sync='visible'></LayerVue>
   </div>
 </template>
 <script>
 export default { 
-    name: "app"，
+    name: "app",
   	data() {
     	return {
       		visible: true,
@@ -135,9 +135,9 @@ export default {
 
 ### destroyOnClose-关闭后销毁窗口
 
-类型：Boolean，默认：true
+类型：Boolean，默认：false
 
-默认关闭窗口时会销毁窗口，如需再次打开时保留上次内容区的内容，可设置destroyOnClose为false，在函数模式下，需和id配合使用，否则设置无效。
+组件模式下默认关闭窗口时不会销毁窗口，如需再次打开时删除上次内容区的内容，可设置destroyOnClose为true，在函数模式下，需和id配合使用，否则设置无效。
 
 若内容区在打开窗口前已经是html上的dom元素，那么destroyOnClose为true时，内容区不会被销毁，只会回到原本的位置。
 
