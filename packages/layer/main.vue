@@ -205,7 +205,6 @@ export default {
   },
   mounted() {
     if (!this.model) {
-      console.log(this.$layer.o.instances);
       this.index = this.$layer.o.instances.length;
       this.$layer.o.instances.push({ index: this.index, instance: this });
     }
@@ -447,9 +446,6 @@ export default {
     },
     // 关闭窗口函数
     close() {
-      console.log(this.el);
-      console.log(this.index);
-
       // 隐藏窗口
       this.defvisible = false;
       if (!this.model) {
@@ -518,8 +514,6 @@ export default {
         // 判断layer窗口是否存在
         if (layerDOM) {
           // 删除layerDOM
-          console.log(node);
-
           node.removeChild(layerDOM);
           this.$destroy();
           delete this[c.l].o.instances[this.index];

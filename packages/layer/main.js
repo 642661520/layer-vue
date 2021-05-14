@@ -98,8 +98,7 @@ const LayerBox = function (Vue) {
         case "number":
         case "string":
         case "boolean":
-          instance.vm.$el[v.qs](".layer-vue-content").innerHTML =
-            options[c.c];
+          instance.vm.$el[v.qs](".layer-vue-content").innerHTML =options[c.c];
           break;
         case "object":
           break;
