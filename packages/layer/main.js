@@ -1,8 +1,8 @@
-import LayerVue, { c, p, v, d, de, n, t,merge } from "./main.vue";
+import LayerVue, {merge } from "./main.vue";
 LayerVue.install = function(Vue) {
-  Vue[c.t](LayerVue.name, LayerVue);
+  Vue.component(LayerVue.name, LayerVue);
 };
-const version = '0.1.4';
+const version = '0.1.5';
 const LayerBox = function (Vue) {
   const LayerBoxConstructor = Vue.extend(LayerVue);
   const layer = function(options) {
@@ -11,14 +11,14 @@ const LayerBox = function (Vue) {
   layer.open = (options={}) => {
   // id
     if (options.id) {
-      let index = Vue[c.p][c.l].o.instances.findIndex(value => {
+      let index = Vue.prototype.$layer.o.instances.findIndex(value => {
         if (value) {
           return value.instance.id === options.id;
         }
       });
         if (index >= 0) {
         if (!options.destroyOnClose) {
-          Vue[c.p][c.l].o.instances[index].instance.defvisible = true;
+          Vue.prototype.$layer.o.instances[index].instance.defvisible = true;
         }
         return index;
         }
@@ -29,22 +29,22 @@ const LayerBox = function (Vue) {
     // 强制删除传入的visible属性
     delete options.visible;
     // 合并全局皮肤配置到默认配置
-    const { skin } = Vue[c.p][c.l].o
+    const { skin } = Vue.prototype.$layer.o
     if (options.skin) {
       options.skin=  merge(options.skin, skin)
     } else {
       options.skin=skin
     }
     // 判断内容区类型
-    if (typeof options[c.c] === "object") {
+    if (typeof options.content === "object") {
       // DOM类型
-      if (options[c.c] instanceof HTMLElement) {
+      if (options.content instanceof HTMLElement) {
         // DOM树中的元素
-        if (options[c.c][v.pn]) {
+        if (options.content.parentNode) {
           // 根据其父元素的calss判断是不是是已经打开的layer窗口
-          if (options[c.c][v.pn].className.indexOf("layer-vue") >= 0) {
+          if (options.content.parentNode.className.indexOf("layer-vue") >= 0) {
             // 返回打开窗口的index
-            return options[c.c][v.pn][v.pn].dataset.index;
+            return options.content.parentNode.parentNode.dataset.index;
           }
           // 新创建DOM
         } else {
@@ -56,14 +56,14 @@ const LayerBox = function (Vue) {
       }
       else {
         // 根据component判断内容区是否为Vue组件
-        if (options[c.c][c.t]) {
-          options[c.c][c.t] = Vue.extend(options[c.c][c.t]);
+        if (options.content.component) {
+          options.content.component = Vue.extend(options.content.component);
         } else {
           console.log("[layer warn]:Incorrect content type");
         }
       }
     }
-    let index = Vue[c.p][c.l].o.instances.length;
+    let index = Vue.prototype.$layer.o.instances.length;
     if (options.index === undefined) {
       options.index = index;
     } else {
@@ -81,24 +81,24 @@ const LayerBox = function (Vue) {
     instance.index = index;
     instance.vm = instance.$mount();
     if (instance.ishtml) {
-      if (options[c.c][v.pn]) {
-        let parentDiv = options[c.c][v.pn];
-        parentDiv.insertBefore(instance.vm.$el, options[c.c]);
+      if (options.content.parentNode) {
+        let parentDiv = options.content.parentNode;
+        parentDiv.insertBefore(instance.vm.$el, options.content);
       } else {
-        if (d[v.qs](options.el)) {
-          d[v.qs](options.el).appendChild(instance.vm.$el);
+        if (document.querySelector(options.el)) {
+          document.querySelector(options.el).appendChild(instance.vm.$el);
         } else {
-          d.body.appendChild(instance.vm.$el);
+          document.body.appendChild(instance.vm.$el);
         }
       }
-      instance.vm.$el[v.qs](".layer-vue-content").appendChild(options[c.c]);
+      instance.vm.$el.querySelector(".layer-vue-content").appendChild(options.content);
     } else {
-      switch (typeof options[c.c]) {
+      switch (typeof options.content) {
         case "function":
         case "number":
         case "string":
         case "boolean":
-          instance.vm.$el[v.qs](".layer-vue-content").innerHTML =options[c.c];
+          instance.vm.$el.querySelector(".layer-vue-content").innerHTML =options.content;
           break;
         case "object":
           break;
@@ -107,13 +107,13 @@ const LayerBox = function (Vue) {
           console.log("[layer warn]:Incorrect content type");
           break;
       }
-      if (d[v.qs](options.el)) {
-        d[v.qs](options.el).appendChild(instance.vm.$el);
+      if (document.querySelector(options.el)) {
+        document.querySelector(options.el).appendChild(instance.vm.$el);
       } else {
-        d.body.appendChild(instance.vm.$el);
+        document.body.appendChild(instance.vm.$el);
       }
     }
-    Vue[c.p][c.l].o.instances.push({ index, instance });
+    Vue.prototype.$layer.o.instances.push({ index, instance });
     return index;
   };
   layer.close = index => {
@@ -121,7 +121,7 @@ const LayerBox = function (Vue) {
       console.log("[layer-warn]:The index is undefined");
       return;
     }
-    const instances = Vue[c.p][c.l].o.instances[index];
+    const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
       instances.instance.close();
     } else {
@@ -133,7 +133,7 @@ const LayerBox = function (Vue) {
       console.log("[layer-warn]:The index is undefined");
       return;
     }
-    const instances = Vue[c.p][c.l].o.instances[index];
+    const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
       instances.instance.resetfun();
     } else {
@@ -141,7 +141,7 @@ const LayerBox = function (Vue) {
     }
   };
   layer.closeAll = () => {
-    Vue[c.p][c.l].o.instances.forEach(element => {
+    Vue.prototype.$layer.o.instances.forEach(element => {
       if (element) {
         element.instance.close()
       }
@@ -152,4 +152,4 @@ const LayerBox = function (Vue) {
 };
 
 export default LayerBox;
-export { LayerVue, c, p, v, d, de, n, t,merge,version };
+export { LayerVue,merge,version };

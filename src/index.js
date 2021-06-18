@@ -1,11 +1,11 @@
-import LayerBox, {LayerVue,c,p,v,d,de,n,t,merge,version} from "../packages/layer/main";
+import LayerBox, { LayerVue, merge, version } from "../packages/layer/main";
 import "../packages/theme/css/index.css";
 const skin = {
-  shadowColor:'rgb(0 0 0 / 30%)',
+  shadowColor: 'rgb(0 0 0 / 30%)',
   title: {
     backgroundColor: "#fff",
     color: "#000",
-    borderColor:"#f0f0f0",
+    borderColor: "#f0f0f0",
   },
   content: {
     backgroundColor: "#fff",
@@ -31,54 +31,46 @@ const install = function (Vue, options) {
     'background:#41b883 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
     'background:transparent'
   )
-  Vue[c.t](LayerVue.name, LayerVue);
+  Vue.component(LayerVue.name, LayerVue);
   Vue.directive('layer', {
     bind: function (el, binding) {
       const l = {};
       const that = binding.value.getthis();
       const f = (callback) => {
-        d[v.up] = e => {
+        document.onmouseup = e => {
           e.preventDefault();
-          that.transition = n;
           callback && callback()
-          d[v.move] = null;
-          d[v.up] = null;
+          document.onmousemove = null;
+          document.onmouseup = null;
         };
-    }
+      }
       // 置顶事件
-      el[v.d] = () => {
+      el.onmousedown = () => {
         if (that.settop) {
-          that.zIndex = that[c.l].o.settop();
+          that.zIndex = that.$layer.o.settop();
         }
       };
-      el[v.add]('transitionend', e => {
-        if (e.propertyName === 'width') {
-          that.overflow = 'auto';
-          that.transition = n;
-        }
-      });
       // 窗口移动事件
-      if (el[v.qs](that.move)) {
-        el[v.qs](that.move).style.cursor = 'move';
-        el[v.qs](that.move)[v.d]= e1 => {
-          if (el.className.indexOf(c.ismax) >= 0) {
+      if (el.querySelector(that.move)) {
+        el.querySelector(that.move).style.cursor = 'move';
+        el.querySelector(that.move).onmousedown = e1 => {
+          if (el.className.indexOf("layer-vue-ismax") >= 0) {
             return;
           }
-          that.transition = n;
-          if (el.className.indexOf(c.ismin) >= 0) {
+          if (el.className.indexOf("layer-vue-ismin") >= 0) {
             const {
               x
             } = that;
             let clientX = e1.clientX;
-            d[v.move] = e2 => {
+            document.onmousemove = e2 => {
               e2.preventDefault();
               let moveX = e2.clientX - clientX;
-              let newX = p(x) + p(moveX);
-              if (!p(that.moveOut[3]) && newX <= 0) {
+              let newX = parseInt(x) + parseInt(moveX);
+              if (!parseInt(that.moveOut[3]) && newX <= 0) {
                 newX = 0;
               }
-              if (!p(that.moveOut[1]) && newX >= de[v.cw] - that.minwidth) {
-                newX = de[v.cw] - that.minwidth;
+              if (!parseInt(that.moveOut[1]) && newX >= document.documentElement.clientWidth - that.minwidth) {
+                newX = document.documentElement.clientWidth - that.minwidth;
               }
               that.x = newX;
             };
@@ -90,34 +82,34 @@ const install = function (Vue, options) {
             } = that;
             let clientX = e1.clientX;
             let clientY = e1.clientY;
-            d[v.move] = e2 => {
+            document.onmousemove = e2 => {
               e2.preventDefault();
               let moveX = e2.clientX - clientX;
               let moveY = e2.clientY - clientY;
-              let newX = p(x) + p(moveX);
-              if (!p(that.moveOut[3]) && newX <= 0) {
+              let newX = parseInt(x) + parseInt(moveX);
+              if (!parseInt(that.moveOut[3]) && newX <= 0) {
                 newX = 0;
               }
               if (
-                !p(that.moveOut[1]) &&
-                newX >= de[v.cw] - that.width
+                !parseInt(that.moveOut[1]) &&
+                newX >= document.documentElement.clientWidth - that.width
               ) {
                 newX =
-                  de[v.cw] -
+                  document.documentElement.clientWidth -
                   that.width;
               }
-              let newY = p(y) + p(moveY);
-              if (!p(that.moveOut[0]) && newY <= 0) {
+              let newY = parseInt(y) + parseInt(moveY);
+              if (!parseInt(that.moveOut[0]) && newY <= 0) {
                 newY = 0;
               }
               if (
-                !p(that.moveOut[2]) &&
+                !parseInt(that.moveOut[2]) &&
                 newY >=
-                de[v.ch] -
+                document.documentElement.clientHeight -
                 that.height
               ) {
                 newY =
-                  de[v.ch] -
+                  document.documentElement.clientHeight -
                   that.height;
               }
               that.x = newX;
@@ -129,13 +121,12 @@ const install = function (Vue, options) {
       }
 
       // 最大化按钮
-      if (el[v.qs](c.max)) {
-        el[v.qs](c.max)[v.on] = () => {
-          that.transition=t
+      if (el.querySelector(".layer-vue-max")) {
+        el.querySelector(".layer-vue-max").onclick = () => {
           that.maxbtn = !that.maxbtn;
           if (that.maxbtn) {
             if (that.move) {
-              el[v.qs](that.move).style.cursor = 'not-allowed';
+              el.querySelector(that.move).style.cursor = 'not-allowed';
             }
             if (that.minbtn) {
               that.minbtn = false;
@@ -147,8 +138,8 @@ const install = function (Vue, options) {
             }
             that.x = 0;
             that.y = 0;
-            that.width = de[v.cw];
-            that.height = de[v.ch];
+            that.width = document.documentElement.clientWidth;
+            that.height = document.documentElement.clientHeight;
             that.full && that.full();
           } else {
             that.x = (l.x);
@@ -157,20 +148,19 @@ const install = function (Vue, options) {
             that.height = (l.height);
             that.restore && that.restore();
             if (that.move) {
-              el[v.qs](that.move).style.cursor = 'move';
+              el.querySelector(that.move).style.cursor = 'move';
             }
           }
         };
       }
 
       // 最小化按钮
-      if (el[v.qs]([c.min])) {
-        el[v.qs]([c.min])[v.on] = () => {
-          that.transition=t
+      if (el.querySelector(".layer-vue-min")) {
+        el.querySelector(".layer-vue-min").onclick = () => {
           that.minbtn = !that.minbtn;
           if (that.minbtn) {
             if (that.move) {
-              el[v.qs](that.move).style.cursor ='move';
+              el.querySelector(that.move).style.cursor = 'move';
             }
             if (that.maxbtn) {
               that.maxbtn = false;
@@ -181,7 +171,7 @@ const install = function (Vue, options) {
               l.height = that.height;
             }
             that.x = l.x;
-            that.y = de[v.ch] - that.titleheight;
+            that.y = document.documentElement.clientHeight - that.titleheight;
             that.height = that.titleheight;
             that.width = 200;
             that.min && that.min();
@@ -195,30 +185,29 @@ const install = function (Vue, options) {
         };
       }
       // 右下拉伸
-      if (el[v.qs]([c.rz])) {
-        el[v.qs]([c.rz])[v.d]= e1 => {
+      if (el.querySelector(".layer-vue-resize")) {
+        el.querySelector(".layer-vue-resize").onmousedown = e1 => {
           e1.preventDefault();
-          that.transition = n
           const { width, height, x, y, minwidth, minheight } = that;
           const clientX = e1.clientX;
           const clientY = e1.clientY;
-          d[v.move] = e2 => {
+          document.onmousemove = e2 => {
             e2.preventDefault();
             let moveX = e2.clientX - clientX;
             let moveY = e2.clientY - clientY;
-            l.width = p(width) + p(moveX);
-            l.height = p(height) + p(moveY);
+            l.width = parseInt(width) + parseInt(moveX);
+            l.height = parseInt(height) + parseInt(moveY);
             if (l.width <= minwidth) {
               l.width = minwidth;
             }
-            if (l.width + x >= de[v.cw]) {
-              l.width = de[v.cw] - x;
+            if (l.width + x >= document.documentElement.clientWidth) {
+              l.width = document.documentElement.clientWidth - x;
             }
             if (l.height <= minheight) {
               l.height = minheight;
             }
-            if (l.height + y >= de[v.ch]) {
-              l.height = de[v.ch] - y;
+            if (l.height + y >= document.documentElement.clientHeight) {
+              l.height = document.documentElement.clientHeight - y;
             }
             that.width = l.width;
             that.height = l.height;
@@ -228,31 +217,30 @@ const install = function (Vue, options) {
         };
       }
       // 左下拉伸
-      if (el[v.qs]([c.lbrz])) {
-        el[v.qs]([c.lbrz])[v.d]= e1 => {
+      if (el.querySelector(".layer-vue-lbresize")) {
+        el.querySelector(".layer-vue-lbresize").onmousedown = e1 => {
           e1.preventDefault();
-          that.transition = n
-          const { minwidth, minheight,width,height,x } = that;
+          const { minwidth, minheight, width, height, x } = that;
           const clientX = e1.clientX;
           const clientY = e1.clientY;
-          d[v.move] = e2 => {
+          document.onmousemove = e2 => {
             e2.preventDefault();
             let moveX = e2.clientX - clientX;
             let moveY = e2.clientY - clientY;
-            l.width = p(width) - p(moveX);
-            l.height = p(height) + p(moveY);
-            let newX = p(x) + p(moveX);
+            l.width = parseInt(width) - parseInt(moveX);
+            l.height = parseInt(height) + parseInt(moveY);
+            let newX = parseInt(x) + parseInt(moveX);
             if (l.width <= minwidth) {
               l.width = minwidth;
             }
             if (l.width + newX >= x + width) {
-              newX = x + width - l.width ;
+              newX = x + width - l.width;
             }
             if (l.height <= minheight) {
               l.height = minheight;
             }
-            if (!p(that.moveOut[3]) && newX <= 0) {
-              newX= 0;
+            if (!parseInt(that.moveOut[3]) && newX <= 0) {
+              newX = 0;
               l.width = x + width;
             }
             that.width = l.width;
@@ -265,24 +253,24 @@ const install = function (Vue, options) {
       }
     }
   });
-  Vue[c.p][c.l] = LayerBox(Vue);
-  Vue[c.p][c.l].o = {
+  Vue.prototype.$layer = LayerBox(Vue);
+  Vue.prototype.$layer.o = {
     zindex: options && options.zindex ? options.zindex : 100,
-    skin:options && options.skin ? merge(options.skin,skin):skin,
+    skin: options && options.skin ? merge(options.skin, skin) : skin,
     settop: () => {
-      Vue[c.p][c.l].o.zindex =
-        Vue[c.p][c.l].o.zindex + 1;
-      return Vue[c.p][c.l].o.zindex;
+      Vue.prototype.$layer.o.zindex =
+        Vue.prototype.$layer.o.zindex + 1;
+      return Vue.prototype.$layer.o.zindex;
     },
     instances: []
   };
 };
 export default {
-  version: version,
+  version,
   LayerBox,
   install
 };
-export  {
+export {
   version,
   LayerBox,
   install

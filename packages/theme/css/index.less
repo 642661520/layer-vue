@@ -1,0 +1,105 @@
+[v-cloak] {
+  display: none;
+}
+
+.layer-vue {
+  position: fixed;
+  display: inline-block;
+  top: 0;
+  left: 0;
+  border-radius: 2px;
+  .layer-vue-title {
+    overflow: hidden;
+    width: 100%;
+
+    >div {
+      display: inline-block;
+    }
+
+    .layer-vue-title-text {
+      padding: 0 0 1px 20px;
+      vertical-align: top;
+      overflow: hidden;
+      width: calc(100% - 130px);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      user-select: none;
+    }
+  }
+
+  .layer-vue-tools {
+    float: right;
+    cursor: pointer;
+    span {
+      display: inline-block;
+      width: 30px;
+      text-align: center;
+    }
+
+    .layer-vue-min:hover,
+    .layer-vue-max:hover {
+      background-color: var(--mbch);
+      fill: var(--mch);
+    }
+
+    .layer-vue-close:hover {
+      background-color: var(--cbch);
+      fill: var(--cch);
+    }
+  }
+  .layer-vue-close2 {
+    display: none;
+    position: absolute;
+    right: -15px;
+    top: -15px;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    z-index: 1;
+    line-height: 21px;
+    background-color: #777;
+    border: 2px solid #FFF;
+    svg {
+      fill: #FFF;
+      line-height: 21px;
+      font-size: 14px;
+      padding: 5px;
+    }
+    &:hover {
+      background-color: var(--cbch);
+      color: var(--cch);
+    }
+  }
+
+  &:hover .layer-vue-close2 {
+    display: block;
+  }
+
+
+  .layer-vue-resize {
+    user-select: none;
+    position: absolute;
+    cursor: se-resize;
+    width: 10px;
+    height: 10px;
+    bottom: 0px;
+    right: 0px;
+    z-index: 1;
+  }
+
+  .layer-vue-lbresize {
+    user-select: none;
+    position: absolute;
+    cursor: sw-resize;
+    width: 10px;
+    height: 10px;
+    bottom: 0px;
+    left: 0px;
+    z-index: 1;
+  }
+
+  .layer-vue-content {
+    position: relative;
+  }
+
+}
