@@ -1,35 +1,37 @@
 <template>
   <div
     v-cloak
+    v-if="destroyOnClose ? defvisible : true"
     οndragstart="return false;"
     :data-index="index"
-    v-if="destroyOnClose ? defvisible : true"
-    v-show="destroyOnClose ? true : defvisible"
     class="layer-vue"
     :id="'layer-vue-' + index"
-    :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn }"
+    :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn, startamin1: (amin===1 && defvisible),endamin1: (amin===1 && !visible || endamin) }"
     v-layer="{ getthis }"
     :style="{
-      '--mch': this.defskin.maxmin.colorHover,
-      '--cch': this.defskin.close.colorHover,
-      '--mbch': this.defskin.maxmin.backgroundColorHover,
-      '--cbch': this.defskin.close.backgroundColorHover,
-      'background-color': this.defskin.title.backgroundColor,
-      'box-shadow': '1px 1px 50px ' + this.defskin.shadowColor,
+      '--mch': defskin.maxmin.colorHover,
+      '--cch': defskin.close.colorHover,
+      '--mbch': defskin.maxmin.backgroundColorHover,
+      '--cbch': defskin.close.backgroundColorHover,
+      'background-color': defskin.title.backgroundColor,
+      'box-shadow': '1px 1px 50px ' + defskin.shadowColor,
       width: width + 'px',
       height: height + 'px',
-      transform: 'translate(' + x + 'px,' + y + 'px)',
+      top: y + 'px',
+      left: x + 'px',
       'z-index': zIndex,
+      display: defvisible ? '' : 'none',
     }"
   >
+    <!--  transform: 'translate(' + x + 'px,' + y + 'px)', -->
     <div
       v-if="title !== false"
       class="layer-vue-title"
       :title="title"
       :style="{
-        'background-color': this.defskin.title.backgroundColor,
-        color: this.defskin.title.color,
-        'border-bottom': '1px solid ' + this.defskin.title.borderColor,
+        'background-color': defskin.title.backgroundColor,
+        color: defskin.title.color,
+        'border-bottom': '1px solid ' + defskin.title.borderColor,
         height: titleheight + 'px',
         'line-height': titleheight + 'px',
       }"
@@ -61,7 +63,7 @@
             ></path>
           </svg>
         </span>
-        <span v-show="closeBtn" class="layer-vue-close" @click="close">
+        <span v-show="closeBtn" class="layer-vue-close" @click="closefun">
           <svg t="1623989504811" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2061" width="16" height="16">
             <path
               d="M563.3 509l352.3-352.3c13.9-13.9 13.9-36.4 0-50.3-13.9-13.9-36.4-13.9-50.3 0L513 458.7 160.7 106.4c-13.9-13.9-36.4-13.9-50.3 0-13.9 13.9-13.9 36.4 0 50.3L462.7 509 110.4 861.3c-13.9 13.9-13.9 36.4 0 50.3 6.9 6.9 16.1 10.4 25.2 10.4s18.2-3.5 25.2-10.4L513 559.3l352.3 352.3c6.9 6.9 16.1 10.4 25.2 10.4s18.2-3.5 25.2-10.4c13.9-13.9 13.9-36.4 0-50.3L563.3 509z"
@@ -71,7 +73,7 @@
         </span>
       </div>
     </div>
-    <span v-show="closeBtn && !title" :class="{ 'layer-vue-close2': !title }" @click="close">
+    <span v-show="closeBtn && !title" :class="{ 'layer-vue-close2': !title }" @click="closefun">
       <svg t="1623989504811" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2061" width="16" height="16">
         <path
           d="M563.3 509l352.3-352.3c13.9-13.9 13.9-36.4 0-50.3-13.9-13.9-36.4-13.9-50.3 0L513 458.7 160.7 106.4c-13.9-13.9-36.4-13.9-50.3 0-13.9 13.9-13.9 36.4 0 50.3L462.7 509 110.4 861.3c-13.9 13.9-13.9 36.4 0 50.3 6.9 6.9 16.1 10.4 25.2 10.4s18.2-3.5 25.2-10.4L513 559.3l352.3 352.3c6.9 6.9 16.1 10.4 25.2 10.4s18.2-3.5 25.2-10.4c13.9-13.9 13.9-36.4 0-50.3L563.3 509z"
@@ -85,10 +87,9 @@
       ref="content"
       class="layer-vue-content"
       :style="{
-        'background-color': this.defskin.content.backgroundColor,
-        color: this.defskin.content.color,
+        'background-color': defskin.content.backgroundColor,
+        color: defskin.content.color,
         height: contentheight + 'px',
-        overflow: overflow,
       }"
     >
       <slot>{{ !model ? content : null }}</slot>
@@ -113,6 +114,7 @@ export default {
     return {
       // 默认开启
       defvisible: true,
+      endamin:false,
       // 最大化按钮
       maxbtn: false,
       minbtn: false,
@@ -125,7 +127,6 @@ export default {
       width: 0,
       height: 0,
       zIndex: 1,
-      overflow: "hidden",
       index: 0,
       model: undefined,
       display: undefined,
@@ -155,7 +156,7 @@ export default {
     resizing: { type: Function },
     resizeEnd: { type: Function },
     destroyOnClose: { type: [Number, Boolean], default: false },
-    amin: { type: Number, default: 0 },
+    amin: { type: Number, default: 1 },
     content: {},
     titleheight: { type: Number, default: 42 },
     skin: { type: Object },
@@ -165,12 +166,21 @@ export default {
   },
   computed: {
     contentheight: function () {
-      return this.height - (this.title ? this.titleheight : 0);
+      let h = this.height - (this.title ? this.titleheight : 0);
+      h <= 0 ? (h = 0) : null;
+      return h;
     },
   },
   watch: {
     visible: function (newvalue) {
+      if(this.amin){
+setTimeout(()=>{
       this.defvisible = newvalue;
+      },200)
+      }else{
+        this.defvisible = newvalue;
+      }
+      
     },
     defvisible: function (newvalue) {
       if (newvalue) {
@@ -185,7 +195,8 @@ export default {
           this.success && this.success();
         });
       } else {
-        this.amininit();
+        // this.amininit();
+        this.close();
       }
     },
     reset: function () {
@@ -196,7 +207,6 @@ export default {
     if (!this.visible) {
       this.defvisible = this.visible;
     }
-    console.log(this.destroyOnClose);
     this.defskin = this.$layer.o.skin;
     window.addEventListener("resize", this.resizefun);
     if (this.visible || this.visible === undefined) {
@@ -254,6 +264,10 @@ export default {
   },
   methods: {
     resizefun() {
+      if (!this.defvisible) {
+        this.amininit();
+        return;
+      }
       if (this.maxbtn) {
         this.width = document.documentElement.clientWidth;
         return;
@@ -297,7 +311,6 @@ export default {
     },
     // 动画初始化函数
     amininit() {
-      this.overflow = "hidden";
       if (this.amin === 0) {
         const { height, width } = this.areainit();
         const { x, y } = this.offsetinit(this.offset, width * 0.5, height * 0.5, 0);
@@ -319,19 +332,10 @@ export default {
       const { height, width } = this.areainit();
       const { x, y } = this.offsetinit(this.offset, width, height);
       this.initdata = { width, height, x, y };
-      if (this.amin === 0) {
-        const movex = this.x - x;
-        const movey = this.y - y;
-        this.amindsq = setInterval(() => {
-          this.width = this.width + width / 50;
-          this.height += height / 50;
-          this.x -= movex / 50;
-          this.y -= movey / 50;
-          if (this.width >= width) {
-            clearInterval(this.amindsq);
-          }
-        }, 1);
-      }
+      this.width = width;
+      this.height = height;
+      this.x = x;
+      this.y = y;
     },
     // 高宽初始化函数
     areainit() {
@@ -540,6 +544,17 @@ export default {
         }
       }
       this.end && this.end();
+    },
+    closefun(){
+      if(this.amin){
+        this.endamin=true;
+        setTimeout(()=>{
+          console.log(2);
+          this.close()
+        },200)
+      }else{
+        this.close()
+      }
     },
     getthis() {
       return this;

@@ -17,7 +17,9 @@
     </div>
 
     <div id="test2">test2</div>
-    <layer-vue :skin="{ content: { color: '#58a' } }" :end="end" :cancel="cancel" :destroyOnClose="false" :title='false'>1231312</layer-vue>
+    <layer-vue :skin="{ content: { color: '#58a' } }" :end="end" :cancel="cancel" :destroyOnClose="false" :title='false'>
+    <div id="content1" style="color:#58a;background:#bfa">内容区是这个dom元素</div>
+      </layer-vue>
     <LayerVue :visible.sync="visible" :maxmin="[1, 1]" :end="end" :cancel="cancel" :resize="[0, 1]" :destroyOnClose="false" :reset="reset"><div id="videobox">
           <video muted autoplay="true" id="video"  controls='true' controlsList="nodownload"></video>
           <button   class="btn" id="download" onclick="download()">下载</button>
@@ -51,7 +53,7 @@ export default {
     // 置顶函数
     log() {
       this.layer1 = this.$layer({
-        // id:'213',
+        id:'213',
         skin: {
           title: {
             backgroundColor: "#bfa",
@@ -70,7 +72,7 @@ export default {
             colorHover: "#123",
           },
         },
-        destroyOnClose: false,
+        destroyOnClose: true,
         titleheight: 30,
         title:'13211111111111111111111111111111111312',
         maxmin: [1, 1],

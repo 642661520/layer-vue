@@ -4,20 +4,20 @@
 
 .layer-vue {
   position: fixed;
-  display: inline-block;
   top: 0;
   left: 0;
   border-radius: 2px;
   .layer-vue-title {
     overflow: hidden;
     width: 100%;
-
+    padding: 0 0 1px 20px;
+    box-sizing: border-box;
     >div {
       display: inline-block;
     }
 
     .layer-vue-title-text {
-      padding: 0 0 1px 20px;
+      
       vertical-align: top;
       overflow: hidden;
       width: calc(100% - 130px);
@@ -100,6 +100,40 @@
 
   .layer-vue-content {
     position: relative;
+    overflow: hidden;
   }
+  &.startamin1{
+    animation: startadmin1 0.3s;
+  }
+  &.endamin1{
+    animation: endamin1 0.3s infinite;
+  }
+}
 
+@keyframes startadmin1 {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  80%{
+    transform: scale(1.1);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes endamin1 {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  20%{
+    transform: scale(1.1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.5);
+  }
 }

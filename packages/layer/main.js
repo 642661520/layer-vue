@@ -2,7 +2,7 @@ import LayerVue, {merge } from "./main.vue";
 LayerVue.install = function(Vue) {
   Vue.component(LayerVue.name, LayerVue);
 };
-const version = '0.1.5';
+const version = '0.1.6';
 const LayerBox = function (Vue) {
   const LayerBoxConstructor = Vue.extend(LayerVue);
   const layer = function(options) {
@@ -123,7 +123,7 @@ const LayerBox = function (Vue) {
     }
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
-      instances.instance.close();
+      instances.instance.closefun();
     } else {
       console.log("[layer-warn]:No layer with index ：layer-vue-" + index + " found");
     }
@@ -143,7 +143,7 @@ const LayerBox = function (Vue) {
   layer.closeAll = () => {
     Vue.prototype.$layer.o.instances.forEach(element => {
       if (element) {
-        element.instance.close()
+        element.instance.closefun()
       }
     });
   }

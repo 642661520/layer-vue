@@ -1,7 +1,7 @@
 {
   "name": "layer-vue",
   "description": "A Vue.js project",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "author": "'finalsummer' <'642661520de@gmail.com'>",
   "license": "MIT",
   "private": false,
@@ -44,6 +44,7 @@
     "layer-vue",
     "finalsummer"
   ],
+  "homepage":"http://layer-vue.cn",
   "repository": {
     "type": "git",
     "url": "https://github.com/642661520/vuelayer.git"

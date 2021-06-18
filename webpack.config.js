@@ -80,7 +80,6 @@ if (process.env.NODE_ENV === "production") {
       use:"css-loader"
     })
   }
-  // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
       "process.env": {
