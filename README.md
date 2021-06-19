@@ -283,11 +283,12 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
 ```js
 {
   //窗口阴影
-  shadowColor:'rgb(0 0 0 / 30%)',
+  boxShadow:'1px 1px 50px rgb(0 0 0 / 30%)',
+  background:"#fff",
   //标题栏
   title: {
-     //标题栏背景色
-    backgroundColor: "#fff",
+     //标题栏背景
+    background: "#fff",
      //标题栏文本色
     color: "#000",
      //标题栏和内容区分割线颜色
@@ -295,30 +296,30 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
   },
   //内容区
   content: {
-	//内容区背景色
-    backgroundColor: "#fff",
+	//内容区背景
+    background: "#fff",
     //内容区文本色   
     color: "#000",
   },
   //最大化最小化按钮
   maxmin: {
-    //最大化最小化按钮背景色
-    backgroundColor: "#fff",
+    //最大化最小化按钮背景
+    background: "#fff",
     //最大化最小化按钮
     color: "#000",
     //鼠标移入时最大化最小化按钮文本色
-    backgroundColorHover: "#6666",
+    backgroundHover: "#6666",
     //鼠标移入时最大化最小化按钮
     colorHover: "#008afc",
   },
   //关闭按钮
   close: {
-    //关闭按钮背景色
-    backgroundColor: "#fff",
+    //关闭按钮背景
+    background: "#fff",
     //关闭按钮文本色
     color: "#000",
-    //鼠标移入时关闭按钮背景色
-    backgroundColorHover: "#f00",
+    //鼠标移入时关闭按钮背景
+    backgroundHover: "#f00",
     //鼠标移入时关闭按钮文本色
     colorHover: "#fff",
   },
@@ -341,10 +342,10 @@ Vue.use(LayerVue,{
     //全局配置窗口皮肤
     skin：{
   		maxmin: {
-   			backgroundColorHover: "#6666",
+   			backgroundHover: "#6666",
   		},
   		close: {
-    		backgroundColor: "#fff",
+    		background: "#fff",
   		},
 	}
 })
@@ -356,7 +357,7 @@ new Vue({render: h => h(App)}).$mount('#app')
 ##### 组件
 
 ```vue
-<LayerVue :skin='{maxmin: {backgroundColorHover: "#6666",}}'></LayerVue>
+<LayerVue :skin='{maxmin: {backgroundHover: "#6666",}}'></LayerVue>
 ```
 
 ##### 方法
@@ -365,7 +366,7 @@ new Vue({render: h => h(App)}).$mount('#app')
 this.$layer({
 	skin：{
   		close: {
-    		backgroundColor: "#fff",
+    		background: "#fff",
   		},
 	}
 	//...其他配置

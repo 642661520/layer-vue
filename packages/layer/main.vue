@@ -4,32 +4,33 @@
     v-if="destroyOnClose ? defvisible : true"
     οndragstart="return false;"
     :data-index="index"
+    :data-amin="amin"
     class="layer-vue"
     :id="'layer-vue-' + index"
-    :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn, startamin1: (amin===1 && defvisible),endamin1: (amin===1 && !visible || endamin) }"
+    :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn, startamin: defvisible, endamin: !visible || endamin }"
     v-layer="{ getthis }"
     :style="{
       '--mch': defskin.maxmin.colorHover,
       '--cch': defskin.close.colorHover,
-      '--mbch': defskin.maxmin.backgroundColorHover,
-      '--cbch': defskin.close.backgroundColorHover,
-      'background-color': defskin.title.backgroundColor,
-      'box-shadow': '1px 1px 50px ' + defskin.shadowColor,
+      '--mbch': defskin.maxmin.backgroundHover,
+      '--cbch': defskin.close.backgroundHover,
+      'box-shadow':defskin.boxShadow,
+      background:defskin.background,
       width: width + 'px',
       height: height + 'px',
       top: y + 'px',
       left: x + 'px',
       'z-index': zIndex,
       display: defvisible ? '' : 'none',
+      position: fixed ? 'fixed' : 'absolute',
     }"
   >
-    <!--  transform: 'translate(' + x + 'px,' + y + 'px)', -->
     <div
-      v-if="title !== false"
+      v-if="title"
       class="layer-vue-title"
       :title="title"
       :style="{
-        'background-color': defskin.title.backgroundColor,
+        'background': defskin.title.background,
         color: defskin.title.color,
         'border-bottom': '1px solid ' + defskin.title.borderColor,
         height: titleheight + 'px',
@@ -87,7 +88,8 @@
       ref="content"
       class="layer-vue-content"
       :style="{
-        'background-color': defskin.content.backgroundColor,
+        'border-radius': title?'0 0 2px 2px':'2px',
+        'background': defskin.content.background,
         color: defskin.content.color,
         height: contentheight + 'px',
       }"
@@ -114,7 +116,7 @@ export default {
     return {
       // 默认开启
       defvisible: true,
-      endamin:false,
+      endamin: false,
       // 最大化按钮
       maxbtn: false,
       minbtn: false,
@@ -161,8 +163,9 @@ export default {
     titleheight: { type: Number, default: 42 },
     skin: { type: Object },
     id: { default: undefined },
-    reset: { typeof: Boolean },
+    reset: { type: Boolean },
     el: {},
+    fixed: { type: Boolean, default: true },
   },
   computed: {
     contentheight: function () {
@@ -173,14 +176,13 @@ export default {
   },
   watch: {
     visible: function (newvalue) {
-      if(this.amin){
-setTimeout(()=>{
-      this.defvisible = newvalue;
-      },200)
-      }else{
+      if (this.amin) {
+        setTimeout(() => {
+          this.defvisible = newvalue;
+        }, 300);
+      } else {
         this.defvisible = newvalue;
       }
-      
     },
     defvisible: function (newvalue) {
       if (newvalue) {
@@ -191,11 +193,11 @@ setTimeout(()=>{
           this.zIndex = this.zindex;
         }
         this.$nextTick(() => {
+          this.endamin = false;
           this.init();
           this.success && this.success();
         });
       } else {
-        // this.amininit();
         this.close();
       }
     },
@@ -226,19 +228,14 @@ setTimeout(()=>{
     if (this.skin) {
       this.defskin = merge(this.skin, this.defskin);
     }
-    this.amininit();
     this.$nextTick(() => {
       if (this.content && this.content.component) {
         let instance = new this.content.component({
           parent: this.content.parent,
           propsData: this.content.data,
         });
-        instance.vm = instance.$mount();
+        instance.vm = instance.$mount(`#layer-vue-${this.index} .layer-vue-content`);
         this.$layer.o.instances[this.index].Vuecomponent = instance;
-        document
-          .getElementById("layer-vue-" + this.index)
-          .querySelector(".layer-vue-content")
-          .appendChild(instance.vm.$el);
       }
       try {
         if (this.$refs.content.children.length) {
@@ -264,10 +261,6 @@ setTimeout(()=>{
   },
   methods: {
     resizefun() {
-      if (!this.defvisible) {
-        this.amininit();
-        return;
-      }
       if (this.maxbtn) {
         this.width = document.documentElement.clientWidth;
         return;
@@ -309,17 +302,6 @@ setTimeout(()=>{
       this.width = this.initdata.width;
       this.height = this.initdata.height;
     },
-    // 动画初始化函数
-    amininit() {
-      if (this.amin === 0) {
-        const { height, width } = this.areainit();
-        const { x, y } = this.offsetinit(this.offset, width * 0.5, height * 0.5, 0);
-        this.width = 0;
-        this.height = 0;
-        this.x = x;
-        this.y = y;
-      }
-    },
     // 初始化函数
     init() {
       this.maxbtn = false;
@@ -332,6 +314,8 @@ setTimeout(()=>{
       const { height, width } = this.areainit();
       const { x, y } = this.offsetinit(this.offset, width, height);
       this.initdata = { width, height, x, y };
+//       var style = document.styleSheets[0];
+// style.insertRule
       this.width = width;
       this.height = height;
       this.x = x;
@@ -545,15 +529,14 @@ setTimeout(()=>{
       }
       this.end && this.end();
     },
-    closefun(){
-      if(this.amin){
-        this.endamin=true;
-        setTimeout(()=>{
-          console.log(2);
-          this.close()
-        },200)
-      }else{
-        this.close()
+    closefun() {
+      if (this.amin) {
+        this.endamin = true;
+        setTimeout(() => {
+          this.close();
+        }, 300);
+      } else {
+        this.close();
       }
     },
     getthis() {
@@ -561,5 +544,5 @@ setTimeout(()=>{
     },
   },
 };
-export { c, p, v, d, de, merge };
+export { merge };
 </script>

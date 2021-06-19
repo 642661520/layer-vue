@@ -3,21 +3,24 @@
 }
 
 .layer-vue {
-  position: fixed;
-  top: 0;
-  left: 0;
   border-radius: 2px;
+
+  // --mch: "#6666";
+  // --cch: "#fff";
+  // --mbch: "#6666";
+  // --cbch: "#f00";
   .layer-vue-title {
     overflow: hidden;
     width: 100%;
-    padding: 0 0 1px 20px;
+    padding: 0 0 0px 20px;
     box-sizing: border-box;
+    border-radius: 2px 2px 0 0px;
+
     >div {
       display: inline-block;
     }
 
     .layer-vue-title-text {
-      
       vertical-align: top;
       overflow: hidden;
       width: calc(100% - 130px);
@@ -30,6 +33,7 @@
   .layer-vue-tools {
     float: right;
     cursor: pointer;
+
     span {
       display: inline-block;
       width: 30px;
@@ -47,6 +51,7 @@
       fill: var(--cch);
     }
   }
+
   .layer-vue-close2 {
     display: none;
     position: absolute;
@@ -59,12 +64,14 @@
     line-height: 21px;
     background-color: #777;
     border: 2px solid #FFF;
+
     svg {
       fill: #FFF;
       line-height: 21px;
       font-size: 14px;
       padding: 5px;
     }
+
     &:hover {
       background-color: var(--cbch);
       color: var(--cch);
@@ -99,14 +106,49 @@
   }
 
   .layer-vue-content {
+    border-radius: 0 0 2px 2px;
     position: relative;
     overflow: hidden;
   }
-  &.startamin1{
+
+  &.startamin[data-amin='1'] {
     animation: startadmin1 0.3s;
   }
-  &.endamin1{
-    animation: endamin1 0.3s infinite;
+
+  &.endamin[data-amin='1'] {
+    animation: endamin1 0.3s;
+  }
+
+  &.startamin[data-amin='2'] {
+    animation: startadmin2 0.3s;
+  }
+
+  &.endamin[data-amin='2'] {
+    animation: endamin2 0.3s;
+  }
+
+  &.startamin[data-amin='3'] {
+    animation: startadmin3 0.3s;
+  }
+
+  &.endamin[data-amin='3'] {
+    animation: endamin3 0.3s;
+  }
+
+  &.startamin[data-amin='4'] {
+    animation: startadmin4 0.3s;
+  }
+
+  &.endamin[data-amin='4'] {
+    animation: endamin4 0.3s;
+  }
+
+  &.startamin[data-amin='5'] {
+    animation: startadmin5 0.3s;
+  }
+
+  &.endamin[data-amin='5'] {
+    animation: endamin5 0.3s;
   }
 }
 
@@ -115,25 +157,104 @@
     opacity: 0;
     transform: scale(0.5);
   }
-  80%{
+
+  80% {
     transform: scale(1.1);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
   }
 }
 
 @keyframes endamin1 {
-  from {
-    opacity: 1;
-    transform: scale(1);
-  }
-  20%{
+  20% {
     transform: scale(1.1);
   }
+
   to {
     opacity: 0;
     transform: scale(0.5);
+
+  }
+}
+
+@keyframes startadmin2 {
+  from {
+    opacity: 0.5;
+    transform: translate(0, -200%) scale(0.1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(0.5);
+  }
+}
+
+@keyframes endamin2 {
+  50% {
+    opacity: 1;
+    transform: scale(0.5);
+  }
+
+  to {
+    opacity: 0.5;
+    transform: translate(0, -200%) scale(0.1);
+  }
+}
+
+@keyframes startadmin3 {
+  from {
+    opacity: 0.5;
+    transform: translate(0, 200%) scale(0.1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(0.5);
+  }
+}
+
+@keyframes endamin3 {
+  50% {
+    opacity: 1;
+    transform: scale(0.5);
+  }
+
+  to {
+    opacity: 0.5;
+    transform: translate(0, 200%) scale(0.1);
+  }
+}
+
+@keyframes startadmin4 {
+  from {
+    opacity: 0.5;
+    transform: translate(-200%, 0) scale(0.1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(0.5);
+  }
+}
+
+@keyframes endamin4 {
+  50% {
+    opacity: 1;
+    transform: scale(0.5);
+  }
+
+  to {
+    opacity: 0.5;
+    transform: translate(-200%, 0) scale(0.1);
+  }
+}
+
+@keyframes startadmin5 {
+  from {
+    transform: translate(-200%, 0) rotate(-7200deg) scale(0);
+  }
+}
+
+@keyframes endamin5 {
+  to {
+    transform: translate(-500%, 0) rotate(-7200deg) scale(0);
   }
 }

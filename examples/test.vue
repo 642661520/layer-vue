@@ -12,6 +12,10 @@ export default {
     }
   },
  props:{id:{}},
+ created(){
+   console.log(this.$parent);
+   
+ },
  methods:{
    add(){
      this.a++

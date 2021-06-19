@@ -1,26 +1,27 @@
 import LayerBox, { LayerVue, merge, version } from "../packages/layer/main";
 import "../packages/theme/css/index.css";
 const skin = {
-  shadowColor: 'rgb(0 0 0 / 30%)',
+  background:"#fff",
+  boxShadow: '1px 1px 50px rgb(0 0 0 / 30%)',
   title: {
-    backgroundColor: "#fff",
+    background: "#fff",
     color: "#000",
     borderColor: "#f0f0f0",
   },
   content: {
-    backgroundColor: "#fff",
+    background: "#fff",
     color: "#000",
   },
   maxmin: {
-    backgroundColor: "#fff",
+    background: "#fff",
     color: "#000",
-    backgroundColorHover: "#6666",
+    backgroundHover: "#6666",
     colorHover: "#008afc",
   },
   close: {
-    backgroundColor: "#fff",
+    background: "#fff",
     color: "#000",
-    backgroundColorHover: "#f00",
+    backgroundHover: "#f00",
     colorHover: "#fff",
   },
 }
