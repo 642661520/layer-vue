@@ -7,8 +7,8 @@
     <button @click="close3">close3</button>
     <button @click="restore">还原</button>
     <button @click="reset = !reset">重置</button>
-    <button @click="aaaa" >关闭全部</button>
-    <button @click="close" >关闭全部</button>
+    <button @click="aaaa">关闭全部</button>
+    <button @click="close">关闭全部</button>
     <!-- <sui-layer></sui-layer> -->
     <div>
       <div>
@@ -17,13 +17,15 @@
     </div>
 
     <div id="test2">test2</div>
-    <layer-vue :skin="{ content: { color: '#58a' } }" :end="end" :cancel="cancel" :destroyOnClose="true" :title='false'>
-    <Test :id="visible"></Test>
-      </layer-vue>
-    <LayerVue :visible.sync="visible" :maxmin="[1, 1]" :end="end" :cancel="cancel" :resize="[0, 1]" :destroyOnClose="false" :reset="reset"><div id="videobox">
-          <video muted autoplay="true" id="video"  controls='true' controlsList="nodownload"></video>
-          <button   class="btn" id="download" onclick="download()">下载</button>
-        </div></LayerVue>
+    <layer-vue :skin="{ content: { color: '#58a' } }" :end="end" :cancel="cancel" :destroyOnClose="true" :title="false">
+      <Test :id="visible"></Test>
+    </layer-vue>
+    <LayerVue :visible.sync="visible" :maxmin="[1, 1]" :end="end" :cancel="cancel" :resize="[0, 1]" :destroyOnClose="false" :reset="reset"
+      ><div id="videobox">
+        <video muted autoplay="true" id="video" controls="true" controlsList="nodownload"></video>
+        <button class="btn" id="download" onclick="download()">下载</button>
+      </div></LayerVue
+    >
   </div>
 </template>
 <script>
@@ -52,10 +54,13 @@ export default {
   methods: {
     // 置顶函数
     log() {
+      console.log(this.parent);
+
       this.layer1 = this.$layer({
-        id:'213',
+        parent: this,
+        id: "213",
         skin: {
-          background:'none',
+          background: "none",
           title: {
             background: "url(" + require("./右侧里框.png") + ")  0 0/100% 100%",
             color: "#333",
@@ -73,18 +78,17 @@ export default {
             colorHover: "#123",
           },
         },
-        anim:5,
-        fixed:false,
-        destroyOnClose: true,
+        anim: 5,
+        destroyOnClose: false,
         titleheight: 30,
         // title:0,
-        move:'.layer-vue-content',
+        move: ".layer-vue-content",
         maxmin: [1, 1],
-        area: [200, 270],
-        minarea:['123','312'],
+        area: [200, 170],
+        minarea: ["123", "112"],
         offset: "b",
         settop: true,
-        // content:document.getElementById('test'),
+        content: this.visible,
         // content: span,
         end: () => {
           console.log("end");
@@ -92,7 +96,7 @@ export default {
         cancel: () => {
           console.log("cancel");
         },
-        content: 1,
+        // content: 1,
         // content: {
         //   component: Test,
         //   parent: this,
@@ -100,14 +104,17 @@ export default {
         // },
       });
     },
-    log2() {
-      this.zindex+=1
+    async log2() {
+      this.zindex += 1;
+      await this.$layer.close(this.layer2);
       this.layer2 = this.$layer({
+        parent: this,
         destroyOnClose: false,
         area: [766, 355],
         offset: "1",
         settop: true,
-        id:'123',
+        // anim:0,
+        id: "123",
         // content: document.getElementById("test"),
         end: () => {
           console.log("end");
@@ -117,7 +124,6 @@ export default {
         },
         content: {
           component: Test,
-          parent: this,
           data: { id: this.zindex },
         },
       });
@@ -125,8 +131,9 @@ export default {
     success(a) {
       this.log(a);
     },
-    close() {
-      this.$layer.close(this.layer1);
+    async close() {
+      let a = await this.$layer.close(this.layer1);
+      console.log(a);
     },
     close2() {
       this.$layer.close(this.layer2);
@@ -143,8 +150,9 @@ export default {
     cancel: () => {
       console.log("cancel");
     },
-    aaaa(){
-      this.$layer.closeAll();
+    async aaaa() {
+      let a = await this.$layer.closeAll();
+      console.log(a);
     },
   },
 };

@@ -7,4 +7,4 @@ console.log(LayerVue,Vue.prototype);
 Vue.config.productionTip = false
 new Vue({
   render: h => h(App),
-}).$mount('#app1')
+}).$mount('#app')

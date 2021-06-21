@@ -37,7 +37,7 @@
         'line-height': titleheight + 'px',
       }"
     >
-      <div class="layer-vue-title-text" :style="{width:textwidth+'px'}">{{ title }}</div>
+      <div class="layer-vue-title-text" :style="{ width: textwidth + 'px' }">{{ title }}</div>
       <div class="layer-vue-tools" :style="{ height: titleheight + 'px', 'line-height': titleheight + 'px' }">
         <span v-show="maxmin[1]" class="layer-vue-min">
           <svg v-show="!minbtn" t="1623989554257" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2299" width="16" height="16">
@@ -124,15 +124,22 @@ export default {
       minwidth: 300,
       // 最小高度
       minheight: 200,
+      // left
       x: 0,
+      // top
       y: 0,
       width: 0,
       height: 0,
       zIndex: 1,
+      // 序号
       index: 0,
+      // 模式
       model: undefined,
+      // display
       display: undefined,
+      // 皮肤
       defskin: {},
+      // 用于记录初始状态
       initdata: { x: 0, y: 0, width: 300, height: 200 },
     };
   },
@@ -174,9 +181,9 @@ export default {
       h <= 0 ? (h = 0) : null;
       return h;
     },
-    textwidth:function(){
-      return  this.width-((this.maxmin[0]?35:0)+(this.maxmin[1]?35:0)+50)
-    }
+    textwidth: function () {
+      return this.width - ((this.maxmin[0] ? 35 : 0) + (this.maxmin[1] ? 35 : 0) + 50);
+    },
   },
   watch: {
     visible: function (newvalue) {
@@ -202,7 +209,7 @@ export default {
           this.success && this.success();
         });
       } else {
-        this.close();
+        // this.close();
       }
     },
     reset: function () {
@@ -238,11 +245,15 @@ export default {
     this.$nextTick(() => {
       if (this.content && this.content.component) {
         let instance = new this.content.component({
-          parent: this.content.parent,
+          parent: this,
           propsData: this.content.data,
         });
-        instance.vm = instance.$mount(`#layer-vue-${this.index} .layer-vue-content`);
+        instance.vm = instance.$mount();
         this.$layer.o.instances[this.index].Vuecomponent = instance;
+        document
+          .getElementById("layer-vue-" + this.index)
+          .querySelector(".layer-vue-content")
+          .appendChild(instance.vm.$el);
       }
       try {
         if (this.$refs.content.children.length) {
@@ -477,6 +488,10 @@ export default {
     // 关闭窗口函数
     close() {
       // 隐藏窗口
+      if (!this.defvisible) {
+        console.warn("[layer-warn]layer-vue-" + this.index + " is closed");
+        return false;
+      }
       this.defvisible = false;
       if (!this.model) {
         // 若传入了visible，则更新visible为false
@@ -486,11 +501,11 @@ export default {
       }
       this.cancel && this.cancel();
       if (!this.destroyOnClose) {
-        return;
+        return true;
       }
       // 获取窗口DOM元素
       const layerDOM = document.getElementById("layer-vue-" + this.index);
-      const warn = () => console.log("[layer-warn]:No layer with id ：layer-vue-" + this.index + "found");
+      const warn = () => console.warn("[layer-warn]:No layer with id ：layer-vue-" + this.index + "found");
       // 判断当前layer窗口打开模式（true：以$layer.open()打开，false:以组件形式）
       if (this.model) {
         // this.visible=false
@@ -523,13 +538,14 @@ export default {
                 } else {
                   // 窗口不存在或已经关闭
                   warn();
+                  return false;
                 }
-                return;
+                return true;
               }
             } else {
               // 窗口不存在或已经关闭
               warn();
-              return;
+              return false;
             }
             // 判断子组件是否存在
           } else if (instances.Vuecomponent) {
@@ -549,25 +565,31 @@ export default {
           delete this.$layer.o.instances[this.index];
         } else {
           warn();
-          return;
+          return false;
         }
       }
       this.end && this.end();
+      return true;
     },
     closefun() {
-      if (this.anim) {
-        this.endanim = true;
-        setTimeout(() => {
-          this.close();
-        }, 300);
-      } else {
-        this.close();
-      }
+      return new Promise((res, rej) => {
+        if (this.anim) {
+          this.endanim = true;
+          setTimeout(() => {
+            let result = this.close();
+            res(result);
+          }, 300);
+        } else {
+          let result = this.close();
+          res(result);
+        }
+      });
     },
     getthis() {
       return this;
     },
   },
+  // parent: this._parent
 };
 export { merge };
 </script>

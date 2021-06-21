@@ -80,6 +80,12 @@ const LayerBox = function (Vue) {
     }
     instance.index = index;
     instance.vm = instance.$mount();
+    if (options.parent) {
+      instance.vm.$parent = options.parent
+    options.parent.$children.push(instance.vm)
+    }
+    
+    console.log(options.parent);
     if (instance.ishtml) {
       if (options.content.parentNode) {
         let parentDiv = options.content.parentNode;
@@ -116,17 +122,19 @@ const LayerBox = function (Vue) {
     Vue.prototype.$layer.o.instances.push({ index, instance });
     return index;
   };
-  layer.close = index => {
+  layer.close =async index => {
     if (index === undefined) {
       console.warn("[layer-warn]:The index is undefined");
-      return;
-    }
-    const instances = Vue.prototype.$layer.o.instances[index];
-    if (instances) {
-      instances.instance.closefun();
-    } else {
-      console.warn("[layer-warn]:No layer with index ：layer-vue-" + index + " found");
-    }
+    return "[layer-warn]:No layer with index ：layer-vue-" + index + " found";
+  }
+  const instances = Vue.prototype.$layer.o.instances[index];
+  if (instances) {
+    let result = await instances.instance.closefun()
+    return result
+  } else {
+    console.warn("[layer-warn]:No layer with index ：layer-vue-" + index + " found");
+    return "[layer-warn]:No layer with index ：layer-vue-" + index + " found"
+  }
   };
   layer.reset = index => {
     if (index === undefined) {
@@ -140,12 +148,15 @@ const LayerBox = function (Vue) {
       console.warn("[layer-warn]:No layer with index ：layer-vue-" + index + " found");
     }
   };
-  layer.closeAll = () => {
-    Vue.prototype.$layer.o.instances.forEach(element => {
+  layer.closeAll = async () => {
+    let closeAll=[]
+    Vue.prototype.$layer.o.instances.forEach((element) => {
       if (element) {
-        element.instance.closefun()
+        closeAll.push(element.instance.closefun())
       }
     });
+  let result=await Promise.all(closeAll)
+    return result
   }
   layer.version = version;
   return layer;

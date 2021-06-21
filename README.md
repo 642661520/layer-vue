@@ -87,7 +87,7 @@ export default { name: "app"};
 ```vue
 // App.vue
 <script>
-export default { 
+export default {
     name: "app",
     methods:{
         openlayer(){
@@ -181,6 +181,10 @@ this.$layer({title:'我是标题'})
 
 类型：VueDOM/DOM/String/Number/Boolean，默认：null
 
+重点：方法下的内容不是响应式的！使用响应式推荐使用组件方式
+
+方法下需要更新内容需要彻底关闭窗口后重新打开窗口，
+
 ```JS
 let span = document.createElement("span");
 span.innerHTML = "<div>13123</div>";
@@ -194,15 +198,25 @@ this.$layer({
         // content: {
     	//子组件名称
         //   component: Test,
-    	//layer和子组件关联，此项固定填写this
-        //   parent: this,
     	//子组件数据
         //   data: { id: 3 },
         // },
       });
 ```
+### parent - Vue组件挂载
 
-### id-唯一标识
+设置parent:this,将当前layer组件挂载在当前使用的组件下，可在vue调试工具中显示，方便调试，0.1.20新增此项，0.1.20之前，在content.parent配置，让内容区的子
+
+组件挂载在在当前使用的组件下，现在默认挂载在layer下，使用设置parent:this后，可以在调试工具中看到清晰的结构，如下所示：
+
+```html
+<App>
+  <LayerVue>
+    <Mycomponent>
+```
+注意：此项和el-父元素选择器不同，parent设置是关乎vue调试工具中能不能显示layer，el设置的是真实dom元素渲染的位置
+
+### id - 唯一标识
 
 类型：String，默认：空字符
 
@@ -459,9 +473,20 @@ this.$layer({
 
 ### $layer.close(index)
 
-参数：窗口标识
+参数：窗口标识,类型：Promise,返回值：Boolean,标识执行结果，true代表成功关闭，false表示该窗口不存在或者已经是关闭状态
 
 关闭layer窗口的方法
+
+修改为Promise类型，主要是针对使用了打开动画后，需要关闭layer后立即重新打开的情况，虽然解决了异步产生的问题，但关闭重新打开的动画不会消失；
+
+不使用动画则无此问题，设置anim=0
+
+```js
+async open() {
+      await this.$layer.close(this.layer2);
+      this.layer = this.$layer();
+    }
+```
 
 ### $layer.reset(index)
 
@@ -471,11 +496,19 @@ this.$layer({
 
 ### $layer.closeAll()
 
-参数：无
+参数：无，类型：Promise,返回值：Boolean数组,标识每个窗口的执行结果，true代表成功关闭，false表示该窗口不存在或者已经是关闭状态
 
 关闭所有layer窗口的方法
 
+修改为Promise类型，主要是针对使用了打开动画后，需要在打开某个窗口前关闭所有其他窗口的情况，若需要打开的窗口已经是打开状态，则会关闭后重新打开；
 
+
+```js
+async open() {
+      await this.$layer.closeAll();
+      this.layer = this.$layer();
+    }
+```
 
 ## 作者
 
