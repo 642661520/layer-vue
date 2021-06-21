@@ -4,10 +4,10 @@
     v-if="destroyOnClose ? defvisible : true"
     οndragstart="return false;"
     :data-index="index"
-    :data-amin="amin"
+    :data-anim="anim"
     class="layer-vue"
     :id="'layer-vue-' + index"
-    :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn, startamin: defvisible, endamin: !visible || endamin }"
+    :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn, startanim: defvisible, endanim: !visible || endanim }"
     v-layer="{ getthis }"
     :style="{
       '--mch': defskin.maxmin.colorHover,
@@ -116,7 +116,7 @@ export default {
     return {
       // 默认开启
       defvisible: true,
-      endamin: false,
+      endanim: false,
       // 最大化按钮
       maxbtn: false,
       minbtn: false,
@@ -158,7 +158,7 @@ export default {
     resizing: { type: Function },
     resizeEnd: { type: Function },
     destroyOnClose: { type: [Number, Boolean], default: false },
-    amin: { type: Number, default: 1 },
+    anim: { type: Number, default: 1 },
     content: {},
     titleheight: { type: Number, default: 42 },
     skin: { type: Object },
@@ -180,7 +180,7 @@ export default {
   },
   watch: {
     visible: function (newvalue) {
-      if (this.amin) {
+      if (this.anim) {
         setTimeout(() => {
           this.defvisible = newvalue;
         }, 300);
@@ -197,7 +197,7 @@ export default {
           this.zIndex = this.zindex;
         }
         this.$nextTick(() => {
-          this.endamin = false;
+          this.endanim = false;
           this.init();
           this.success && this.success();
         });
@@ -388,12 +388,12 @@ export default {
       return { height, width };
     },
     // 偏移量初始化函数
-    offsetinit(offset, width, height, amin = -1) {
+    offsetinit(offset, width, height, anim = -1) {
       let x = 0;
       let y = 0;
       let w = width;
       let h = height;
-      if (amin === 0) {
+      if (anim === 0) {
         x = width * 0.5;
         y = height * 0.5;
         width = 0;
@@ -555,8 +555,8 @@ export default {
       this.end && this.end();
     },
     closefun() {
-      if (this.amin) {
-        this.endamin = true;
+      if (this.anim) {
+        this.endanim = true;
         setTimeout(() => {
           this.close();
         }, 300);

@@ -73,7 +73,7 @@ export default {
             colorHover: "#123",
           },
         },
-        amin:5,
+        anim:5,
         fixed:false,
         destroyOnClose: true,
         titleheight: 30,
