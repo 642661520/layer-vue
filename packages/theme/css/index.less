@@ -15,7 +15,7 @@
     padding: 0 0 0px 20px;
     box-sizing: border-box;
     border-radius: 2px 2px 0 0px;
-
+    position: relative;
     >div {
       display: inline-block;
     }
@@ -23,7 +23,7 @@
     .layer-vue-title-text {
       vertical-align: top;
       overflow: hidden;
-      width: calc(100% - 130px);
+      // width: calc(100% - 100px);
       white-space: nowrap;
       text-overflow: ellipsis;
       user-select: none;
@@ -31,7 +31,8 @@
   }
 
   .layer-vue-tools {
-    float: right;
+    position: absolute;
+    right: 0;
     cursor: pointer;
 
     span {

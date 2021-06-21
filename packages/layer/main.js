@@ -2,7 +2,7 @@ import LayerVue, {merge } from "./main.vue";
 LayerVue.install = function(Vue) {
   Vue.component(LayerVue.name, LayerVue);
 };
-const version = '0.1.6';
+const version = '0.1.7';
 const LayerBox = function (Vue) {
   const LayerBoxConstructor = Vue.extend(LayerVue);
   const layer = function(options) {
@@ -59,7 +59,7 @@ const LayerBox = function (Vue) {
         if (options.content.component) {
           options.content.component = Vue.extend(options.content.component);
         } else {
-          console.log("[layer warn]:Incorrect content type");
+          console.warn("[layer warn]:Incorrect content type");
         }
       }
     }
@@ -104,7 +104,7 @@ const LayerBox = function (Vue) {
           break;
         case "array":
         default:
-          console.log("[layer warn]:Incorrect content type");
+          console.warn("[layer warn]:Incorrect content type");
           break;
       }
       if (document.querySelector(options.el)) {
@@ -118,26 +118,26 @@ const LayerBox = function (Vue) {
   };
   layer.close = index => {
     if (index === undefined) {
-      console.log("[layer-warn]:The index is undefined");
+      console.warn("[layer-warn]:The index is undefined");
       return;
     }
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
       instances.instance.closefun();
     } else {
-      console.log("[layer-warn]:No layer with index ：layer-vue-" + index + " found");
+      console.warn("[layer-warn]:No layer with index ：layer-vue-" + index + " found");
     }
   };
   layer.reset = index => {
     if (index === undefined) {
-      console.log("[layer-warn]:The index is undefined");
+      console.warn("[layer-warn]:The index is undefined");
       return;
     }
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
       instances.instance.resetfun();
     } else {
-      console.log("[layer-warn]:No layer with index ：layer-vue-" + index + " found");
+      console.warn("[layer-warn]:No layer with index ：layer-vue-" + index + " found");
     }
   };
   layer.closeAll = () => {

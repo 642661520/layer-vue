@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app1">
     <button @click="log">打开</button>
     <button @click="close">close</button>
     <button @click="log2">打开2</button>
@@ -74,12 +74,14 @@ export default {
           },
         },
         amin:5,
+        fixed:false,
         destroyOnClose: true,
         titleheight: 30,
-        title:0,
+        // title:0,
         move:'.layer-vue-content',
         maxmin: [1, 1],
         area: [200, 270],
+        minarea:['123','312'],
         offset: "b",
         settop: true,
         // content:document.getElementById('test'),

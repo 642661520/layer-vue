@@ -14,8 +14,8 @@
       '--cch': defskin.close.colorHover,
       '--mbch': defskin.maxmin.backgroundHover,
       '--cbch': defskin.close.backgroundHover,
-      'box-shadow':defskin.boxShadow,
-      background:defskin.background,
+      'box-shadow': defskin.boxShadow,
+      background: defskin.background,
       width: width + 'px',
       height: height + 'px',
       top: y + 'px',
@@ -30,14 +30,14 @@
       class="layer-vue-title"
       :title="title"
       :style="{
-        'background': defskin.title.background,
+        background: defskin.title.background,
         color: defskin.title.color,
         'border-bottom': '1px solid ' + defskin.title.borderColor,
         height: titleheight + 'px',
         'line-height': titleheight + 'px',
       }"
     >
-      <div class="layer-vue-title-text">{{ title }}</div>
+      <div class="layer-vue-title-text" :style="{width:textwidth+'px'}">{{ title }}</div>
       <div class="layer-vue-tools" :style="{ height: titleheight + 'px', 'line-height': titleheight + 'px' }">
         <span v-show="maxmin[1]" class="layer-vue-min">
           <svg v-show="!minbtn" t="1623989554257" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2299" width="16" height="16">
@@ -88,8 +88,8 @@
       ref="content"
       class="layer-vue-content"
       :style="{
-        'border-radius': title?'0 0 2px 2px':'2px',
-        'background': defskin.content.background,
+        'border-radius': title ? '0 0 2px 2px' : '2px',
+        background: defskin.content.background,
         color: defskin.content.color,
         height: contentheight + 'px',
       }"
@@ -166,6 +166,7 @@ export default {
     reset: { type: Boolean },
     el: {},
     fixed: { type: Boolean, default: true },
+    minarea: { type: [Number, Array], default: () => [300, 200] },
   },
   computed: {
     contentheight: function () {
@@ -173,6 +174,9 @@ export default {
       h <= 0 ? (h = 0) : null;
       return h;
     },
+    textwidth:function(){
+      return  this.width-((this.maxmin[0]?35:0)+(this.maxmin[1]?35:0)+50)
+    }
   },
   watch: {
     visible: function (newvalue) {
@@ -221,6 +225,9 @@ export default {
     }
   },
   mounted() {
+    const { width, height } = this.minareainit();
+    this.minwidth = width;
+    this.minheight = height;
     if (!this.model) {
       this.index = this.$layer.o.instances.length;
       this.$layer.o.instances.push({ index: this.index, instance: this });
@@ -242,7 +249,7 @@ export default {
           this.display = this.$refs.content.children[0].style.display;
         }
       } catch (error) {
-        console.log("[layer warn]:not find children");
+        console.warn("[layer warn]:not find children");
       }
       if (this.visible || this.visible === undefined) {
         if (this.settop) {
@@ -314,12 +321,30 @@ export default {
       const { height, width } = this.areainit();
       const { x, y } = this.offsetinit(this.offset, width, height);
       this.initdata = { width, height, x, y };
-//       var style = document.styleSheets[0];
-// style.insertRule
       this.width = width;
       this.height = height;
       this.x = x;
       this.y = y;
+    },
+    minareainit() {
+      let width = 0;
+      let height = 0;
+      if (this.minarea instanceof Array) {
+        width = this.minarea[0];
+        height = this.minarea[1];
+        height = +height;
+        width = +width;
+        if (isNaN(height)) {
+          height = 200;
+        }
+        if (isNaN(width)) {
+          width = 300;
+        }
+      } else {
+        width = 300;
+        height = 200;
+      }
+      return { height, width };
     },
     // 高宽初始化函数
     areainit() {
