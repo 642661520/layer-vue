@@ -1,4 +1,4 @@
-import LayerBox, { LayerVue, merge, version } from "../packages/layer/main";
+import LayerBox, { LayerVue, merge, version,versions } from "../packages/layer/main";
 import "../packages/theme/css/index.css";
 const skin = {
   background:"#fff",
@@ -268,11 +268,13 @@ const install = function (Vue, options) {
 };
 export default {
   version,
+  versions,
   LayerBox,
   install
 };
 export {
   version,
+  versions,
   LayerBox,
   install
 };

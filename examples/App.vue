@@ -1,22 +1,18 @@
 <template>
   <div id="app1">
-    <button @click="log">打开</button>
-    <button @click="close">close</button>
-    <button @click="log2">打开2</button>
-    <button @click="close2">close2</button>
-    <button @click="close3">close3</button>
-    <button @click="restore">还原</button>
-    <button @click="reset = !reset">重置</button>
-    <button @click="aaaa">关闭全部</button>
-    <button @click="close">关闭全部</button>
-    <!-- <sui-layer></sui-layer> -->
+    <el-button @click="open1">打开窗口1</el-button>
+    <el-button @click="close1">关闭窗口1</el-button>
+    <el-button @click="restore">还原窗口1</el-button>
+    <el-button @click="open2">打开窗口2</el-button>
+    <el-button @click="close2">关闭窗口2</el-button>
+    <el-button @click="close3">窗口3</el-button>
+    <el-button @click="reset = !reset">重置窗口3</el-button>
+    <el-button @click="closeAll">关闭全部</el-button>
     <div>
       <div>
         <div id="test">test<Test></Test></div>
       </div>
     </div>
-
-    <div id="test2">test2</div>
     <layer-vue :skin="{ content: { color: '#58a' } }" :end="end" :cancel="cancel" :destroyOnClose="true" :title="false">
       <Test :id="visible"></Test>
     </layer-vue>
@@ -24,8 +20,8 @@
       ><div id="videobox">
         <video muted autoplay="true" id="video" controls="true" controlsList="nodownload"></video>
         <button class="btn" id="download" onclick="download()">下载</button>
-      </div></LayerVue
-    >
+      </div>
+    </LayerVue>
   </div>
 </template>
 <script>
@@ -36,9 +32,7 @@ export default {
   components: {
     Test,
   },
-
   name: "app",
-
   data() {
     return {
       zindex: 100,
@@ -48,25 +42,19 @@ export default {
       reset: true,
     };
   },
-  created() {
-    console.log();
-  },
   methods: {
-    // 置顶函数
-    log() {
-      console.log(this.parent);
-
+    open1() {
       this.layer1 = this.$layer({
         parent: this,
         id: "213",
         skin: {
           background: "none",
           title: {
-            background: "url(" + require("./右侧里框.png") + ")  0 0/100% 100%",
+            background: "url(" + require("./bg.png") + ")  0 0/100% 100%",
             color: "#333",
           },
           content: {
-            background: "url(" + require("./右侧里框.png") + ")  0 0/100% 100%",
+            background: "url(" + require("./bg.png") + ")  0 0/100% 100%",
             color: "#000",
           },
           maxmin: {
@@ -74,7 +62,6 @@ export default {
             colorHover: "#008afc",
           },
           close: {
-            // backgroundHover: "url('./右侧里框.png')",
             colorHover: "#123",
           },
         },
@@ -85,6 +72,7 @@ export default {
         move: ".layer-vue-content",
         maxmin: [1, 1],
         area: [200, 170],
+        isOutAnim: 0,
         minarea: ["123", "112"],
         offset: "b",
         settop: true,
@@ -104,7 +92,14 @@ export default {
         // },
       });
     },
-    async log2() {
+    async close1() {
+      let state = await this.$layer.close(this.layer1);
+      console.log(state);
+      if(!state){
+        this.$message.warning('窗口不存在或已经关闭')
+      }
+    },
+    async open2() {
       this.zindex += 1;
       await this.$layer.close(this.layer2);
       this.layer2 = this.$layer({
@@ -128,13 +123,7 @@ export default {
         },
       });
     },
-    success(a) {
-      this.log(a);
-    },
-    async close() {
-      let a = await this.$layer.close(this.layer1);
-      console.log(a);
-    },
+
     close2() {
       this.$layer.close(this.layer2);
     },
@@ -150,7 +139,7 @@ export default {
     cancel: () => {
       console.log("cancel");
     },
-    async aaaa() {
+    async closeAll() {
       let a = await this.$layer.closeAll();
       console.log(a);
     },

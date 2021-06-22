@@ -1,39 +1,57 @@
-import LayerVue, {merge } from "./main.vue";
+import LayerVue, { merge } from "./main.vue";
 LayerVue.install = function(Vue) {
   Vue.component(LayerVue.name, LayerVue);
 };
-const version = '0.1.9';
-const LayerBox = function (Vue) {
+const version = "0.1.10";
+const versions = [
+  "0.0.1",
+  "0.0.2",
+  "0.0.3",
+  "0.0.4",
+  "0.0.5",
+  "0.0.6",
+  "0.0.7",
+  "0.1.0",
+  "0.1.1",
+  "0.1.2",
+  "0.1.3",
+  "0.1.4",
+  "0.1.5",
+  "0.1.6",
+  "0.1.9",
+  "0.1.10"
+];
+const LayerBox = function(Vue) {
   const LayerBoxConstructor = Vue.extend(LayerVue);
   const layer = function(options) {
     return layer.open(options);
   };
-  layer.open = (options={}) => {
-  // id
+  layer.open = (options = {}) => {
+    // id
     if (options.id) {
       let index = Vue.prototype.$layer.o.instances.findIndex(value => {
         if (value) {
           return value.instance.id === options.id;
         }
       });
-        if (index >= 0) {
+      if (index >= 0) {
         if (!options.destroyOnClose) {
           Vue.prototype.$layer.o.instances[index].instance.defvisible = true;
         }
         return index;
-        }
+      }
     } else {
-      options.destroyOnClose=true
+      options.destroyOnClose = true;
     }
     let instance = new LayerBoxConstructor();
     // 强制删除传入的visible属性
     delete options.visible;
     // 合并全局皮肤配置到默认配置
-    const { skin } = Vue.prototype.$layer.o
+    const { skin } = Vue.prototype.$layer.o;
     if (options.skin) {
-      options.skin=  merge(options.skin, skin)
+      options.skin = merge(options.skin, skin);
     } else {
-      options.skin=skin
+      options.skin = skin;
     }
     // 判断内容区类型
     if (typeof options.content === "object") {
@@ -53,8 +71,7 @@ const LayerBox = function (Vue) {
         }
         // DOM类型绑定状态
         instance.ishtml = true;
-      }
-      else {
+      } else {
         // 根据component判断内容区是否为Vue组件
         if (options.content.component) {
           options.content.component = Vue.extend(options.content.component);
@@ -67,7 +84,7 @@ const LayerBox = function (Vue) {
     if (options.index === undefined) {
       options.index = index;
     } else {
-      index= options.index;
+      index = options.index;
     }
     options.model = 1;
     if (!options.el) {
@@ -81,11 +98,9 @@ const LayerBox = function (Vue) {
     instance.index = index;
     instance.vm = instance.$mount();
     if (options.parent) {
-      instance.vm.$parent = options.parent
-    options.parent.$children.push(instance.vm)
+      instance.vm.$parent = options.parent;
+      options.parent.$children.push(instance.vm);
     }
-    
-    console.log(options.parent);
     if (instance.ishtml) {
       if (options.content.parentNode) {
         let parentDiv = options.content.parentNode;
@@ -97,14 +112,17 @@ const LayerBox = function (Vue) {
           document.body.appendChild(instance.vm.$el);
         }
       }
-      instance.vm.$el.querySelector(".layer-vue-content").appendChild(options.content);
+      instance.vm.$el
+        .querySelector(".layer-vue-content")
+        .appendChild(options.content);
     } else {
       switch (typeof options.content) {
         case "function":
         case "number":
         case "string":
         case "boolean":
-          instance.vm.$el.querySelector(".layer-vue-content").innerHTML =options.content;
+          instance.vm.$el.querySelector(".layer-vue-content").innerHTML =
+            options.content;
           break;
         case "object":
           break;
@@ -122,45 +140,51 @@ const LayerBox = function (Vue) {
     Vue.prototype.$layer.o.instances.push({ index, instance });
     return index;
   };
-  layer.close =async index => {
+  layer.close = async index => {
     if (index === undefined) {
       console.warn("[layer-warn]:The index is undefined");
-    return "[layer-warn]:No layer with index ：layer-vue-" + index + " found";
-  }
-  const instances = Vue.prototype.$layer.o.instances[index];
-  if (instances) {
-    let result = await instances.instance.closefun()
-    return result
-  } else {
-    console.warn("[layer-warn]:No layer with index ：layer-vue-" + index + " found");
-    return "[layer-warn]:No layer with index ：layer-vue-" + index + " found"
-  }
+      return false;
+    }
+    const instances = Vue.prototype.$layer.o.instances[index];
+    if (instances) {
+      let result = await instances.instance.closefun();
+      return result;
+    } else {
+      console.warn(
+        "[layer-warn]:No layer with index ：layer-vue-" + index + " found"
+      );
+      return false;
+    }
   };
   layer.reset = index => {
     if (index === undefined) {
       console.warn("[layer-warn]:The index is undefined");
-      return;
+      return false;
     }
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
       instances.instance.resetfun();
+      return true;
     } else {
-      console.warn("[layer-warn]:No layer with index ：layer-vue-" + index + " found");
+      console.warn(
+        "[layer-warn]:No layer with index ：layer-vue-" + index + " found"
+      );
+      return false;
     }
   };
   layer.closeAll = async () => {
-    let closeAll=[]
-    Vue.prototype.$layer.o.instances.forEach((element) => {
+    let closeAll = [];
+    Vue.prototype.$layer.o.instances.forEach(element => {
       if (element) {
-        closeAll.push(element.instance.closefun())
+        closeAll.push(element.instance.closefun());
       }
     });
-  let result=await Promise.all(closeAll)
-    return result
-  }
+    let result = await Promise.all(closeAll);
+    return result;
+  };
   layer.version = version;
   return layer;
 };
 
 export default LayerBox;
-export { LayerVue,merge,version };
+export { LayerVue, merge, version, versions };

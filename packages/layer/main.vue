@@ -7,7 +7,7 @@
     :data-anim="anim"
     class="layer-vue"
     :id="'layer-vue-' + index"
-    :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn, startanim: defvisible, endanim: !visible || endanim }"
+    :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn, startanim: defvisible, endanim: isOutAnim && (!visible || endanim) }"
     v-layer="{ getthis }"
     :style="{
       '--mch': defskin.maxmin.colorHover,
@@ -174,6 +174,7 @@ export default {
     el: {},
     fixed: { type: Boolean, default: true },
     minarea: { type: [Number, Array], default: () => [300, 200] },
+    isOutAnim:{type: [Boolean,Number], default: true}
   },
   computed: {
     contentheight: function () {
@@ -573,7 +574,7 @@ export default {
     },
     closefun() {
       return new Promise((res, rej) => {
-        if (this.anim) {
+        if (this.anim && this.isOutAnim) {
           this.endanim = true;
           setTimeout(() => {
             let result = this.close();
@@ -588,8 +589,7 @@ export default {
     getthis() {
       return this;
     },
-  },
-  // parent: this._parent
+  }
 };
 export { merge };
 </script>

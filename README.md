@@ -4,9 +4,9 @@
 
 ## 简介
 
-基于Vue框架的可移动可调整大小的非模态弹出层，效果类似于Layui中的Layer窗口，或者说是Window 窗体。基于Vue和React的UI库中，没有一款可移动非模态弹出层，如果你需要在页面中弹出一个窗口后依旧需要操作其他内容，那么layer-vue可以为你解决这一问题。
+基于 Vue2 框架的可移动可调整大小的非模态弹出层，效果类似于Layui中的Layer窗口，或者说是Window 窗体。热门的ui库中只有模态框，如果你需要在页面中弹出一个窗口后依旧需要操作其他内容，那么layer-vue可以为你解决这一问题。
 
-## 安装使用
+## 安装
 
 ### npm安装
 
@@ -66,7 +66,7 @@ new Vue({render: h => h(App)}).$mount('#app')
 
 ## 使用
 
-### 1.组件
+### 组件使用
 
 ```vue
 // App.vue
@@ -82,7 +82,7 @@ export default { name: "app"};
 </script>
 ```
 
-### 2.方法
+### 方法使用
 
 ```vue
 // App.vue
@@ -107,9 +107,41 @@ export default {
 </script>
 ```
 
+## 测试
+
+### 在线demo
+
+http://layer-vue.cn/#/demo
+
+### 本地运行
+
+从github或gitee下载
+
+  https://github.com/642661520/vuelayer/archive/refs/heads/master.zip
+
+  下载依赖
+
+```npm
+npm i
+```
+
+  运行测试页面
+
+```
+npm run dev
+```
+
+  打包
+
+```
+npm run build
+```
+
+
+
 ## 配置项
 
-### visible-显示状态
+### visible - 显示状态
 
 类型：Number/Boolean，默认：true
 
@@ -135,7 +167,7 @@ export default {
 </script>
 ```
 
-### destroyOnClose-关闭后销毁窗口
+### destroyOnClose - 关闭后销毁窗口
 
 类型：Boolean，默认：false
 
@@ -157,9 +189,9 @@ this.$layer({title:'我是标题'})
 
 ### content - 内容
 
-#### 组件
+#### 组件content
 
-##### 标签方式
+##### 标签内容区
 
 类型：String/Number/Boolean，默认：null
 
@@ -168,7 +200,7 @@ this.$layer({title:'我是标题'})
 <LayerVue :content="content"></LayerVue>
 ```
 
-##### 插槽方式
+##### 插槽内容区
 
 类型：VueDOM/DOM/String/Boolean/Number，默认：null
 
@@ -177,7 +209,7 @@ this.$layer({title:'我是标题'})
 <LayerVue>{{content}}</LayerVue>
 ```
 
-#### 方法
+#### 方法content
 
 类型：VueDOM/DOM/String/Number/Boolean，默认：null
 
@@ -226,7 +258,7 @@ id只在函数模式下可用，组件模式下本身只会弹出一个窗口。
 
 另外如需设置destroyOnClose时，必须设置id，否则destroyOnClose不可更改。
 
-### el-父元素选择器
+### el - 父元素选择器
 
 类型：String，默认：'#app'
 
@@ -264,7 +296,7 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
 | offset: 'rt'              | 快捷设置右上角              |
 | offset: 'rb'              | 快捷设置右下角              |
 
-### anim - 弹出动画
+### anim - 动画效果
 
 类型：Number，默认：1
 
@@ -275,6 +307,11 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
 | anim: 3 | 下方飞入 |
 | anim: 4 | 左侧滑入 |
 | anim: 5 | 左侧旋转飞入 |
+
+### isOutAnim - 关闭动画
+类型：Boolean/类型：Number，默认：true
+
+默认情况下，关闭层时会有一个过度动画。如果你不想开启，设置 isOutAnim: false 即可
 
 ### closeBtn - 关闭按钮
 
@@ -358,7 +395,7 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
 
 Layer提供了灵活的皮肤配置方案，只需配置需要修改的内容，不修改的无需传递。
 
-#### 1.全局配置
+#### 全局配置
 
 ```js
 // mian.js
@@ -382,15 +419,15 @@ Vue.use(LayerVue,{
 new Vue({render: h => h(App)}).$mount('#app')
 ```
 
-#### 2.单独配置
+#### 单独配置
 
-##### 组件
+##### 组件配置皮肤
 
 ```vue
 <LayerVue :skin='{maxmin: {backgroundHover: "#6666",}}'></LayerVue>
 ```
 
-##### 方法
+##### 方法配置皮肤
 
 ```js
 this.$layer({
@@ -477,9 +514,9 @@ this.$layer({
 
 关闭layer窗口的方法
 
-修改为Promise类型，主要是针对使用了打开动画后，需要关闭layer后立即重新打开的情况，虽然解决了异步产生的问题，但关闭重新打开的动画不会消失；
+修改为Promise类型，主要是针对使用了关闭动画后，需要关闭layer后立即重新打开的情况，虽然解决了异步产生的问题，但关闭的动画不会消失；
 
-不使用动画则无此问题，设置anim=0
+不使用关闭动画则无此问题，设置isOutAnim=0
 
 ```js
 async open() {
@@ -490,7 +527,7 @@ async open() {
 
 ### $layer.reset(index)
 
-参数：窗口标识
+参数：窗口标识,返回值：Boolean数组,标识每个窗口的执行结果，true代表成功关闭，false表示该窗口不存在或者已经是关闭状态
 
 重置layer窗口大小和定位的方法
 
@@ -500,8 +537,9 @@ async open() {
 
 关闭所有layer窗口的方法
 
-修改为Promise类型，主要是针对使用了打开动画后，需要在打开某个窗口前关闭所有其他窗口的情况，若需要打开的窗口已经是打开状态，则会关闭后重新打开；
+修改为Promise类型，主要是针对使用了关闭动画后，需要在打开某个窗口前关闭所有其他窗口的情况，若需要打开的窗口已经是打开状态，则会关闭后重新打开；
 
+不使用关闭动画则无此问题，设置isOutAnim=0
 
 ```js
 async open() {
