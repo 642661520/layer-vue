@@ -239,7 +239,7 @@ this.$layer({
 ```
 ### parent - Vue组件挂载
 
-设置parent:this,将当前layer组件挂载在当前使用的组件下，可在vue调试工具中显示，方便调试，0.1.20新增此项，0.1.20之前，在content.parent配置，让内容区的子
+设置parent:this,将当前layer组件挂载在当前使用的组件下，可在vue调试工具中显示，方便调试，0.1.10新增此项，0.1.10之前，在content.parent配置，让内容区的子
 
 组件挂载在在当前使用的组件下，现在默认挂载在layer下，使用设置parent:this后，可以在调试工具中看到清晰的结构，如下所示：
 
