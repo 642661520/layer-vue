@@ -7,13 +7,15 @@
     :data-anim="anim"
     class="layer-vue"
     :id="'layer-vue-' + index"
-    :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn, startanim: defvisible, endanim: isOutAnim && (!visible || endanim) }"
+    :data-skin="(typeof defskin==='string')?defskin:''"
+    :class="{'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn,
+    startanim: defvisible, endanim: isOutAnim && (!visible || endanim),}"
     v-layer="{ getthis }"
     :style="{
-      '--mch': defskin.maxmin.colorHover,
-      '--cch': defskin.close.colorHover,
-      '--mbch': defskin.maxmin.backgroundHover,
-      '--cbch': defskin.close.backgroundHover,
+      '--mch':defskin.maxmin? defskin.maxmin.colorHover:'',
+      '--cch': defskin.close?defskin.close.colorHover:'',
+      '--mbch': defskin.maxmin?defskin.maxmin.backgroundHover:'',
+      '--cbch':  defskin.close?defskin.close.backgroundHover:'',
       'box-shadow': defskin.boxShadow,
       background: defskin.background,
       width: width + 'px',
@@ -30,9 +32,9 @@
       class="layer-vue-title"
       :title="title"
       :style="{
-        background: defskin.title.background,
-        color: defskin.title.color,
-        'border-bottom': '1px solid ' + defskin.title.borderColor,
+        background:defskin.title? defskin.title.background:'',
+        color:defskin.title? defskin.title.color:'',
+        'border-bottom': '1px solid ' + (defskin.title? defskin.title.borderColor:'transparent'),
         height: titleheight + 'px',
         'line-height': titleheight + 'px',
       }"
@@ -89,8 +91,8 @@
       class="layer-vue-content"
       :style="{
         'border-radius': title ? '0 0 2px 2px' : '2px',
-        background: defskin.content.background,
-        color: defskin.content.color,
+        background:defskin.content? defskin.content.background:'',
+        color:defskin.content? defskin.content.color:'',
         height: contentheight + 'px',
       }"
     >
@@ -168,7 +170,7 @@ export default {
     anim: { type: Number, default: 1 },
     content: {},
     titleheight: { type: Number, default: 42 },
-    skin: { type: Object },
+    skin: { type: [Object,String] },
     id: { default: undefined },
     reset: { type: Boolean },
     el: {},
@@ -240,8 +242,12 @@ export default {
       this.index = this.$layer.o.instances.length;
       this.$layer.o.instances.push({ index: this.index, instance: this });
     }
-    if (this.skin) {
-      this.defskin = merge(this.skin, this.defskin);
+    if (typeof this.skin  ==='object') {
+      if(typeof this.defskin  ==='object'){
+this.defskin = merge(this.skin, this.defskin);
+      }
+    }else if(typeof this.skin  ==='string'){
+      this.defskin=this.skin 
     }
     this.$nextTick(() => {
       if (this.content && this.content.component) {

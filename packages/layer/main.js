@@ -2,7 +2,7 @@ import LayerVue, { merge } from "./main.vue";
 LayerVue.install = function(Vue) {
   Vue.component(LayerVue.name, LayerVue);
 };
-const version = "0.1.10";
+const version = "0.1.11";
 const versions = [
   "0.0.1",
   "0.0.2",
@@ -19,7 +19,8 @@ const versions = [
   "0.1.5",
   "0.1.6",
   "0.1.9",
-  "0.1.10"
+  "0.1.10",
+  "0.1.11"
 ];
 const LayerBox = function(Vue) {
   const LayerBoxConstructor = Vue.extend(LayerVue);
@@ -49,7 +50,10 @@ const LayerBox = function(Vue) {
     // 合并全局皮肤配置到默认配置
     const { skin } = Vue.prototype.$layer.o;
     if (options.skin) {
-      options.skin = merge(options.skin, skin);
+      if (typeof options.skin === "string") {
+      } else {
+        options.skin = merge(options.skin, skin);
+      }
     } else {
       options.skin = skin;
     }
@@ -183,6 +187,7 @@ const LayerBox = function(Vue) {
     return result;
   };
   layer.version = version;
+  layer.versions = versions;
   return layer;
 };
 

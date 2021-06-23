@@ -1,50 +1,55 @@
-import LayerBox, { LayerVue, merge, version,versions } from "../packages/layer/main";
+import LayerBox, {
+  LayerVue,
+  merge,
+  version,
+  versions
+} from "../packages/layer/main";
 import "../packages/theme/css/index.css";
 const skin = {
-  background:"#fff",
-  boxShadow: '1px 1px 50px rgb(0 0 0 / 30%)',
+  background: "#fff",
+  boxShadow: "1px 1px 50px rgb(0 0 0 / 30%)",
   title: {
     background: "#fff",
     color: "#000",
-    borderColor: "#f0f0f0",
+    borderColor: "#f0f0f0"
   },
   content: {
     background: "#fff",
-    color: "#000",
+    color: "#000"
   },
   maxmin: {
     background: "#fff",
     color: "#000",
     backgroundHover: "#6666",
-    colorHover: "#008afc",
+    colorHover: "#008afc"
   },
   close: {
     background: "#fff",
     color: "#000",
     backgroundHover: "#f00",
-    colorHover: "#fff",
-  },
-}
-const install = function (Vue, options) {
+    colorHover: "#fff"
+  }
+};
+const install = function(Vue, options) {
   console.log(
     `%c layer-vue %c v${version} %c`,
-    'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
-    'background:#41b883 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff',
-    'background:transparent'
-  )
+    "background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff",
+    "background:#41b883 ; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff",
+    "background:transparent"
+  );
   Vue.component(LayerVue.name, LayerVue);
-  Vue.directive('layer', {
-    bind: function (el, binding) {
+  Vue.directive("layer", {
+    bind: function(el, binding) {
       const l = {};
       const that = binding.value.getthis();
-      const f = (callback) => {
+      const f = callback => {
         document.onmouseup = e => {
           e.preventDefault();
-          callback && callback()
+          callback && callback();
           document.onmousemove = null;
           document.onmouseup = null;
         };
-      }
+      };
       // 置顶事件
       el.onmousedown = () => {
         if (that.settop) {
@@ -53,15 +58,13 @@ const install = function (Vue, options) {
       };
       // 窗口移动事件
       if (el.querySelector(that.move)) {
-        el.querySelector(that.move).style.cursor = 'move';
+        el.querySelector(that.move).style.cursor = "move";
         el.querySelector(that.move).onmousedown = e1 => {
           if (el.className.indexOf("layer-vue-ismax") >= 0) {
             return;
           }
           if (el.className.indexOf("layer-vue-ismin") >= 0) {
-            const {
-              x
-            } = that;
+            const { x } = that;
             let clientX = e1.clientX;
             document.onmousemove = e2 => {
               e2.preventDefault();
@@ -70,17 +73,17 @@ const install = function (Vue, options) {
               if (!parseInt(that.moveOut[3]) && newX <= 0) {
                 newX = 0;
               }
-              if (!parseInt(that.moveOut[1]) && newX >= document.documentElement.clientWidth - that.minwidth) {
+              if (
+                !parseInt(that.moveOut[1]) &&
+                newX >= document.documentElement.clientWidth - that.minwidth
+              ) {
                 newX = document.documentElement.clientWidth - that.minwidth;
               }
               that.x = newX;
             };
-            f()
+            f();
           } else {
-            const {
-              x,
-              y
-            } = that;
+            const { x, y } = that;
             let clientX = e1.clientX;
             let clientY = e1.clientY;
             document.onmousemove = e2 => {
@@ -95,9 +98,7 @@ const install = function (Vue, options) {
                 !parseInt(that.moveOut[1]) &&
                 newX >= document.documentElement.clientWidth - that.width
               ) {
-                newX =
-                  document.documentElement.clientWidth -
-                  that.width;
+                newX = document.documentElement.clientWidth - that.width;
               }
               let newY = parseInt(y) + parseInt(moveY);
               if (!parseInt(that.moveOut[0]) && newY <= 0) {
@@ -105,18 +106,14 @@ const install = function (Vue, options) {
               }
               if (
                 !parseInt(that.moveOut[2]) &&
-                newY >=
-                document.documentElement.clientHeight -
-                that.height
+                newY >= document.documentElement.clientHeight - that.height
               ) {
-                newY =
-                  document.documentElement.clientHeight -
-                  that.height;
+                newY = document.documentElement.clientHeight - that.height;
               }
               that.x = newX;
               that.y = newY;
             };
-            f(that.moveEnd)
+            f(that.moveEnd);
           }
         };
       }
@@ -127,7 +124,7 @@ const install = function (Vue, options) {
           that.maxbtn = !that.maxbtn;
           if (that.maxbtn) {
             if (that.move) {
-              el.querySelector(that.move).style.cursor = 'not-allowed';
+              el.querySelector(that.move).style.cursor = "not-allowed";
             }
             if (that.minbtn) {
               that.minbtn = false;
@@ -143,13 +140,13 @@ const install = function (Vue, options) {
             that.height = document.documentElement.clientHeight;
             that.full && that.full();
           } else {
-            that.x = (l.x);
-            that.y = (l.y);
-            that.width = (l.width);
-            that.height = (l.height);
+            that.x = l.x;
+            that.y = l.y;
+            that.width = l.width;
+            that.height = l.height;
             that.restore && that.restore();
             if (that.move) {
-              el.querySelector(that.move).style.cursor = 'move';
+              el.querySelector(that.move).style.cursor = "move";
             }
           }
         };
@@ -161,7 +158,7 @@ const install = function (Vue, options) {
           that.minbtn = !that.minbtn;
           if (that.minbtn) {
             if (that.move) {
-              el.querySelector(that.move).style.cursor = 'move';
+              el.querySelector(that.move).style.cursor = "move";
             }
             if (that.maxbtn) {
               that.maxbtn = false;
@@ -212,9 +209,9 @@ const install = function (Vue, options) {
             }
             that.width = l.width;
             that.height = l.height;
-            that.resizing && that.resizing()
+            that.resizing && that.resizing();
           };
-          f(that.resizeEnd)
+          f(that.resizeEnd);
         };
       }
       // 左下拉伸
@@ -249,18 +246,25 @@ const install = function (Vue, options) {
             that.x = newX;
             that.resizing && that.resizing();
           };
-          f(that.resizeEnd)
+          f(that.resizeEnd);
         };
       }
     }
   });
   Vue.prototype.$layer = LayerBox(Vue);
+  let newskin = skin;
+  if (options.skin) {
+    if (typeof options.skin === "object") {
+      newskin = merge(options.skin, skin);
+    } else {
+      newskin = options.skin;
+    }
+  }
   Vue.prototype.$layer.o = {
     zindex: options && options.zindex ? options.zindex : 100,
-    skin: options && options.skin ? merge(options.skin, skin) : skin,
+    skin: newskin,
     settop: () => {
-      Vue.prototype.$layer.o.zindex =
-        Vue.prototype.$layer.o.zindex + 1;
+      Vue.prototype.$layer.o.zindex = Vue.prototype.$layer.o.zindex + 1;
       return Vue.prototype.$layer.o.zindex;
     },
     instances: []
@@ -272,9 +276,4 @@ export default {
   LayerBox,
   install
 };
-export {
-  version,
-  versions,
-  LayerBox,
-  install
-};
+export { version, versions, LayerBox, install };

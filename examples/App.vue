@@ -10,13 +10,13 @@
     <el-button @click="closeAll">关闭全部</el-button>
     <div>
       <div>
-        <div id="test">test<Test></Test></div>
+        <div id="test" >test<Test :id="visible"></Test></div>
       </div>
     </div>
-    <layer-vue :skin="{ content: { color: '#58a' } }" :end="end" :cancel="cancel" :destroyOnClose="true" :title="false">
+    <layer-vue :skin="{ content: { color: '#58a' } }" :end="end" :cancel="cancel" :destroyOnClose="true" skin='win7' :maxmin="[1,1]">
       <Test :id="visible"></Test>
     </layer-vue>
-    <LayerVue :visible.sync="visible" :maxmin="[1, 1]" :end="end" :cancel="cancel" :resize="[0, 1]" :destroyOnClose="false" :reset="reset"
+    <LayerVue :visible.sync="visible" :maxmin="[1, 1]" :end="end" offset='l' :cancel="cancel" skin='mac' :resize="[0, 1]" :destroyOnClose="false" :reset="reset"
       ><div id="videobox">
         <video muted autoplay="true" id="video" controls="true" controlsList="nodownload"></video>
         <button class="btn" id="download" onclick="download()">下载</button>
@@ -36,11 +36,15 @@ export default {
   data() {
     return {
       zindex: 100,
-      visible: false,
+      visible: true,
       layer1: null,
       layer2: null,
       reset: true,
     };
+  },
+  mounted(){
+    this.open1()
+    this.open2()
   },
   methods: {
     open1() {
@@ -105,22 +109,23 @@ export default {
       this.layer2 = this.$layer({
         parent: this,
         destroyOnClose: false,
-        area: [766, 355],
-        offset: "1",
+        area: [466, 355],
+        offset: "r",
         settop: true,
         // anim:0,
+        skin:'winxp',
         id: "123",
-        // content: document.getElementById("test"),
+        content: document.getElementById("test"),
         end: () => {
           console.log("end");
         },
         cancel: () => {
           console.log("cancel");
         },
-        content: {
-          component: Test,
-          data: { id: this.zindex },
-        },
+        // content: {
+        //   component: Test,
+        //   data: { id: this.zindex },
+        // },
       });
     },
 
