@@ -2,7 +2,7 @@ import LayerVue, { merge } from "./main.vue";
 LayerVue.install = function(Vue) {
   Vue.component(LayerVue.name, LayerVue);
 };
-const version = "0.1.11";
+const version = "0.1.12";
 const versions = [
   "0.0.1",
   "0.0.2",
@@ -20,7 +20,8 @@ const versions = [
   "0.1.6",
   "0.1.9",
   "0.1.10",
-  "0.1.11"
+  "0.1.11",
+  "0.1.12"
 ];
 const LayerBox = function(Vue) {
   const LayerBoxConstructor = Vue.extend(LayerVue);
@@ -80,7 +81,7 @@ const LayerBox = function(Vue) {
         if (options.content.component) {
           options.content.component = Vue.extend(options.content.component);
         } else {
-          console.warn("[layer warn]:Incorrect content type");
+          Vue.prototype.$layer.o.log && console.warn("[layer warn]:Incorrect content type");
         }
       }
     }
@@ -132,7 +133,7 @@ const LayerBox = function(Vue) {
           break;
         case "array":
         default:
-          console.warn("[layer warn]:Incorrect content type");
+          Vue.prototype.$layer.o.log && console.warn("[layer warn]:Incorrect content type");
           break;
       }
       if (document.querySelector(options.el)) {
@@ -146,7 +147,7 @@ const LayerBox = function(Vue) {
   };
   layer.close = async index => {
     if (index === undefined) {
-      console.warn("[layer-warn]:The index is undefined");
+      Vue.prototype.$layer.o.log && console.warn("[layer-warn]:The index is undefined");
       return false;
     }
     const instances = Vue.prototype.$layer.o.instances[index];
@@ -154,7 +155,7 @@ const LayerBox = function(Vue) {
       let result = await instances.instance.closefun();
       return result;
     } else {
-      console.warn(
+      Vue.prototype.$layer.o.log && console.warn(
         "[layer-warn]:No layer with index ：layer-vue-" + index + " found"
       );
       return false;
@@ -162,7 +163,7 @@ const LayerBox = function(Vue) {
   };
   layer.reset = index => {
     if (index === undefined) {
-      console.warn("[layer-warn]:The index is undefined");
+      Vue.prototype.$layer.o.log && console.warn("[layer-warn]:The index is undefined");
       return false;
     }
     const instances = Vue.prototype.$layer.o.instances[index];
@@ -170,7 +171,7 @@ const LayerBox = function(Vue) {
       instances.instance.resetfun();
       return true;
     } else {
-      console.warn(
+      Vue.prototype.$layer.o.log && console.warn(
         "[layer-warn]:No layer with index ：layer-vue-" + index + " found"
       );
       return false;

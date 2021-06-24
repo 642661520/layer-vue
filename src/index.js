@@ -45,7 +45,7 @@ const install = function(Vue, options) {
       const f = callback => {
         document.onmouseup = e => {
           e.preventDefault();
-          callback && callback();
+          callback && callback(that.$el, that.index, that.id);
           document.onmousemove = null;
           document.onmouseup = null;
         };
@@ -138,13 +138,13 @@ const install = function(Vue, options) {
             that.y = 0;
             that.width = document.documentElement.clientWidth;
             that.height = document.documentElement.clientHeight;
-            that.full && that.full();
+            that.full && that.full(that.$el, that.index, that.id);
           } else {
             that.x = l.x;
             that.y = l.y;
             that.width = l.width;
             that.height = l.height;
-            that.restore && that.restore();
+            that.restore && that.restore(that.$el, that.index, that.id);
             if (that.move) {
               el.querySelector(that.move).style.cursor = "move";
             }
@@ -172,13 +172,13 @@ const install = function(Vue, options) {
             that.y = document.documentElement.clientHeight - that.titleheight;
             that.height = that.titleheight;
             that.width = 200;
-            that.min && that.min();
+            that.min && that.min(that.$el, that.index, that.id);
           } else {
             that.x = l.x;
             that.y = l.y;
             that.width = l.width;
             that.height = l.height;
-            that.restore && that.restore();
+            that.restore && that.restore(that.$el, that.index, that.id);
           }
         };
       }
@@ -209,7 +209,7 @@ const install = function(Vue, options) {
             }
             that.width = l.width;
             that.height = l.height;
-            that.resizing && that.resizing();
+            that.resizing && that.resizing(that.$el, that.width, that.height);
           };
           f(that.resizeEnd);
         };
@@ -244,7 +244,7 @@ const install = function(Vue, options) {
             that.width = l.width;
             that.height = l.height;
             that.x = newX;
-            that.resizing && that.resizing();
+            that.resizing && that.resizing(that.$el, that.width, that.height);
           };
           f(that.resizeEnd);
         };
@@ -261,6 +261,7 @@ const install = function(Vue, options) {
     }
   }
   Vue.prototype.$layer.o = {
+    log:options && options.log ? options.log : false,
     zindex: options && options.zindex ? options.zindex : 100,
     skin: newskin,
     settop: () => {

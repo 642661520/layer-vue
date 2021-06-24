@@ -143,7 +143,7 @@ npm run build
 
 ## 配置项
 
-### visible - 显示状态
+### visible - 显示状态【组件模式专用】
 
 类型：Number/Boolean，默认：true
 
@@ -237,7 +237,8 @@ this.$layer({
         // },
       });
 ```
-### parent - Vue组件挂载
+
+### parent - Vue组件挂载【方法模式专用】
 
 设置parent:this,将当前layer组件挂载在当前使用的组件下，可在vue调试工具中显示，方便调试，0.1.10新增此项，0.1.10之前，在content.parent配置，让内容区的子
 
@@ -250,21 +251,21 @@ this.$layer({
 ```
 注意：此项和el-父元素选择器不同，parent设置是关乎vue调试工具中能不能显示layer，el设置的是真实dom元素渲染的位置
 
-### id - 唯一标识
+### id - 唯一标识【方法模式专用】
 
 类型：String，默认：空字符
 
-id只在函数模式下可用，组件模式下本身只会弹出一个窗口。设置该值后，不管内容区是什么类型，都只允许同时弹出一个。
+id只在方法模式下可用，组件模式下本身只会弹出一个窗口。设置该值后，不管内容区是什么类型，都只允许同时弹出一个。
 
-内容区为非DOM元素时，默认每执行一次open函数，就会创建一个新的窗口，可设置id屏蔽多个窗口弹出。
+内容区为非DOM元素时，默认每执行一次open方法，就会创建一个新的窗口，可设置id屏蔽多个窗口弹出。
 
 另外如需设置destroyOnClose时，必须设置id，否则destroyOnClose不可更改。
 
-### el - 父元素选择器
+### el - 父元素选择器【方法模式专用】
 
 类型：String，默认：'#app'
 
-组件模式无需配置，layer在dom树的位置不会被改变，函数模式下，默认在id为app的dom节点下，若不存在app，则挂载在body下
+组件模式无需配置，layer在dom树的位置不会被改变，方法模式下，默认在id为app的dom节点下，若不存在app，则挂载在body下
 
 ### area - 宽高
 
@@ -339,13 +340,13 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
 
 一般用于解决和其它组件的层叠冲突，不能和settop一起使用。
 
-### settop-窗口置顶
+### settop - 窗口置顶
 
 类型：Boolean，默认：false
 
 当你的页面有很多很多 layer 窗口，你需要像 Window 窗体那样，点击某个窗口，该窗体就置顶在上面，那么 settop 可以来轻松实现。
 
-### skin-自定义皮肤
+### skin - 自定义皮肤
 
 类型：Object，默认：
 
@@ -460,53 +461,59 @@ this.$layer({
 
 默认只能在窗口内拖拽，如果你想让拖到窗外，那么设定*moveOut: [1, 1, 1, 1]*即可。
 
-### reset -重置窗口大小和定位
+### reset -重置窗口大小和定位【组件模式专用】
 
 类型：Boolean，默认：null
 
-组件模式下，在模版中传入reset初始值，之后通过对reset值取反进行重置窗口大小，通过方法创建layer窗口时，无需设置reset，可直接通过全局方法$layer.reset进行重置。
+组件模式下，在模版中传入reset初始值true或false均可，之后通过对reset值取反进行重置窗口大小，通过方法创建layer窗口时，无需设置reset，可直接通过全局方法$layer.reset进行重置。
+
+### borderwidth - 边框大小修正值
+
+类型：Number，默认：0,单位：px
+
+正常情况下无需设置该项，如修改样式时，对layer外层容器添加了上下方向border，设置该值为上线方向border的平均值，来修正layer内部高度的计算。
 
 ## 回调函数
 
 ### success - 层弹出后的成功回调方法
 
-类型：Function，默认：null
+类型：Function，默认：null,携带参数：el:layer窗口dom,index:窗口编号,id:传入的id，
 
 当你需要在层创建完毕时即执行一些语句，可以通过该回调。
 
 ### cancel - 关闭窗口时触发的回调
 
-类型：Function，默认：null
+类型：Function，默认：null，携带参数：el:layer窗口dom,index:窗口编号,id:传入的id，
 
 无论窗口是否销毁，都会执行cancel ，执行顺序在窗口销毁前。
 
 ### end -窗口销毁后触发的回调
 
-类型：Function，默认：null
+类型：Function，默认：null，携带参数：el:layer窗口dom,index:窗口编号,id:传入的id，
 
 只有窗口销毁后才会执行
 
 ### moveEnd - 拖动完毕后的回调方法
 
-类型：Function，默认：null
+类型：Function，默认：null，携带参数：el:layer窗口dom,index:窗口编号,id:传入的id，
 
 默认不会触发moveEnd，如果你需要，设定*moveEnd: function(){}*即可。
 
 ### resizing - 监听窗口拉伸动作
 
-类型：Function，默认：null
+类型：Function，默认：null，携带参数：el:layer窗口dom,width:layer窗口宽度,height:layer窗口高度
 
 当你拖拽弹层右下角对窗体进行尺寸调整时，如果你设定了该回调，则会执行。
 
 ### resizeEnd - 拉伸完毕后的回调方法
 
-类型：Function，默认：null
+类型：Function，默认：null，携带参数：el:layer窗口dom,index:窗口编号,id:传入的id，
 
 默认不会触发resizeEnd，如果你需要，设定*moveEnd: function(){}*即可。
 
 ### full/min/restore -分别代表最大化、最小化、还原 后触发的回调
 
-类型：Function，默认：null
+类型：Function，默认：null，携带参数：el:layer窗口dom,index:窗口编号,id:传入的id，
 
 ## 全局方法
 

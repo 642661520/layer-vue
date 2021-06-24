@@ -122,6 +122,12 @@ export default {
         cancel: () => {
           console.log("cancel");
         },
+        success: function(e,width,height){
+    console.log(e,width,height);
+  },resizing:(e,width,height)=>{
+    // console.log(e,width,height);
+    
+  }
         // content: {
         //   component: Test,
         //   data: { id: this.zindex },

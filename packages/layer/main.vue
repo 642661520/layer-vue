@@ -5,17 +5,17 @@
     οndragstart="return false;"
     :data-index="index"
     :data-anim="anim"
+    :data-id="id"
     class="layer-vue"
     :id="'layer-vue-' + index"
-    :data-skin="(typeof defskin==='string')?defskin:''"
-    :class="{'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn,
-    startanim: defvisible, endanim: isOutAnim && (!visible || endanim),}"
+    :data-skin="typeof defskin === 'string' ? defskin : ''"
+    :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn, startanim: defvisible, endanim: isOutAnim && (!visible || endanim) }"
     v-layer="{ getthis }"
     :style="{
-      '--mch':defskin.maxmin? defskin.maxmin.colorHover:'',
-      '--cch': defskin.close?defskin.close.colorHover:'',
-      '--mbch': defskin.maxmin?defskin.maxmin.backgroundHover:'',
-      '--cbch':  defskin.close?defskin.close.backgroundHover:'',
+      '--mch': defskin.maxmin ? defskin.maxmin.colorHover : '',
+      '--cch': defskin.close ? defskin.close.colorHover : '',
+      '--mbch': defskin.maxmin ? defskin.maxmin.backgroundHover : '',
+      '--cbch': defskin.close ? defskin.close.backgroundHover : '',
       'box-shadow': defskin.boxShadow,
       background: defskin.background,
       width: width + 'px',
@@ -32,9 +32,9 @@
       class="layer-vue-title"
       :title="title"
       :style="{
-        background:defskin.title? defskin.title.background:'',
-        color:defskin.title? defskin.title.color:'',
-        'border-bottom': '1px solid ' + (defskin.title? defskin.title.borderColor:'transparent'),
+        background: defskin.title ? defskin.title.background : '',
+        color: defskin.title ? defskin.title.color : '',
+        'border-bottom': '1px solid ' + (defskin.title ? defskin.title.borderColor : 'transparent'),
         height: titleheight + 'px',
         'line-height': titleheight + 'px',
       }"
@@ -91,8 +91,8 @@
       class="layer-vue-content"
       :style="{
         'border-radius': title ? '0 0 2px 2px' : '2px',
-        background:defskin.content? defskin.content.background:'',
-        color:defskin.content? defskin.content.color:'',
+        background: defskin.content ? defskin.content.background : '',
+        color: defskin.content ? defskin.content.color : '',
         height: contentheight + 'px',
       }"
     >
@@ -143,6 +143,7 @@ export default {
       defskin: {},
       // 用于记录初始状态
       initdata: { x: 0, y: 0, width: 300, height: 200 },
+      defborderwidth: 0,
     };
   },
   props: {
@@ -170,17 +171,26 @@ export default {
     anim: { type: Number, default: 1 },
     content: {},
     titleheight: { type: Number, default: 42 },
-    skin: { type: [Object,String] },
+    skin: { type: [Object, String] },
     id: { default: undefined },
     reset: { type: Boolean },
     el: {},
     fixed: { type: Boolean, default: true },
     minarea: { type: [Number, Array], default: () => [300, 200] },
-    isOutAnim:{type: [Boolean,Number], default: true}
+    isOutAnim: { type: [Boolean, Number], default: true },
+    boderwidth: { type: Number, default: 0 },
   },
   computed: {
     contentheight: function () {
       let h = this.height - (this.title ? this.titleheight : 0);
+      if (this.boderwidth <= 0) {
+        if (typeof this.skin === "string") {
+          this.defborderwidth = 3;
+        } else {
+          this.defborderwidth = 0;
+        }
+      }
+      h = h - this.defborderwidth * 2;
       h <= 0 ? (h = 0) : null;
       return h;
     },
@@ -209,7 +219,7 @@ export default {
         this.$nextTick(() => {
           this.endanim = false;
           this.init();
-          this.success && this.success();
+          this.success && this.success(this.$el, this.index, this.id);
         });
       } else {
         // this.close();
@@ -242,12 +252,14 @@ export default {
       this.index = this.$layer.o.instances.length;
       this.$layer.o.instances.push({ index: this.index, instance: this });
     }
-    if (typeof this.skin  ==='object') {
-      if(typeof this.defskin  ==='object'){
-this.defskin = merge(this.skin, this.defskin);
+    if (typeof this.skin === "object") {
+      if (typeof this.defskin === "object") {
+        this.defskin = merge(this.skin, this.defskin);
+      } else {
+        if (this.borderwidth) this.borderwidth = 3;
       }
-    }else if(typeof this.skin  ==='string'){
-      this.defskin=this.skin 
+    } else if (typeof this.skin === "string") {
+      this.defskin = this.skin;
     }
     this.$nextTick(() => {
       if (this.content && this.content.component) {
@@ -267,7 +279,7 @@ this.defskin = merge(this.skin, this.defskin);
           this.display = this.$refs.content.children[0].style.display;
         }
       } catch (error) {
-        console.warn("[layer warn]:not find children");
+        this.$layer.o.log && console.warn("[layer warn]:not find children");
       }
       if (this.visible || this.visible === undefined) {
         if (this.settop) {
@@ -277,7 +289,7 @@ this.defskin = merge(this.skin, this.defskin);
           this.zIndex = this.zindex;
         }
         this.init();
-        this.success && this.success();
+        this.success && this.success(this.$el, this.index, this.id);
       }
     });
   },
@@ -496,7 +508,7 @@ this.defskin = merge(this.skin, this.defskin);
     close() {
       // 隐藏窗口
       if (!this.defvisible) {
-        console.warn("[layer-warn]layer-vue-" + this.index + " is closed");
+        this.$layer.o.log && console.warn("[layer-warn]layer-vue-" + this.index + " is closed");
         return false;
       }
       this.defvisible = false;
@@ -506,7 +518,7 @@ this.defskin = merge(this.skin, this.defskin);
           this.$emit("update:visible", false);
         }
       }
-      this.cancel && this.cancel();
+      this.cancel && this.cancel(this.$el, this.index, this.id);
       if (!this.destroyOnClose) {
         return true;
       }
@@ -541,17 +553,17 @@ this.defskin = merge(this.skin, this.defskin);
                   this.$destroy();
                   delete this.$layer.o.instances[this.index];
                   // 销毁窗口回调
-                  this.end && this.end();
+                  this.end && this.end(this.$el, this.index, this.id);
                 } else {
                   // 窗口不存在或已经关闭
-                  warn();
+                  this.$layer.o.log && warn();
                   return false;
                 }
                 return true;
               }
             } else {
               // 窗口不存在或已经关闭
-              warn();
+              this.$layer.o.log && warn();
               return false;
             }
             // 判断子组件是否存在
@@ -571,11 +583,11 @@ this.defskin = merge(this.skin, this.defskin);
           this.$destroy();
           delete this.$layer.o.instances[this.index];
         } else {
-          warn();
+          this.$layer.o.log && warn();
           return false;
         }
       }
-      this.end && this.end();
+      this.end && this.end(this.$el, this.index, this.id);
       return true;
     },
     closefun() {
@@ -595,7 +607,7 @@ this.defskin = merge(this.skin, this.defskin);
     getthis() {
       return this;
     },
-  }
+  },
 };
 export { merge };
 </script>

@@ -1,5 +1,23 @@
 # 版本更新笔记
 
+## 0.1.12
+
+1.修复mac皮肤颜色丢失，
+
+2.添加全局配置项 log，默认为false，不在控制台输出告警信息，如需查看，设置为true
+
+3.添加borderwidth配置项
+
+4.各回调函数添加携带参数，除了resizing，其他均为el:layer窗口dom,index:窗口编号,id:传入的id，
+
+resizing携带参数为el:layer窗口dom,width:layer窗口宽度,height:layer窗口高度,方便在调整窗口时对内容区的进行相应调整
+
+### borderwidth - 边框大小修正值
+
+类型：Number，默认：0,单位：px
+
+正常情况下无需设置该项，如修改样式时，对layer外层容器添加了上下方向border，设置该值为上线方向border的平均值，来修正layer内部高度的计算。
+
 ## 0.1.11
 
 添加3种内置经典皮肤（xp风格，win7透明风格，mac风格）
