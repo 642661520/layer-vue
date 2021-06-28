@@ -97,7 +97,7 @@
         height: contentheight + 'px',
       }"
     >
-      <slot>{{ !model &&contenttype!=='object' ? content : null }}</slot>
+      <slot>{{ !model ? content : null }}</slot>
     </div>
   </div>
 </template>
@@ -114,11 +114,13 @@ const merge = (options, def) => {
 };
 
 export default {
-  // TODO 考虑添加isMax,初始化时全屏显示，多一种方式全屏 √
-  // TODO 组件如何使用全局方法 √
-  // TODO 方法添加响应式
+  // TODO 添加isMax,初始化时全屏显示，多一种方式全屏 √
+  // TODO 组件如何使用全局方法(index/id) full,min,restore openAgain √
+  // TODO 方法下 title content 可修改 非直接响应 √
+  // TODO bug修复：reset window.resizing √
   // TODO 添加遮罩，默认不显示
   // TODO SVG颜色需要修复skin关联性
+  // 优化 删除自定义指令
   name: "LayerVue",
   data() {
     return {
@@ -151,7 +153,7 @@ export default {
       initdata: { x: 0, y: 0, width: 300, height: 200 },
       defborderwidth: 0,
       l: {},
-      deftitle:undefined
+      deftitle: undefined,
     };
   },
   props: {
@@ -180,7 +182,7 @@ export default {
     content: {},
     titleheight: { type: Number, default: 42 },
     skin: { type: [Object, String] },
-    id: {type:String, default: undefined },
+    id: { type: String, default: undefined },
     reset: { type: Boolean },
     el: {},
     fixed: { type: Boolean, default: true },
@@ -206,10 +208,6 @@ export default {
     textwidth: function () {
       return this.width - ((this.maxmin[0] ? 35 : 0) + (this.maxmin[1] ? 35 : 0) + 50);
     },
-    contenttype:function(){
-      console.log(typeof this.content);
-      return typeof this.content
-    }
   },
   watch: {
     visible: function (newvalue) {
@@ -258,7 +256,7 @@ export default {
     if (!this.visible) {
       this.defvisible = this.visible;
     }
-    this.deftitle=this.title
+    this.deftitle = this.title;
     this.defskin = this.$layer.o.skin;
     window.addEventListener("resize", this.resizefun);
     if (this.visible || this.visible === undefined) {
@@ -276,7 +274,7 @@ export default {
     this.minheight = height;
     if (!this.model) {
       this.index = this.$layer.o.instances.length;
-      this.$layer.o.instances.push({instance: this });
+      this.$layer.o.instances.push({ instance: this });
     }
     if (typeof this.skin === "object") {
       if (typeof this.defskin === "object") {
@@ -346,6 +344,7 @@ export default {
     resizefun() {
       if (this.maxbtn) {
         this.width = document.documentElement.clientWidth;
+        this.height = document.documentElement.clientHeight;
         return;
       }
       if (this.x + this.width >= document.documentElement.clientWidth) {
@@ -380,6 +379,8 @@ export default {
       }
     },
     resetfun() {
+      this.maxbtn = false;
+      this.minbtn = false;
       this.x = this.initdata.x;
       this.y = this.initdata.y;
       this.width = this.initdata.width;
@@ -659,7 +660,7 @@ export default {
       this.$emit("update:isMax", this.maxbtn);
 
       if (this.maxbtn) {
-        if (this.move) {
+        if (this.move && this.$el.querySelector(this.move)) {
           this.$el.querySelector(this.move).style.cursor = "not-allowed";
         }
         if (this.minbtn) {
@@ -681,7 +682,7 @@ export default {
         this.width = this.l.width;
         this.height = this.l.height;
         this.restore && this.restore(this.$el, this.index, this.id);
-        if (this.move) {
+        if (this.move && this.$el.querySelector(this.move)) {
           this.$el.querySelector(this.move).style.cursor = "move";
         }
       }
@@ -689,7 +690,7 @@ export default {
     minfun() {
       this.minbtn = !this.minbtn;
       if (this.minbtn) {
-        if (this.move) {
+        if (this.move && this.$el.querySelector(this.move)) {
           this.$el.querySelector(this.move).style.cursor = "move";
         }
         if (this.maxbtn) {
@@ -798,7 +799,7 @@ export default {
       this.$el.querySelector(this.move).style.cursor = "move";
     },
     movefun(move) {
-      if (this.$el.querySelector(move).onmousedown === null) {
+      if (this.$el.querySelector(move) && this.$el.querySelector(move).onmousedown === null) {
         this.$el.querySelector(move).style.cursor = "move";
         this.$el.querySelector(move).onmousedown = (e1) => {
           if (this.$el.className.indexOf("layer-vue-ismax") >= 0) {

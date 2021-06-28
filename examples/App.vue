@@ -13,10 +13,10 @@
         <div id="test" >test<Test :id="visible"></Test></div>
       </div>
     </div>
-    <layer-vue :visible.sync="visible" :isMax='isMax' id="31321" :end="end" :cancel="cancel" :destroyOnClose="false" skin='win7' :maxmin="[1,1]">
-      <Test :id="visible"></Test>
+    <layer-vue :visible.sync="visible" :isMax='isMax' :reset="reset" id="31321" :end="end" :cancel="cancel" :destroyOnClose="false" skin='win7' :maxmin="[1,1]" content='3131'>
+      <!-- <Test :id="visible"></Test> -->
     </layer-vue>
-    <LayerVue :visible="true" :maxmin="[1, 1]" :end="end" offset='l' :cancel="cancel" skin='mac' :resize="[0, 1]" :destroyOnClose="true" :reset="reset"
+    <LayerVue :visible="true" :maxmin="[1, 1]" :end="end" offset='l' :cancel="cancel" skin='mac' :resize="[0, 1]" :destroyOnClose="true" 
       ><div id="videobox">
         <video muted autoplay="true" id="video" controls="true" controlsList="nodownload"></video>
         <button class="btn" id="download" onclick="download()">下载</button>
@@ -46,7 +46,7 @@ export default {
   },
   watch:{
     title:function(newvalue){
-        this.$layer.set(this.layer1,'title',newvalue)
+        this.$layer.setTitle(this.layer1,newvalue)
     }
   },
   mounted(){
@@ -90,18 +90,18 @@ export default {
         offset: "b",
         settop: true,
         // content: this.visible,
-        // content: span,
+        // content: document.getElementById('test'),
         end: () => {
           console.log("end");
         },
         cancel: () => {
           console.log("cancel");
         },
-        // content: 1,
-        content: {
-          component: Test,
-          data: { id: 3 },
-        },
+        content:false,
+        // content: {
+        //   component: Test,
+        //   data: { id: 3 },
+        // },
       });
     },
     async close1() {
