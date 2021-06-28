@@ -13,10 +13,10 @@
         <div id="test" >test<Test :id="visible"></Test></div>
       </div>
     </div>
-    <layer-vue :skin="{ content: { color: '#58a' } }" :end="end" :cancel="cancel" :destroyOnClose="true" skin='win7' :maxmin="[1,1]">
+    <layer-vue :visible.sync="visible" :isMax='isMax' id="31321" :end="end" :cancel="cancel" :destroyOnClose="false" skin='win7' :maxmin="[1,1]">
       <Test :id="visible"></Test>
     </layer-vue>
-    <LayerVue :visible.sync="visible" :maxmin="[1, 1]" :end="end" offset='l' :cancel="cancel" skin='mac' :resize="[0, 1]" :destroyOnClose="false" :reset="reset"
+    <LayerVue :visible="true" :maxmin="[1, 1]" :end="end" offset='l' :cancel="cancel" skin='mac' :resize="[0, 1]" :destroyOnClose="true" :reset="reset"
       ><div id="videobox">
         <video muted autoplay="true" id="video" controls="true" controlsList="nodownload"></video>
         <button class="btn" id="download" onclick="download()">下载</button>
@@ -36,11 +36,18 @@ export default {
   data() {
     return {
       zindex: 100,
-      visible: true,
+      visible: false,
       layer1: null,
       layer2: null,
       reset: true,
+      isMax:true,
+      title:'313131',
     };
+  },
+  watch:{
+    title:function(newvalue){
+        this.$layer.set(this.layer1,'title',newvalue)
+    }
   },
   mounted(){
     this.open1()
@@ -49,8 +56,10 @@ export default {
   methods: {
     open1() {
       this.layer1 = this.$layer({
+        isMax:true,
         parent: this,
-        id: "213",
+        title:['title'],
+        id: '{id:1}',
         skin: {
           background: "none",
           title: {
@@ -73,14 +82,14 @@ export default {
         destroyOnClose: false,
         titleheight: 30,
         // title:0,
-        move: ".layer-vue-content",
+        move: "#movetest",
         maxmin: [1, 1],
         area: [200, 170],
-        isOutAnim: 0,
+        // isOutAnim: 0,
         minarea: ["123", "112"],
         offset: "b",
         settop: true,
-        content: this.visible,
+        // content: this.visible,
         // content: span,
         end: () => {
           console.log("end");
@@ -89,11 +98,10 @@ export default {
           console.log("cancel");
         },
         // content: 1,
-        // content: {
-        //   component: Test,
-        //   parent: this,
-        //   data: { id: 3 },
-        // },
+        content: {
+          component: Test,
+          data: { id: 3 },
+        },
       });
     },
     async close1() {

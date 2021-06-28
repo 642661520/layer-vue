@@ -23,29 +23,47 @@ const versions = [
   "0.1.11",
   "0.1.12"
 ];
+const findIndex = id => {
+  let index = -1;
+  if (typeof id === "number") {
+    index = id;
+  } else if (typeof id === "string") {
+    index = Vue.prototype.$layer.o.instances.findIndex(value => {
+      if (value) {
+        return value.instance.id === id;
+      }
+    });
+  }
+  return index;
+};
 const LayerBox = function(Vue) {
   const LayerBoxConstructor = Vue.extend(LayerVue);
   const layer = function(options) {
     return layer.open(options);
   };
   layer.open = (options = {}) => {
-    // id
+    if (typeof options.title === "object") {
+      options.title = options.parent.title;
+    }
     if (options.id) {
-      let index = Vue.prototype.$layer.o.instances.findIndex(value => {
-        if (value) {
-          return value.instance.id === options.id;
-        }
-      });
+      let index = findIndex(options.id);
       if (index >= 0) {
-        if (!options.destroyOnClose) {
-          Vue.prototype.$layer.o.instances[index].instance.defvisible = true;
+        let instance = Vue.prototype.$layer.o.instances[index].instance;
+        if (!instance.destroyOnClose) {
+          if (instance.model) {
+            Vue.prototype.$layer.o.instances[index].instance.defvisible = true;
+          } else {
+            Vue.prototype.$layer.o.instances[index].instance.$emit(
+              "update:visible",
+              true
+            );
+          }
         }
         return index;
       }
     } else {
       options.destroyOnClose = true;
     }
-    let instance = new LayerBoxConstructor();
     // 强制删除传入的visible属性
     delete options.visible;
     // 合并全局皮肤配置到默认配置
@@ -72,41 +90,40 @@ const LayerBox = function(Vue) {
           // 新创建DOM
         } else {
           // 新创建DOM 打开时绑定状态
-          instance.isnewDOM = true;
+          options.isnewDOM = true;
         }
         // DOM类型绑定状态
-        instance.ishtml = true;
+        options.ishtml = true;
       } else {
         // 根据component判断内容区是否为Vue组件
         if (options.content.component) {
           options.content.component = Vue.extend(options.content.component);
         } else {
-          Vue.prototype.$layer.o.log && console.warn("[layer warn]:Incorrect content type");
+          Vue.prototype.$layer.o.log &&
+            console.warn("[layer warn]:Incorrect content type");
         }
       }
     }
     let index = Vue.prototype.$layer.o.instances.length;
-    if (options.index === undefined) {
-      options.index = index;
-    } else {
-      index = options.index;
-    }
-    options.model = 1;
     if (!options.el) {
       options.el = "#app";
     }
-    for (let prop in options) {
-      if (options.hasOwnProperty(prop)) {
-        instance[prop] = options[prop];
+
+    let instance = new LayerBoxConstructor({
+      propsData: {
+        ...options
       }
-    }
-    instance.index = index;
+    });
+    instance._ishtml = options.ishtml;
+    instance._isnewDOM = options.isnewDOM;
+    instance.$data.index = index;
+    instance.$data.model = 1;
     instance.vm = instance.$mount();
     if (options.parent) {
       instance.vm.$parent = options.parent;
       options.parent.$children.push(instance.vm);
     }
-    if (instance.ishtml) {
+    if (instance._ishtml) {
       if (options.content.parentNode) {
         let parentDiv = options.content.parentNode;
         parentDiv.insertBefore(instance.vm.$el, options.content);
@@ -117,6 +134,8 @@ const LayerBox = function(Vue) {
           document.body.appendChild(instance.vm.$el);
         }
       }
+      console.log(instance.vm.$el);
+
       instance.vm.$el
         .querySelector(".layer-vue-content")
         .appendChild(options.content);
@@ -133,7 +152,8 @@ const LayerBox = function(Vue) {
           break;
         case "array":
         default:
-          Vue.prototype.$layer.o.log && console.warn("[layer warn]:Incorrect content type");
+          Vue.prototype.$layer.o.log &&
+            console.warn("[layer warn]:Incorrect content type");
           break;
       }
       if (document.querySelector(options.el)) {
@@ -142,38 +162,34 @@ const LayerBox = function(Vue) {
         document.body.appendChild(instance.vm.$el);
       }
     }
-    Vue.prototype.$layer.o.instances.push({ index, instance });
+    Vue.prototype.$layer.o.instances.push({ instance });
     return index;
   };
   layer.close = async index => {
-    if (index === undefined) {
-      Vue.prototype.$layer.o.log && console.warn("[layer-warn]:The index is undefined");
-      return false;
-    }
+    index = findIndex(index);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
       let result = await instances.instance.closefun();
       return result;
     } else {
-      Vue.prototype.$layer.o.log && console.warn(
-        "[layer-warn]:No layer with index ：layer-vue-" + index + " found"
-      );
+      Vue.prototype.$layer.o.log &&
+        console.warn(
+          "[layer-warn]:No layer with index ：layer-vue-" + index + " found"
+        );
       return false;
     }
   };
   layer.reset = index => {
-    if (index === undefined) {
-      Vue.prototype.$layer.o.log && console.warn("[layer-warn]:The index is undefined");
-      return false;
-    }
+    index = findIndex(index);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
       instances.instance.resetfun();
       return true;
     } else {
-      Vue.prototype.$layer.o.log && console.warn(
-        "[layer-warn]:No layer with index ：layer-vue-" + index + " found"
-      );
+      Vue.prototype.$layer.o.log &&
+        console.warn(
+          "[layer-warn]:No layer with index ：layer-vue-" + index + " found"
+        );
       return false;
     }
   };
@@ -186,6 +202,77 @@ const LayerBox = function(Vue) {
     });
     let result = await Promise.all(closeAll);
     return result;
+  };
+  layer.full = index => {
+    index = findIndex(index);
+    const instances = Vue.prototype.$layer.o.instances[index];
+    if (instances && instances.instance.maxbtn === false) {
+      instances.instance.maxfun();
+      return true;
+    } else {
+      Vue.prototype.$layer.o.log &&
+        console.warn(
+          "[layer-warn]:No layer with index ：layer-vue-" + index + " found"
+        );
+      return false;
+    }
+  };
+  layer.min = index => {
+    index = findIndex(index);
+    const instances = Vue.prototype.$layer.o.instances[index];
+    if (instances && instances.instance.minbtn === false) {
+      instances.instance.minfun();
+      return true;
+    } else {
+      Vue.prototype.$layer.o.log &&
+        console.warn(
+          "[layer-warn]:No layer with index ：layer-vue-" + index + " found"
+        );
+      return false;
+    }
+  };
+  layer.restore = index => {
+    index = findIndex(index);
+    const instances = Vue.prototype.$layer.o.instances[index];
+    if (instances) {
+      instances.instance.restorefun();
+      return true;
+    } else {
+      Vue.prototype.$layer.o.log &&
+        console.warn(
+          "[layer-warn]:No layer with index ：layer-vue-" + index + " found"
+        );
+      return false;
+    }
+  };
+  layer.openAgain = index => {
+    if (typeof index !== "object") {
+      index = findIndex(index);
+      if (index >= 0 && index < Vue.prototype.$layer.o.instances.length) {
+        let instance = Vue.prototype.$layer.o.instances[index].instance;
+        if (!instance.destroyOnClose && instance.defvisible === false) {
+          if (instance.model) {
+            instance.defvisible = true;
+          } else {
+            instance.$emit("update:visible", true);
+          }
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    }
+  };
+  layer.set = (index, key, value) => {
+    index = findIndex(index);
+    const instance = Vue.prototype.$layer.o.instances[index].instance;
+    if (instance.model) {
+      instance.$data["def" + key] = value;
+      return true;
+    }
+    return false;
   };
   layer.version = version;
   layer.versions = versions;

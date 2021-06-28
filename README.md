@@ -451,9 +451,9 @@ this.$layer({
 
 ### move - 触发拖动的元素
 
-类型：String/Boolean，默认：'.layui-layer-title'
+类型：String/Boolean，默认：'.layer-vue-title'
 
-默认是触发标题区域拖拽。如果你想单独定义，指向元素的选择器或者DOM即可。如*move: '.mine-move'*。你还配置设定*move: false*来禁止拖拽。
+默认是触发标题区域拖拽。如果你想单独定义，指向元素的选择器或者DOM即可。如*move: '.move'*。你还配置设定*move: false*来禁止拖拽。
 
 ### moveOut - 是否允许拖拽到窗口外
 
@@ -461,7 +461,7 @@ this.$layer({
 
 默认只能在窗口内拖拽，如果你想让拖到窗外，那么设定*moveOut: [1, 1, 1, 1]*即可。
 
-### reset -重置窗口大小和定位【组件模式专用】
+### reset - 重置窗口大小和定位【组件模式专用】
 
 类型：Boolean，默认：null
 
@@ -472,6 +472,12 @@ this.$layer({
 类型：Number，默认：0,单位：px
 
 正常情况下无需设置该项，如修改样式时，对layer外层容器添加了上下方向border，设置该值为上线方向border的平均值，来修正layer内部高度的计算。
+
+### log - layer警告信息
+
+类型：Boolean，默认：false
+
+默认在控制台输出警告信息，如需查看，设置为true
 
 ## 回调函数
 

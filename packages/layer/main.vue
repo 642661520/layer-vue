@@ -10,7 +10,6 @@
     :id="'layer-vue-' + index"
     :data-skin="typeof defskin === 'string' ? defskin : ''"
     :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn, startanim: defvisible, endanim: isOutAnim && (!visible || endanim) }"
-    v-layer="{ getthis }"
     :style="{
       '--mch': defskin.maxmin ? defskin.maxmin.colorHover : '',
       '--cch': defskin.close ? defskin.close.colorHover : '',
@@ -26,11 +25,12 @@
       display: defvisible ? '' : 'none',
       position: fixed ? 'fixed' : 'absolute',
     }"
+    @mousedown="settopfun"
   >
     <div
-      v-if="title"
+      v-if="deftitle"
       class="layer-vue-title"
-      :title="title"
+      :title="deftitle"
       :style="{
         background: defskin.title ? defskin.title.background : '',
         color: defskin.title ? defskin.title.color : '',
@@ -38,10 +38,11 @@
         height: titleheight + 'px',
         'line-height': titleheight + 'px',
       }"
+      @mousedown="test"
     >
-      <div class="layer-vue-title-text" :style="{ width: textwidth + 'px' }">{{ title }}</div>
+      <div class="layer-vue-title-text" :style="{ width: textwidth + 'px' }">{{ deftitle }}</div>
       <div class="layer-vue-tools" :style="{ height: titleheight + 'px', 'line-height': titleheight + 'px' }">
-        <span v-show="maxmin[1]" class="layer-vue-min">
+        <span v-show="maxmin[1]" class="layer-vue-min" @click="minfun">
           <svg v-show="!minbtn" t="1623989554257" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2299" width="16" height="16">
             <path d="M128 512h768a25.6 25.6 0 1 1 0 51.2h-768a25.6 25.6 0 1 1 0-51.2z" p-id="2300"></path>
           </svg>
@@ -52,7 +53,7 @@
             ></path>
           </svg>
         </span>
-        <span v-show="maxmin[0] && !minbtn" class="layer-vue-max">
+        <span v-show="maxmin[0] && !minbtn" class="layer-vue-max" @click="maxfun">
           <svg v-show="!maxbtn" t="1623988846084" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1720" width="16" height="16">
             <path
               d="M918.14912 546.53952l0 282.50112c0 48.85504-39.76192 88.59648-88.6272 88.59648l-634.9824 0c-48.87552 0-88.63744-39.74144-88.63744-88.59648L105.90208 194.74432c0-48.85504 39.76192-88.60672 88.63744-88.60672L477.7984 106.1376c-15.24736 15.64672-25.38496 36.29056-27.60704 59.22816L194.52928 165.36576c-16.20992 0-29.39904 13.17888-29.39904 29.37856l0 634.29632c0 16.18944 13.18912 29.36832 29.39904 29.36832l634.9824 0c16.20992 0 29.39904-13.17888 29.39904-29.36832L858.91072 574.1056C881.2032 571.96544 901.888 562.37056 918.14912 546.53952zM573.93152 188.90752l193.6384 0L454.13376 502.35392c-17.34656 17.34656-17.34656 45.47584 0 62.8224 17.34656 17.34656 45.47584 17.34656 62.8224 0.01024l313.43616-313.4464 0 193.64864c0 24.53504 19.88608 44.42112 44.42112 44.42112 12.26752 0 23.37792-4.95616 31.41632-13.0048 8.0384-8.05888 13.01504-19.1488 13.01504-31.41632L919.2448 144.47616c0-24.53504-19.88608-44.42112-44.42112-44.42112L573.93152 100.05504c-24.53504 0-44.42112 19.88608-44.42112 44.43136C529.50016 169.02144 549.39648 188.90752 573.93152 188.90752z"
@@ -84,8 +85,8 @@
         ></path>
       </svg>
     </span>
-    <div v-if="resize[0]" class="layer-vue-resize"></div>
-    <div v-if="resize[1]" class="layer-vue-lbresize"></div>
+    <div v-if="resize[0] && !maxbtn" class="layer-vue-resize" @mousedown="rbresizefun"></div>
+    <div v-if="resize[1] && !maxbtn" class="layer-vue-lbresize" @mousedown="lbresizefun"></div>
     <div
       ref="content"
       class="layer-vue-content"
@@ -96,7 +97,7 @@
         height: contentheight + 'px',
       }"
     >
-      <slot>{{ !model ? content : null }}</slot>
+      <slot>{{ !model &&contenttype!=='object' ? content : null }}</slot>
     </div>
   </div>
 </template>
@@ -113,6 +114,11 @@ const merge = (options, def) => {
 };
 
 export default {
+  // TODO 考虑添加isMax,初始化时全屏显示，多一种方式全屏 √
+  // TODO 组件如何使用全局方法 √
+  // TODO 方法添加响应式
+  // TODO 添加遮罩，默认不显示
+  // TODO SVG颜色需要修复skin关联性
   name: "LayerVue",
   data() {
     return {
@@ -134,7 +140,7 @@ export default {
       height: 0,
       zIndex: 1,
       // 序号
-      index: 0,
+      index: undefined,
       // 模式
       model: undefined,
       // display
@@ -144,6 +150,8 @@ export default {
       // 用于记录初始状态
       initdata: { x: 0, y: 0, width: 300, height: 200 },
       defborderwidth: 0,
+      l: {},
+      deftitle:undefined
     };
   },
   props: {
@@ -172,13 +180,14 @@ export default {
     content: {},
     titleheight: { type: Number, default: 42 },
     skin: { type: [Object, String] },
-    id: { default: undefined },
+    id: {type:String, default: undefined },
     reset: { type: Boolean },
     el: {},
     fixed: { type: Boolean, default: true },
     minarea: { type: [Number, Array], default: () => [300, 200] },
     isOutAnim: { type: [Boolean, Number], default: true },
     boderwidth: { type: Number, default: 0 },
+    isMax: { type: Boolean, default: false },
   },
   computed: {
     contentheight: function () {
@@ -197,6 +206,10 @@ export default {
     textwidth: function () {
       return this.width - ((this.maxmin[0] ? 35 : 0) + (this.maxmin[1] ? 35 : 0) + 50);
     },
+    contenttype:function(){
+      console.log(typeof this.content);
+      return typeof this.content
+    }
   },
   watch: {
     visible: function (newvalue) {
@@ -221,18 +234,31 @@ export default {
           this.init();
           this.success && this.success(this.$el, this.index, this.id);
         });
-      } else {
-        // this.close();
       }
     },
     reset: function () {
       this.resetfun();
+    },
+    isMax: function (newvalue) {
+      if (newvalue !== this.maxbtn && this.$el.querySelector(this.move)) {
+        this.maxfun();
+      }
+    },
+    minbtn: function (newvalue) {
+      if (this.move != ".layer-vue-title") {
+        if (newvalue) {
+          this.$el.querySelector(".layer-vue-title").style.cursor = "move";
+        } else {
+          this.$el.querySelector(".layer-vue-title").style.cursor = "";
+        }
+      }
     },
   },
   created() {
     if (!this.visible) {
       this.defvisible = this.visible;
     }
+    this.deftitle=this.title
     this.defskin = this.$layer.o.skin;
     window.addEventListener("resize", this.resizefun);
     if (this.visible || this.visible === undefined) {
@@ -250,7 +276,7 @@ export default {
     this.minheight = height;
     if (!this.model) {
       this.index = this.$layer.o.instances.length;
-      this.$layer.o.instances.push({ index: this.index, instance: this });
+      this.$layer.o.instances.push({instance: this });
     }
     if (typeof this.skin === "object") {
       if (typeof this.defskin === "object") {
@@ -297,6 +323,26 @@ export default {
     window.removeEventListener("resize", this.resizefun);
   },
   methods: {
+    test(e1) {
+      e1.preventDefault();
+      if (this.minbtn && this.move != ".layer-vue-title") {
+        const { x } = this;
+        let clientX = e1.clientX;
+        document.onmousemove = (e2) => {
+          e2.preventDefault();
+          let moveX = e2.clientX - clientX;
+          let newX = parseInt(x) + parseInt(moveX);
+          if (!parseInt(this.moveOut[3]) && newX <= 0) {
+            newX = 0;
+          }
+          if (!parseInt(this.moveOut[1]) && newX >= document.documentElement.clientWidth - this.minwidth) {
+            newX = document.documentElement.clientWidth - this.minwidth;
+          }
+          this.x = newX;
+        };
+        this.f();
+      }
+    },
     resizefun() {
       if (this.maxbtn) {
         this.width = document.documentElement.clientWidth;
@@ -355,6 +401,10 @@ export default {
       this.height = height;
       this.x = x;
       this.y = y;
+      this.movefun(this.move);
+      if (this.isMax) {
+        this.maxfun();
+      }
     },
     minareainit() {
       let width = 0;
@@ -533,13 +583,13 @@ export default {
         // 判断窗口配置项是否存在
         if (instances) {
           // 判断内容区是否是DOM
-          if (instances.instance.ishtml) {
+          if (instances.instance._ishtml) {
             // 判断窗口DOM元素是否存在
             if (layerDOM) {
               // 获取内容区外层DOM
               const content = layerDOM.querySelector(".layer-vue-content");
               // 判断内容区是否是新建DOM
-              if (instances.instance.isnewDOM) {
+              if (instances.instance._isnewDOM) {
                 // 删除新建DOM
                 content.removeChild(content.children[0]);
               } else {
@@ -604,8 +654,203 @@ export default {
         }
       });
     },
-    getthis() {
-      return this;
+    maxfun() {
+      this.maxbtn = !this.maxbtn;
+      this.$emit("update:isMax", this.maxbtn);
+
+      if (this.maxbtn) {
+        if (this.move) {
+          this.$el.querySelector(this.move).style.cursor = "not-allowed";
+        }
+        if (this.minbtn) {
+          this.minbtn = false;
+        } else {
+          this.l.x = this.x;
+          this.l.y = this.y;
+          this.l.width = this.width;
+          this.l.height = this.height;
+        }
+        this.x = 0;
+        this.y = 0;
+        this.width = document.documentElement.clientWidth;
+        this.height = document.documentElement.clientHeight;
+        this.full && this.full(this.$el, this.index, this.id);
+      } else {
+        this.x = this.l.x;
+        this.y = this.l.y;
+        this.width = this.l.width;
+        this.height = this.l.height;
+        this.restore && this.restore(this.$el, this.index, this.id);
+        if (this.move) {
+          this.$el.querySelector(this.move).style.cursor = "move";
+        }
+      }
+    },
+    minfun() {
+      this.minbtn = !this.minbtn;
+      if (this.minbtn) {
+        if (this.move) {
+          this.$el.querySelector(this.move).style.cursor = "move";
+        }
+        if (this.maxbtn) {
+          this.maxbtn = false;
+        } else {
+          this.l.x = this.x;
+          this.l.y = this.y;
+          this.l.width = this.width;
+          this.l.height = this.height;
+        }
+        this.x = this.l.x;
+        this.y = document.documentElement.clientHeight - this.titleheight;
+        this.height = this.titleheight;
+        this.width = 200;
+        this.min && this.min(this.$el, this.index, this.id);
+      } else {
+        this.x = this.l.x;
+        this.y = this.l.y;
+        this.width = this.l.width;
+        this.height = this.l.height;
+        this.restore && this.restore(this.$el, this.index, this.id);
+      }
+    },
+    settopfun() {
+      if (this.settop) {
+        this.zIndex = this.$layer.o.settop();
+      }
+    },
+    f(callback) {
+      document.onmouseup = (e) => {
+        e.preventDefault();
+        callback && callback(this.$el, this.index, this.id);
+        document.onmousemove = null;
+        document.onmouseup = null;
+      };
+    },
+    lbresizefun(e1) {
+      e1.preventDefault();
+      const { minwidth, minheight, width, height, x } = this;
+      const clientX = e1.clientX;
+      const clientY = e1.clientY;
+      document.onmousemove = (e2) => {
+        e2.preventDefault();
+        let moveX = e2.clientX - clientX;
+        let moveY = e2.clientY - clientY;
+        this.l.width = parseInt(width) - parseInt(moveX);
+        this.l.height = parseInt(height) + parseInt(moveY);
+        let newX = parseInt(x) + parseInt(moveX);
+        if (this.l.width <= minwidth) {
+          this.l.width = minwidth;
+        }
+        if (this.l.width + newX >= x + width) {
+          newX = x + width - this.l.width;
+        }
+        if (this.l.height <= minheight) {
+          this.l.height = minheight;
+        }
+        if (!parseInt(this.moveOut[3]) && newX <= 0) {
+          newX = 0;
+          this.l.width = x + width;
+        }
+        this.width = this.l.width;
+        this.height = this.l.height;
+        this.x = newX;
+        this.resizing && this.resizing(this.$el, this.width, this.height);
+      };
+      this.f(this.resizeEnd);
+    },
+    rbresizefun(e1) {
+      e1.preventDefault();
+      const { width, height, x, y, minwidth, minheight } = this;
+      const clientX = e1.clientX;
+      const clientY = e1.clientY;
+      document.onmousemove = (e2) => {
+        e2.preventDefault();
+        let moveX = e2.clientX - clientX;
+        let moveY = e2.clientY - clientY;
+        this.l.width = parseInt(width) + parseInt(moveX);
+        this.l.height = parseInt(height) + parseInt(moveY);
+        if (this.l.width <= minwidth) {
+          this.l.width = minwidth;
+        }
+        if (this.l.width + x >= document.documentElement.clientWidth) {
+          this.l.width = document.documentElement.clientWidth - x;
+        }
+        if (this.l.height <= minheight) {
+          this.l.height = minheight;
+        }
+        if (this.l.height + y >= document.documentElement.clientHeight) {
+          this.l.height = document.documentElement.clientHeight - y;
+        }
+        this.width = this.l.width;
+        this.height = this.l.height;
+        this.resizing && this.resizing(this.$el, this.width, this.height);
+      };
+      this.f(this.resizeEnd);
+    },
+    restorefun() {
+      this.minbtn = false;
+      this.maxbtn = false;
+      this.$emit("update:isMax", this.maxbtn);
+      this.x = this.l.x;
+      this.y = this.l.y;
+      this.width = this.l.width;
+      this.height = this.l.height;
+      this.$el.querySelector(this.move).style.cursor = "move";
+    },
+    movefun(move) {
+      if (this.$el.querySelector(move).onmousedown === null) {
+        this.$el.querySelector(move).style.cursor = "move";
+        this.$el.querySelector(move).onmousedown = (e1) => {
+          if (this.$el.className.indexOf("layer-vue-ismax") >= 0) {
+            return;
+          }
+          if (this.$el.className.indexOf("layer-vue-ismin") >= 0) {
+            const { x } = this;
+            let clientX = e1.clientX;
+            document.onmousemove = (e2) => {
+              e2.preventDefault();
+              let moveX = e2.clientX - clientX;
+              let newX = parseInt(x) + parseInt(moveX);
+              if (!parseInt(this.moveOut[3]) && newX <= 0) {
+                newX = 0;
+              }
+              if (!parseInt(this.moveOut[1]) && newX >= document.documentElement.clientWidth - this.minwidth) {
+                newX = document.documentElement.clientWidth - this.minwidth;
+              }
+              this.x = newX;
+            };
+            this.f();
+          } else {
+            const { x, y } = this;
+            let clientX = e1.clientX;
+            let clientY = e1.clientY;
+            document.onmousemove = (e2) => {
+              e2.preventDefault();
+              let moveX = e2.clientX - clientX;
+              let moveY = e2.clientY - clientY;
+              let newX = parseInt(x) + parseInt(moveX);
+              if (!parseInt(this.moveOut[3]) && newX <= 0) {
+                newX = 0;
+              }
+              if (!parseInt(this.moveOut[1]) && newX >= document.documentElement.clientWidth - this.width) {
+                newX = document.documentElement.clientWidth - this.width;
+              }
+              let newY = parseInt(y) + parseInt(moveY);
+              if (!parseInt(this.moveOut[0]) && newY <= 0) {
+                newY = 0;
+              }
+              if (!parseInt(this.moveOut[2]) && newY >= document.documentElement.clientHeight - this.height) {
+                newY = document.documentElement.clientHeight - this.height;
+              }
+              this.x = newX;
+              this.y = newY;
+              this.l.x = newX;
+              this.l.y = newY;
+            };
+            this.f(this.moveEnd);
+          }
+        };
+      }
     },
   },
 };
