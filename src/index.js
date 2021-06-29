@@ -11,7 +11,7 @@ const skin = {
   title: {
     background: "#fff",
     color: "#000",
-    borderColor: "#f0f0f0"
+    borderBottom: '1px solid #f0f0f0'
   },
   content: {
     background: "#fff",

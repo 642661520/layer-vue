@@ -1,5 +1,21 @@
 # 版本更新笔记
 
+## 0.1.13
+
+1.添加isMax,初始化时可全屏显示
+
+2.组件模式可配置id使用全局方法
+
+3.新增方法full,min,restore openAgain
+
+4.方法下 title content 可修改
+
+5.修改skin borderColor->borderBottom
+
+6.bug修复：reset没有恢复一些状态；resizing没有计算高度 ；修改高度计算，
+
+7.优化 删除自定义指令
+
 ## 0.1.12
 
 1.修复mac皮肤颜色丢失，

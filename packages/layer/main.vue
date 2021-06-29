@@ -30,17 +30,16 @@
     <div
       v-if="deftitle"
       class="layer-vue-title"
-      :title="deftitle"
       :style="{
         background: defskin.title ? defskin.title.background : '',
         color: defskin.title ? defskin.title.color : '',
-        'border-bottom': '1px solid ' + (defskin.title ? defskin.title.borderColor : 'transparent'),
+        'border-bottom': defskin.title ? defskin.title.borderBottom : '',
         height: titleheight + 'px',
         'line-height': titleheight + 'px',
       }"
-      @mousedown="test"
+      @mousedown="minmovefun"
     >
-      <div class="layer-vue-title-text" :style="{ width: textwidth + 'px' }">{{ deftitle }}</div>
+      <div class="layer-vue-title-text" :title="deftitle" :style="{ width: textwidth + 'px' }">{{ deftitle }}</div>
       <div class="layer-vue-tools" :style="{ height: titleheight + 'px', 'line-height': titleheight + 'px' }">
         <span v-show="maxmin[1]" class="layer-vue-min" @click="minfun">
           <svg v-show="!minbtn" t="1623989554257" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2299" width="16" height="16">
@@ -118,9 +117,8 @@ export default {
   // TODO 组件如何使用全局方法(index/id) full,min,restore openAgain √
   // TODO 方法下 title content 可修改 非直接响应 √
   // TODO bug修复：reset window.resizing √
-  // TODO 添加遮罩，默认不显示
-  // TODO SVG颜色需要修复skin关联性
-  // 优化 删除自定义指令
+  // TODO 修改高度计算，修改skin borderColor->borderBottom √
+  // TODO 优化 删除自定义指令
   name: "LayerVue",
   data() {
     return {
@@ -168,7 +166,7 @@ export default {
     maxmin: { type: Array, default: () => [0, 0] },
     resize: { type: Array, default: () => [1, 1] },
     moveEnd: { type: Function },
-    move: { type: [String, Boolean], default: ".layer-vue-title" },
+    move: { type: [String, Boolean], default: ".layer-vue-title-text" },
     cancel: { type: Function },
     success: { type: Function },
     end: { type: Function },
@@ -190,6 +188,7 @@ export default {
     isOutAnim: { type: [Boolean, Number], default: true },
     boderwidth: { type: Number, default: 0 },
     isMax: { type: Boolean, default: false },
+    shape: { type: Array, default: () => [0, 0] },
   },
   computed: {
     contentheight: function () {
@@ -243,11 +242,11 @@ export default {
       }
     },
     minbtn: function (newvalue) {
-      if (this.move != ".layer-vue-title") {
+      if (this.move != ".layer-vue-title-text") {
         if (newvalue) {
-          this.$el.querySelector(".layer-vue-title").style.cursor = "move";
+          this.$el.querySelector(".layer-vue-title-text").style.cursor = "move";
         } else {
-          this.$el.querySelector(".layer-vue-title").style.cursor = "";
+          this.$el.querySelector(".layer-vue-title-text").style.cursor = "";
         }
       }
     },
@@ -321,9 +320,9 @@ export default {
     window.removeEventListener("resize", this.resizefun);
   },
   methods: {
-    test(e1) {
+    minmovefun(e1) {
       e1.preventDefault();
-      if (this.minbtn && this.move != ".layer-vue-title") {
+      if (this.minbtn && this.move != ".layer-vue-title-text") {
         const { x } = this;
         let clientX = e1.clientX;
         document.onmousemove = (e2) => {
@@ -438,9 +437,9 @@ export default {
           children = true;
         }
         if (this.area[1]) {
-          height = this.tf(this.area[1], "clientHeight") + (this.title ? this.titleheight : 0);
+          height = this.tf(this.area[1], "clientHeight");
         } else {
-          height = children ? this.$refs.content.children[0].scrollHeight : 0 + this.titleheight;
+          height = children ? this.$refs.content.children[0].scrollHeight : 0;
         }
       } else {
         if (this.area === "auto") {
@@ -448,7 +447,7 @@ export default {
         } else {
           width = this.tf(this.area, "clientWidth");
         }
-        height = children ? this.$refs.content.children[0].scrollHeight : 0 + this.titleheight;
+        height = children ? this.$refs.content.children[0].scrollHeight : 0;
       }
       if (width > document.documentElement.clientWidth && document.documentElement.clientWidth > this.minwidth) {
         width = document.documentElement.clientWidth;

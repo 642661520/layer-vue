@@ -1,8 +1,8 @@
 import LayerVue, { merge } from "./main.vue";
-LayerVue.install = function (Vue) {
+LayerVue.install = function(Vue) {
   Vue.component(LayerVue.name, LayerVue);
 };
-const version = "0.1.12";
+const version = "0.1.13";
 const versions = [
   "0.0.1",
   "0.0.2",
@@ -22,13 +22,14 @@ const versions = [
   "0.1.10",
   "0.1.11",
   "0.1.12",
+  "0.1.13"
 ];
-const findIndex = (id) => {
+const findIndex = id => {
   let index = -1;
   if (typeof id === "number") {
     index = id;
   } else if (typeof id === "string") {
-    index = Vue.prototype.$layer.o.instances.findIndex((value) => {
+    index = Vue.prototype.$layer.o.instances.findIndex(value => {
       if (value) {
         return value.instance.id === id;
       }
@@ -36,9 +37,9 @@ const findIndex = (id) => {
   }
   return index;
 };
-const LayerBox = function (Vue) {
+const LayerBox = function(Vue) {
   const LayerBoxConstructor = Vue.extend(LayerVue);
-  const layer = function (options) {
+  const layer = function(options) {
     return layer.open(options);
   };
   layer.open = (options = {}) => {
@@ -51,12 +52,12 @@ const LayerBox = function (Vue) {
         let instance = Vue.prototype.$layer.o.instances[index].instance;
         if (!instance.destroyOnClose) {
           if (instance.model) {
-            Vue.prototype.$layer.o.instances[index].instance.defvisible = true;
+            instance.defvisible = true;
           } else {
-            Vue.prototype.$layer.o.instances[index].instance.$emit(
-              "update:visible",
-              true
-            );
+            instance.$emit("update:visible", true);
+            if (!instance.defvisible) {
+              instance.defvisible = true;
+            }
           }
         }
         return index;
@@ -112,8 +113,8 @@ const LayerBox = function (Vue) {
 
     let instance = new LayerBoxConstructor({
       propsData: {
-        ...options,
-      },
+        ...options
+      }
     });
     instance._ishtml = options.ishtml;
     instance._isnewDOM = options.isnewDOM;
@@ -165,7 +166,7 @@ const LayerBox = function (Vue) {
     Vue.prototype.$layer.o.instances.push({ instance });
     return index;
   };
-  layer.close = async (index) => {
+  layer.close = async index => {
     index = findIndex(index);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
@@ -179,7 +180,7 @@ const LayerBox = function (Vue) {
       return false;
     }
   };
-  layer.reset = (index) => {
+  layer.reset = index => {
     index = findIndex(index);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
@@ -195,7 +196,7 @@ const LayerBox = function (Vue) {
   };
   layer.closeAll = async () => {
     let closeAll = [];
-    Vue.prototype.$layer.o.instances.forEach((element) => {
+    Vue.prototype.$layer.o.instances.forEach(element => {
       if (element) {
         closeAll.push(element.instance.closefun());
       }
@@ -203,7 +204,7 @@ const LayerBox = function (Vue) {
     let result = await Promise.all(closeAll);
     return result;
   };
-  layer.full = (index) => {
+  layer.full = index => {
     index = findIndex(index);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances && instances.instance.maxbtn === false) {
@@ -217,7 +218,7 @@ const LayerBox = function (Vue) {
       return false;
     }
   };
-  layer.min = (index) => {
+  layer.min = index => {
     index = findIndex(index);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances && instances.instance.minbtn === false) {
@@ -231,7 +232,7 @@ const LayerBox = function (Vue) {
       return false;
     }
   };
-  layer.restore = (index) => {
+  layer.restore = index => {
     index = findIndex(index);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
@@ -245,7 +246,7 @@ const LayerBox = function (Vue) {
       return false;
     }
   };
-  layer.openAgain = (index) => {
+  layer.openAgain = index => {
     if (typeof index !== "object") {
       index = findIndex(index);
       if (index >= 0 && index < Vue.prototype.$layer.o.instances.length) {
@@ -255,6 +256,9 @@ const LayerBox = function (Vue) {
             instance.defvisible = true;
           } else {
             instance.$emit("update:visible", true);
+            if (!instance.defvisible) {
+              instance.defvisible = true;
+            }
           }
           return true;
         } else {
@@ -290,7 +294,7 @@ const LayerBox = function (Vue) {
           );
         let chlidinstance = new instances.instance.content.component({
           parent: instances.instance,
-          propsData: value,
+          propsData: value
         });
         for (const key in instances.Vuecomponent.$data) {
           if (Object.hasOwnProperty.call(instances.Vuecomponent.$data, key)) {
