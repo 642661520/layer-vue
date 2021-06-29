@@ -11,6 +11,10 @@
     :data-skin="typeof defskin === 'string' ? defskin : ''"
     :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn, startanim: defvisible, endanim: isOutAnim && (!visible || endanim) }"
     :style="{
+      '--mc': defskin.maxmin ? defskin.maxmin.color : '',
+      '--cc': defskin.close ? defskin.close.color : '',
+      '--mbc': defskin.maxmin ? defskin.maxmin.background : '',
+      '--cbc': defskin.close ? defskin.close.background : '',
       '--mch': defskin.maxmin ? defskin.maxmin.colorHover : '',
       '--cch': defskin.close ? defskin.close.colorHover : '',
       '--mbch': defskin.maxmin ? defskin.maxmin.backgroundHover : '',

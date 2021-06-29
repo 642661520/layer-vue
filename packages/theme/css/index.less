@@ -8,7 +8,6 @@
   box-sizing: border-box;
 
   .layer-vue-title {
-    z-index: 1;
     overflow: hidden;
     width: 100%;
     padding: 0 0 0px 20px;
@@ -23,7 +22,6 @@
     .layer-vue-title-text {
       vertical-align: top;
       overflow: hidden;
-      // width: calc(100% - 100px);
       white-space: nowrap;
       text-overflow: ellipsis;
       user-select: none;
@@ -41,15 +39,26 @@
       text-align: center;
     }
 
+    .layer-vue-min,
+    .layer-vue-max {
+      background: var(--mbc);
+      fill: var(--mc);
+    }
+
     .layer-vue-min:hover,
     .layer-vue-max:hover {
-      background-color: var(--mbch);
+      background: var(--mbch);
       fill: var(--mch);
     }
 
-    .layer-vue-close:hover {
-      background-color: var(--cbch);
-      fill: var(--cch);
+    .layer-vue-close {
+      background: var(--cbc);
+      fill: var(--cc);
+
+      &:hover {
+        background: var(--cbch);
+        fill: var(--cch);
+      }
     }
   }
 
@@ -67,14 +76,14 @@
     border: 2px solid #FFF;
 
     svg {
-      fill: #FFF;
+      fill: var(--cc);
       line-height: 21px;
       font-size: 14px;
       padding: 5px;
     }
 
     &:hover {
-      background-color: var(--cbch);
+      background: var(--cbch);
       color: var(--cch);
     }
   }
@@ -107,7 +116,6 @@
   }
 
   .layer-vue-content {
-    z-index: 1;
     border-radius: 0 0 2px 2px;
     position: relative;
     overflow: hidden;
