@@ -30,7 +30,7 @@ const skin = {
     colorHover: "#fff"
   }
 };
-const install = function(Vue, options) {
+const install = function(Vue, options={}) {
   console.log(
     `%c layer-vue %c v${version} %c`,
     "background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff",

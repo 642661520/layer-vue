@@ -46,7 +46,7 @@ new Vue({render: h => h(App)}).$mount('#app')
 	  <!-- 引入 layer-vue.js -->
 	  <script src="//unpkg.com/layer-vue/lib/layer-vue.js"></script>
     <script>
-    //挂载layer组件    
+    //挂载layer组件
       Vue.use(LayerVue,{
       //此项设置置顶窗口的初始值，默认为100，一般无需配置，和其他组件冲突时可在此 配置
       zindex:100,
@@ -585,7 +585,7 @@ async open() {
 
 重新打开指定的layer窗口
 
-### $layer.setTitle(index/id,value)【方法模式专用】
+### $layer.setTitle(index/id,value) - 【方法模式专用】
 
 参数：窗口序号/窗口id,新的title值,返回值：Boolean数组,标识每个窗口的执行结果，true代表成功，false表示该窗口不存在或者已经是关闭状态
 
@@ -626,7 +626,7 @@ export default {
 
 
 
-### $layer.setContent(index/id,value)【方法模式专用】
+### $layer.setContent(index/id,value) - 【方法模式专用】
 
 参数：窗口序号/窗口id,新的content值,返回值：Boolean数组,标识每个窗口的执行结果，true代表成功，false表示该窗口不存在或者已经是关闭状态
 

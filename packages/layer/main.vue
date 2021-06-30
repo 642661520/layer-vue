@@ -117,12 +117,6 @@ const merge = (options, def) => {
 };
 
 export default {
-  // TODO 添加isMax,初始化时全屏显示，多一种方式全屏 √
-  // TODO 组件如何使用全局方法(index/id) full,min,restore openAgain √
-  // TODO 方法下 title content 可修改 非直接响应 √
-  // TODO bug修复：reset window.resizing √
-  // TODO 修改高度计算，修改skin borderColor->borderBottom √
-  // TODO 优化 删除自定义指令
   name: "LayerVue",
   data() {
     return {
@@ -254,6 +248,9 @@ export default {
         }
       }
     },
+    title:function(newvalue){
+      this.deftitle=newvalue
+    }
   },
   created() {
     if (!this.visible) {
