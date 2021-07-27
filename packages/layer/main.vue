@@ -9,7 +9,12 @@
     class="layer-vue"
     :id="'layer-vue-' + index"
     :data-skin="typeof defskin === 'string' ? defskin : ''"
-    :class="{ 'layer-vue-ismax': maxbtn, 'layer-vue-ismin': minbtn, startanim: defvisible, endanim: isOutAnim && (!visible || endanim) }"
+    :class="{
+      'layer-vue-ismax': maxbtn,
+      'layer-vue-ismin': minbtn,
+      startanim: defvisible,
+      endanim: isOutAnim && (!visible || endanim),
+    }"
     :style="{
       '--mc': defskin.maxmin ? defskin.maxmin.color : '',
       '--cc': defskin.close ? defskin.close.color : '',
@@ -43,27 +48,86 @@
       }"
       @mousedown="minmovefun"
     >
-      <div class="layer-vue-title-text" :title="deftitle" :style="{ width: textwidth + 'px' }">{{ deftitle }}</div>
-      <div class="layer-vue-tools" :style="{ height: titleheight + 'px', 'line-height': titleheight + 'px' }">
+      <div
+        class="layer-vue-title-text"
+        :title="deftitle"
+        :style="{ width: textwidth + 'px' }"
+      >
+        {{ deftitle }}
+      </div>
+      <div
+        class="layer-vue-tools"
+        :style="{
+          height: titleheight + 'px',
+          'line-height': titleheight + 'px',
+        }"
+      >
         <span v-show="maxmin[1]" class="layer-vue-min" @click="minfun">
-          <svg v-show="!minbtn" t="1623989554257" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2299" width="16" height="16">
-            <path d="M128 512h768a25.6 25.6 0 1 1 0 51.2h-768a25.6 25.6 0 1 1 0-51.2z" p-id="2300"></path>
+          <svg
+            v-show="!minbtn"
+            t="1623989554257"
+            class="icon"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="2299"
+            width="16"
+            height="16"
+          >
+            <path
+              d="M128 512h768a25.6 25.6 0 1 1 0 51.2h-768a25.6 25.6 0 1 1 0-51.2z"
+              p-id="2300"
+            ></path>
           </svg>
-          <svg v-show="minbtn" t="1623989831113" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2537" width="16" height="16">
+          <svg
+            v-show="minbtn"
+            t="1623989831113"
+            class="icon"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="2537"
+            width="16"
+            height="16"
+          >
             <path
               d="M959.72 0H294.216a63.96 63.96 0 0 0-63.96 63.96v127.92H64.28A63.96 63.96 0 0 0 0.32 255.84V959.4a63.96 63.96 0 0 0 63.96 63.96h703.56a63.96 63.96 0 0 0 63.96-63.96V792.465h127.92a63.96 63.96 0 0 0 63.96-63.96V63.96A63.96 63.96 0 0 0 959.72 0zM767.84 728.505V959.4H64.28V255.84h703.56z m189.322 0H831.8V255.84a63.96 63.96 0 0 0-63.96-63.96H294.216V63.96H959.72z"
               p-id="2538"
             ></path>
           </svg>
         </span>
-        <span v-show="maxmin[0] && !minbtn" class="layer-vue-max" @click="maxfun">
-          <svg v-show="!maxbtn" t="1623988846084" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1720" width="16" height="16">
+        <span
+          v-show="maxmin[0] && !minbtn"
+          class="layer-vue-max"
+          @click="maxfun"
+        >
+          <svg
+            v-show="!maxbtn"
+            t="1623988846084"
+            class="icon"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="1720"
+            width="16"
+            height="16"
+          >
             <path
               d="M918.14912 546.53952l0 282.50112c0 48.85504-39.76192 88.59648-88.6272 88.59648l-634.9824 0c-48.87552 0-88.63744-39.74144-88.63744-88.59648L105.90208 194.74432c0-48.85504 39.76192-88.60672 88.63744-88.60672L477.7984 106.1376c-15.24736 15.64672-25.38496 36.29056-27.60704 59.22816L194.52928 165.36576c-16.20992 0-29.39904 13.17888-29.39904 29.37856l0 634.29632c0 16.18944 13.18912 29.36832 29.39904 29.36832l634.9824 0c16.20992 0 29.39904-13.17888 29.39904-29.36832L858.91072 574.1056C881.2032 571.96544 901.888 562.37056 918.14912 546.53952zM573.93152 188.90752l193.6384 0L454.13376 502.35392c-17.34656 17.34656-17.34656 45.47584 0 62.8224 17.34656 17.34656 45.47584 17.34656 62.8224 0.01024l313.43616-313.4464 0 193.64864c0 24.53504 19.88608 44.42112 44.42112 44.42112 12.26752 0 23.37792-4.95616 31.41632-13.0048 8.0384-8.05888 13.01504-19.1488 13.01504-31.41632L919.2448 144.47616c0-24.53504-19.88608-44.42112-44.42112-44.42112L573.93152 100.05504c-24.53504 0-44.42112 19.88608-44.42112 44.43136C529.50016 169.02144 549.39648 188.90752 573.93152 188.90752z"
               p-id="1721"
             ></path>
           </svg>
-          <svg v-show="maxbtn" t="1623989831113" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2537" width="16" height="16">
+          <svg
+            v-show="maxbtn"
+            t="1623989831113"
+            class="icon"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="2537"
+            width="16"
+            height="16"
+          >
             <path
               d="M959.72 0H294.216a63.96 63.96 0 0 0-63.96 63.96v127.92H64.28A63.96 63.96 0 0 0 0.32 255.84V959.4a63.96 63.96 0 0 0 63.96 63.96h703.56a63.96 63.96 0 0 0 63.96-63.96V792.465h127.92a63.96 63.96 0 0 0 63.96-63.96V63.96A63.96 63.96 0 0 0 959.72 0zM767.84 728.505V959.4H64.28V255.84h703.56z m189.322 0H831.8V255.84a63.96 63.96 0 0 0-63.96-63.96H294.216V63.96H959.72z"
               p-id="2538"
@@ -71,7 +135,16 @@
           </svg>
         </span>
         <span v-show="closeBtn" class="layer-vue-close" @click="closefun">
-          <svg t="1623989504811" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2061" width="16" height="16">
+          <svg
+            t="1623989504811"
+            class="icon"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="2061"
+            width="16"
+            height="16"
+          >
             <path
               d="M563.3 509l352.3-352.3c13.9-13.9 13.9-36.4 0-50.3-13.9-13.9-36.4-13.9-50.3 0L513 458.7 160.7 106.4c-13.9-13.9-36.4-13.9-50.3 0-13.9 13.9-13.9 36.4 0 50.3L462.7 509 110.4 861.3c-13.9 13.9-13.9 36.4 0 50.3 6.9 6.9 16.1 10.4 25.2 10.4s18.2-3.5 25.2-10.4L513 559.3l352.3 352.3c6.9 6.9 16.1 10.4 25.2 10.4s18.2-3.5 25.2-10.4c13.9-13.9 13.9-36.4 0-50.3L563.3 509z"
               p-id="2062"
@@ -80,16 +153,37 @@
         </span>
       </div>
     </div>
-    <span v-show="closeBtn && !title" :class="{ 'layer-vue-close2': !title }" @click="closefun">
-      <svg t="1623989504811" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2061" width="16" height="16">
+    <span
+      v-show="closeBtn && !title"
+      :class="{ 'layer-vue-close2': !title }"
+      @click="closefun"
+    >
+      <svg
+        t="1623989504811"
+        class="icon"
+        viewBox="0 0 1024 1024"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        p-id="2061"
+        width="16"
+        height="16"
+      >
         <path
           d="M563.3 509l352.3-352.3c13.9-13.9 13.9-36.4 0-50.3-13.9-13.9-36.4-13.9-50.3 0L513 458.7 160.7 106.4c-13.9-13.9-36.4-13.9-50.3 0-13.9 13.9-13.9 36.4 0 50.3L462.7 509 110.4 861.3c-13.9 13.9-13.9 36.4 0 50.3 6.9 6.9 16.1 10.4 25.2 10.4s18.2-3.5 25.2-10.4L513 559.3l352.3 352.3c6.9 6.9 16.1 10.4 25.2 10.4s18.2-3.5 25.2-10.4c13.9-13.9 13.9-36.4 0-50.3L563.3 509z"
           p-id="2062"
         ></path>
       </svg>
     </span>
-    <div v-if="resize[0] && !maxbtn" class="layer-vue-resize" @mousedown="rbresizefun"></div>
-    <div v-if="resize[1] && !maxbtn" class="layer-vue-lbresize" @mousedown="lbresizefun"></div>
+    <div
+      v-if="resize[0] && !maxbtn"
+      class="layer-vue-resize"
+      @mousedown="rbresizefun"
+    ></div>
+    <div
+      v-if="resize[1] && !maxbtn"
+      class="layer-vue-lbresize"
+      @mousedown="lbresizefun"
+    ></div>
     <div
       ref="content"
       class="layer-vue-content"
@@ -186,7 +280,8 @@ export default {
     isOutAnim: { type: [Boolean, Number], default: true },
     boderwidth: { type: Number, default: 0 },
     isMax: { type: Boolean, default: false },
-    shape: { type: Array, default: () => [0, 0] },
+    // shape: { type: Array, default: () => [0, 0] },
+    ratio: { type: Boolean, default: false },
   },
   computed: {
     contentheight: function () {
@@ -203,7 +298,10 @@ export default {
       return h;
     },
     textwidth: function () {
-      return this.width - ((this.maxmin[0] ? 35 : 0) + (this.maxmin[1] ? 35 : 0) + 50);
+      return (
+        this.width -
+        ((this.maxmin[0] ? 35 : 0) + (this.maxmin[1] ? 35 : 0) + 50)
+      );
     },
   },
   watch: {
@@ -248,9 +346,9 @@ export default {
         }
       }
     },
-    title:function(newvalue){
-      this.deftitle=newvalue
-    }
+    title: function (newvalue) {
+      this.deftitle = newvalue;
+    },
   },
   created() {
     if (!this.visible) {
@@ -333,7 +431,10 @@ export default {
           if (!parseInt(this.moveOut[3]) && newX <= 0) {
             newX = 0;
           }
-          if (!parseInt(this.moveOut[1]) && newX >= document.documentElement.clientWidth - this.minwidth) {
+          if (
+            !parseInt(this.moveOut[1]) &&
+            newX >= document.documentElement.clientWidth - this.minwidth
+          ) {
             newX = document.documentElement.clientWidth - this.minwidth;
           }
           this.x = newX;
@@ -391,7 +492,10 @@ export default {
       this.maxbtn = false;
       this.minbtn = false;
       if (this.$refs.content.children.length) {
-        if (this.display === "none" || getComputedStyle(this.$refs.content.children[0]).display === "none") {
+        if (
+          this.display === "none" ||
+          getComputedStyle(this.$refs.content.children[0]).display === "none"
+        ) {
           this.$refs.content.children[0].style.display = "block";
         }
       }
@@ -434,7 +538,11 @@ export default {
       let children = false;
       if (this.area instanceof Array) {
         width = this.tf(this.area[0], "clientWidth");
-        if (this.$refs.content && this.$refs.content.children && this.$refs.content.children.length > 0) {
+        if (
+          this.$refs.content &&
+          this.$refs.content.children &&
+          this.$refs.content.children.length > 0
+        ) {
           children = true;
         }
         if (this.area[1]) {
@@ -450,12 +558,18 @@ export default {
         }
         height = children ? this.$refs.content.children[0].scrollHeight : 0;
       }
-      if (width > document.documentElement.clientWidth && document.documentElement.clientWidth > this.minwidth) {
+      if (
+        width > document.documentElement.clientWidth &&
+        document.documentElement.clientWidth > this.minwidth
+      ) {
         width = document.documentElement.clientWidth;
       } else if (width <= this.minwidth) {
         width = this.minwidth;
       }
-      if (height > document.documentElement.clientHeight && document.documentElement.clientHeight > this.minheight) {
+      if (
+        height > document.documentElement.clientHeight &&
+        document.documentElement.clientHeight > this.minheight
+      ) {
         height = document.documentElement.clientHeight;
       } else if (height <= this.minheight) {
         height = this.minheight;
@@ -493,7 +607,10 @@ export default {
       } else if (offset.substr(-2).indexOf("px") === 0) {
         y = parseInt(offset.slice(0, -2));
       } else if (offset.substr(-1).indexOf("%") === 0) {
-        y = document.documentElement.clientHeight * parseInt(offset.slice(0, -1)) * 0.01;
+        y =
+          document.documentElement.clientHeight *
+          parseInt(offset.slice(0, -1)) *
+          0.01;
       } else {
         switch (offset) {
           case "auto":
@@ -549,7 +666,10 @@ export default {
       } else if (value.substr(-2).indexOf("px") === 0) {
         name = parseInt(value.slice(0, -2));
       } else if (value.substr(-1).indexOf("%") === 0) {
-        name = document.documentElement[client] * parseInt(value.slice(0, -1)) * 0.01;
+        name =
+          document.documentElement[client] *
+          parseInt(value.slice(0, -1)) *
+          0.01;
       } else {
         name = parseInt(value);
       }
@@ -559,7 +679,8 @@ export default {
     close() {
       // 隐藏窗口
       if (!this.defvisible) {
-        this.$layer.o.log && console.warn("[layer-warn]layer-vue-" + this.index + " is closed");
+        this.$layer.o.log &&
+          console.warn("[layer-warn]layer-vue-" + this.index + " is closed");
         return false;
       }
       this.defvisible = false;
@@ -575,7 +696,10 @@ export default {
       }
       // 获取窗口DOM元素
       const layerDOM = document.getElementById("layer-vue-" + this.index);
-      const warn = () => console.warn("[layer-warn]:No layer with id ：layer-vue-" + this.index + "found");
+      const warn = () =>
+        console.warn(
+          "[layer-warn]:No layer with id ：layer-vue-" + this.index + "found"
+        );
       // 判断当前layer窗口打开模式（true：以$layer.open()打开，false:以组件形式）
       if (this.model) {
         // this.visible=false
@@ -729,7 +853,7 @@ export default {
     },
     lbresizefun(e1) {
       e1.preventDefault();
-      const { minwidth, minheight, width, height, x } = this;
+      const { minwidth, minheight, width, height, x, ratio } = this;
       const clientX = e1.clientX;
       const clientY = e1.clientY;
       document.onmousemove = (e2) => {
@@ -752,6 +876,20 @@ export default {
           newX = 0;
           this.l.width = x + width;
         }
+        if (ratio) {
+          this.l.height =
+            (this.l.width * this.initdata.height) / this.initdata.width;
+
+          if (
+            !parseInt(this.moveOut[3]) &&
+            this.l.height + this.y >= document.documentElement.clientHeight
+          ) {
+            this.l.height = document.documentElement.clientHeight - this.y;
+            this.l.width =
+              (this.l.height * this.initdata.width) / this.initdata.height;
+            newX = x - (this.l.width - width);
+          }
+        }
         this.width = this.l.width;
         this.height = this.l.height;
         this.x = newX;
@@ -761,7 +899,7 @@ export default {
     },
     rbresizefun(e1) {
       e1.preventDefault();
-      const { width, height, x, y, minwidth, minheight } = this;
+      const { width, height, x, y, minwidth, minheight, ratio } = this;
       const clientX = e1.clientX;
       const clientY = e1.clientY;
       document.onmousemove = (e2) => {
@@ -773,14 +911,32 @@ export default {
         if (this.l.width <= minwidth) {
           this.l.width = minwidth;
         }
-        if (this.l.width + x >= document.documentElement.clientWidth) {
+        if (
+          !parseInt(this.moveOut[2]) &&
+          this.l.width + x >= document.documentElement.clientWidth
+        ) {
           this.l.width = document.documentElement.clientWidth - x;
         }
         if (this.l.height <= minheight) {
           this.l.height = minheight;
         }
-        if (this.l.height + y >= document.documentElement.clientHeight) {
+        if (
+          !parseInt(this.moveOut[3]) &&
+          this.l.height + y >= document.documentElement.clientHeight
+        ) {
           this.l.height = document.documentElement.clientHeight - y;
+        }
+        if (ratio) {
+          this.l.height =
+            (this.l.width * this.initdata.height) / this.initdata.width;
+          if (
+            !parseInt(this.moveOut[3]) &&
+            this.l.height + y >= document.documentElement.clientHeight
+          ) {
+            this.l.height = document.documentElement.clientHeight - y;
+            this.l.width =
+              (this.l.height * this.initdata.width) / this.initdata.height;
+          }
         }
         this.width = this.l.width;
         this.height = this.l.height;
@@ -799,7 +955,10 @@ export default {
       this.$el.querySelector(this.move).style.cursor = "move";
     },
     movefun(move) {
-      if (this.$el.querySelector(move) && this.$el.querySelector(move).onmousedown === null) {
+      if (
+        this.$el.querySelector(move) &&
+        this.$el.querySelector(move).onmousedown === null
+      ) {
         this.$el.querySelector(move).style.cursor = "move";
         this.$el.querySelector(move).onmousedown = (e1) => {
           if (this.$el.className.indexOf("layer-vue-ismax") >= 0) {
@@ -815,7 +974,10 @@ export default {
               if (!parseInt(this.moveOut[3]) && newX <= 0) {
                 newX = 0;
               }
-              if (!parseInt(this.moveOut[1]) && newX >= document.documentElement.clientWidth - this.minwidth) {
+              if (
+                !parseInt(this.moveOut[1]) &&
+                newX >= document.documentElement.clientWidth - this.minwidth
+              ) {
                 newX = document.documentElement.clientWidth - this.minwidth;
               }
               this.x = newX;
@@ -833,14 +995,20 @@ export default {
               if (!parseInt(this.moveOut[3]) && newX <= 0) {
                 newX = 0;
               }
-              if (!parseInt(this.moveOut[1]) && newX >= document.documentElement.clientWidth - this.width) {
+              if (
+                !parseInt(this.moveOut[1]) &&
+                newX >= document.documentElement.clientWidth - this.width
+              ) {
                 newX = document.documentElement.clientWidth - this.width;
               }
               let newY = parseInt(y) + parseInt(moveY);
               if (!parseInt(this.moveOut[0]) && newY <= 0) {
                 newY = 0;
               }
-              if (!parseInt(this.moveOut[2]) && newY >= document.documentElement.clientHeight - this.height) {
+              if (
+                !parseInt(this.moveOut[2]) &&
+                newY >= document.documentElement.clientHeight - this.height
+              ) {
                 newY = document.documentElement.clientHeight - this.height;
               }
               this.x = newX;

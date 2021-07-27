@@ -61,6 +61,8 @@ export default {
     open1() {
       this.layer1 = this.$layer({
         // isMax: true,
+        ratio:true,
+        moveOut:[1,1,1,1],
         parent: this,
         // id: "{id:1}",
         zindex: 999,
@@ -114,7 +116,7 @@ export default {
         title: true,
         // move: "#movetest",
         maxmin: [1, 1],
-        area: [200, 250],
+        area: [1200, 250],
         // isOutAnim: 0,
         // minarea: ["123", "112"],
         offset: "b",

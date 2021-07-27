@@ -2,7 +2,7 @@ import LayerVue, { merge } from "./main.vue";
 LayerVue.install = function(Vue) {
   Vue.component(LayerVue.name, LayerVue);
 };
-const version = "0.2.2";
+const version = "0.2.3";
 const versions = [
   "0.0.1",
   "0.0.2",
@@ -24,7 +24,8 @@ const versions = [
   "0.1.12",
   "0.2.0",
   "0.2.1",
-  "0.2.2"
+  "0.2.2",
+  "0.2.3"
 ];
 const findIndex = id => {
   let index = -1;
