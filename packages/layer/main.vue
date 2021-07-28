@@ -36,8 +36,13 @@
     }"
     @mousedown="settopfun"
   >
-  <div class="layer-vue-shade" v-if="shade" :style="{background:defshade}" @mousedown="shadeClosefun"></div>
-  <div class="layer-vue-border"></div>
+    <div
+      class="layer-vue-shade"
+      v-if="shade"
+      :style="{ background: defshade }"
+      @mousedown="shadeClosefun"
+    ></div>
+    <div class="layer-vue-border"></div>
     <div
       v-if="deftitle"
       class="layer-vue-title"
@@ -182,8 +187,7 @@ export default {
       defborderwidth: 0,
       l: {},
       deftitle: undefined,
-      defshade:'rgba(0, 0, 0, 0.3)'
-
+      defshade: "rgba(0, 0, 0, 0.3)",
     };
   },
   props: {
@@ -222,8 +226,8 @@ export default {
     isMax: { type: Boolean, default: false },
     // shape: { type: Array, default: () => [0, 0] },
     ratio: { type: Boolean, default: false },
-    shade:{},
-    shadeClose:{type: Boolean, default: false }
+    shade: {},
+    shadeClose: { type: Boolean, default: false },
   },
   computed: {
     contentheight: function () {
@@ -298,13 +302,15 @@ export default {
     }
     this.deftitle = this.title;
     this.defskin = this.$layer.o.skin;
-    if(this.shade){
-      if(typeof this.shade==='number'){
-          this.defshade=`rgba(0, 0, 0,${this.shade})`
-      }else if(this.shade  instanceof Array && this.shade.length>=2){
-       this.defshade=`${this.shade[1]}${(this.shade[0]*255).toString(16)}`
-      }else if(typeof this.shade==='string'){
-         this.defshade=this.shade
+    if (this.shade) {
+      if (typeof this.shade === "number") {
+        this.defshade = `rgba(0, 0, 0,${this.shade})`;
+      } else if (this.shade instanceof Array && this.shade.length >= 2) {
+        this.defshade = `${this.shade[1]}${(this.shade[0] * 255).toString(16)}`;
+      } else if (typeof this.shade === "string") {
+        if (!this.shade === "1") {
+          this.defshade = this.shade;
+        }
       }
     }
     window.addEventListener("resize", this.resizefun);
@@ -675,15 +681,15 @@ export default {
 
                   const _el = document.querySelector(instances.instance._el);
                   const solt = document.querySelector(
-                      ".layer-vue-solt-" + this.index
-                    );
+                    ".layer-vue-solt-" + this.index
+                  );
                   if (_el && solt.parentNode) {
                     const parentDiv = solt.parentNode;
                     content.children[0].style.display = this.display;
                     parentDiv.insertBefore(content.children[0], solt);
                     _el.removeChild(layerDOM);
                     parentDiv.removeChild(solt);
-                  } else{
+                  } else {
                     const parentDiv = layerDOM.parentNode;
                     content.children[0].style.display = this.display;
                     parentDiv.insertBefore(content.children[0], layerDOM);
@@ -986,11 +992,11 @@ export default {
         };
       }
     },
-    shadeClosefun(){
-      if(this.shadeClose){
-        this.closefun()
+    shadeClosefun() {
+      if (this.shadeClose) {
+        this.closefun();
       }
-    }
+    },
   },
 };
 export { merge };
