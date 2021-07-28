@@ -12,8 +12,8 @@
     :class="{
       'layer-vue-ismax': maxbtn,
       'layer-vue-ismin': minbtn,
-      startanim: defvisible,
-      endanim: isOutAnim && (!visible || endanim),
+      'layer-vue-startanim': defvisible,
+      'layer-vue-endanim': isOutAnim && (!visible || endanim),
     }"
     :style="{
       '--mc': defskin.maxmin ? defskin.maxmin.color : '',
@@ -536,15 +536,15 @@ export default {
       let height = 0;
       let width = 0;
       let children = false;
-      if (this.area instanceof Array) {
-        width = this.tf(this.area[0], "clientWidth");
-        if (
+      if (
           this.$refs.content &&
           this.$refs.content.children &&
           this.$refs.content.children.length > 0
         ) {
           children = true;
         }
+      if (this.area instanceof Array) {
+        width = this.tf(this.area[0], "clientWidth");
         if (this.area[1]) {
           height = this.tf(this.area[1], "clientHeight");
         } else {

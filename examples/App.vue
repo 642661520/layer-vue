@@ -8,16 +8,16 @@
     <el-button @click="close3">窗口3</el-button>
     <el-button @click="reset = !reset">重置窗口3</el-button>
     <el-button @click="closeAll">关闭全部</el-button>
-    <div id="test">test<Test :id="visible"></Test></div>
-    <layer-vue :isMax="isMax" :reset="reset" id="31321" :end="end" :cancel="cancel" skin="win7" :maxmin="[1, 1]" content="3131">
-      <!-- <Test :id="visible"></Test> -->
-    </layer-vue>
-    <LayerVue :visible="true" :maxmin="[1, 1]" :end="end" offset="l" :cancel="cancel" skin="mac" :resize="[0, 1]" :destroyOnClose="true"
+    <div id="test">test<Test :id="visible" ref="test"></Test></div>
+    <!-- <layer-vue :isMax="isMax" :reset="reset" id="31321" :end="end" :cancel="cancel" skin="win7" :maxmin="[1, 1]" content="3131">
+      <Test :id="visible"></Test>
+    </layer-vue> -->
+    <!-- <LayerVue :visible="true" :maxmin="[1, 1]" :end="end" offset="l" :cancel="cancel" skin="mac" :resize="[0, 1]" :destroyOnClose="true"
       ><div id="videobox">
         <video muted autoplay="true" id="video" controls="true" controlsList="nodownload"></video>
         <button class="btn" id="download" onclick="download()">下载</button>
       </div>
-    </LayerVue>
+    </LayerVue> -->
   </div>
 </template>
 <script>
@@ -54,13 +54,14 @@ export default {
     },
   },
   mounted() {
-    this.open1();
-    this.open2();
+    // this.open1();
+    // this.open2();
   },
   methods: {
     open1() {
-      this.layer1 = this.$layer({
+      this.layer1 = this.$layer.open({
         // isMax: true,
+        id:'site_w',
         ratio:true,
         moveOut:[1,1,1,1],
         parent: this,
@@ -116,7 +117,7 @@ export default {
         title: true,
         // move: "#movetest",
         maxmin: [1, 1],
-        area: [1200, 250],
+        // area: [1200, 250],
         // isOutAnim: 0,
         // minarea: ["123", "112"],
         offset: "b",
@@ -144,18 +145,20 @@ export default {
       }
     },
     async open2() {
+      console.log(this.$refs.test.$el);
+      
       this.zindex += 1;
       await this.$layer.close(this.layer2);
       this.layer2 = this.$layer({
         parent: this,
         destroyOnClose: false,
-        area: [466, 355],
+        // area: [466, 355],
         offset: "r",
         settop: true,
         // anim:0,
         skin: "winxp",
         id: "123",
-        content: document.getElementById("test"),
+        content: this.$refs.test.$el,
         end: () => {
           console.log("end");
         },

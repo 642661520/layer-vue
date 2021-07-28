@@ -27,7 +27,7 @@ const versions = [
   "0.2.2",
   "0.2.3"
 ];
-const findIndex = id => {
+const findIndex = (id,Vue) => {
   let index = -1;
   if (typeof id === "number") {
     index = id;
@@ -50,7 +50,7 @@ const LayerBox = function(Vue) {
       options.title = options.parent.title;
     }
     if (options.id) {
-      let index = findIndex(options.id);
+      let index = findIndex(options.id,Vue);
       if (index >= 0) {
         let instance = Vue.prototype.$layer.o.instances[index].instance;
         if (!instance.destroyOnClose) {
@@ -113,7 +113,6 @@ const LayerBox = function(Vue) {
     if (!options.el) {
       options.el = "#app";
     }
-
     let instance = new LayerBoxConstructor({
       propsData: {
         ...options
@@ -170,7 +169,7 @@ const LayerBox = function(Vue) {
     return index;
   };
   layer.close = async index => {
-    index = findIndex(index);
+    index = findIndex(index,Vue);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
       let result = await instances.instance.closefun();
@@ -184,7 +183,7 @@ const LayerBox = function(Vue) {
     }
   };
   layer.reset = index => {
-    index = findIndex(index);
+    index = findIndex(index,Vue);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
       instances.instance.resetfun();
@@ -208,7 +207,7 @@ const LayerBox = function(Vue) {
     return result;
   };
   layer.full = index => {
-    index = findIndex(index);
+    index = findIndex(index,Vue);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances && instances.instance.maxbtn === false) {
       instances.instance.maxfun();
@@ -222,7 +221,7 @@ const LayerBox = function(Vue) {
     }
   };
   layer.min = index => {
-    index = findIndex(index);
+    index = findIndex(index,Vue);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances && instances.instance.minbtn === false) {
       instances.instance.minfun();
@@ -236,7 +235,7 @@ const LayerBox = function(Vue) {
     }
   };
   layer.restore = index => {
-    index = findIndex(index);
+    index = findIndex(index,Vue);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
       instances.instance.restorefun();
@@ -251,7 +250,7 @@ const LayerBox = function(Vue) {
   };
   layer.openAgain = index => {
     if (typeof index !== "object") {
-      index = findIndex(index);
+      index = findIndex(index,Vue);
       if (index >= 0 && index < Vue.prototype.$layer.o.instances.length) {
         let instance = Vue.prototype.$layer.o.instances[index].instance;
         if (!instance.destroyOnClose && instance.defvisible === false) {
@@ -273,7 +272,7 @@ const LayerBox = function(Vue) {
     }
   };
   layer.setTitle = (index, value) => {
-    index = findIndex(index);
+    index = findIndex(index,Vue);
     const instance = Vue.prototype.$layer.o.instances[index].instance;
     if (instance.model) {
       instance.$data.deftitle = value;
@@ -282,7 +281,7 @@ const LayerBox = function(Vue) {
     return false;
   };
   layer.setContent = (index, value) => {
-    index = findIndex(index);
+    index = findIndex(index,Vue);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances.instance.model) {
       if (instances.instance._ishtml) {

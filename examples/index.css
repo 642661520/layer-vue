@@ -1,3 +1,5 @@
 #test{
-  display: none;
+  /* display: none; */
+  width: 700px;
+  height: 600px;
 }
