@@ -355,6 +355,18 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
 
 当你的页面有很多很多 layer 窗口，你需要像 Window 窗体那样，点击某个窗口，该窗体就置顶在上面，那么 settop 可以来轻松实现。
 
+### shade - 遮罩
+
+类型：String/Array/Boolean，默认：0
+
+即弹层外区域。设置true，则是0.3透明度的黑色背景（'#000'）。如果你想定义别的颜色，可以shade: [0.8, '#393D49'],或shade: "#bfac"
+
+### shadeClose - 是否点击遮罩关闭
+
+类型：Boolean，默认：false
+
+如果你的shade是存在的，那么你可以设定shadeClose来控制点击弹层外区域关闭。
+
 ### skin - 自定义皮肤
 
 类型：Object，默认：

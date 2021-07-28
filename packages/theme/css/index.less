@@ -7,6 +7,16 @@
   background: white;
   box-sizing: border-box;
 
+  .layer-vue-shade {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -2;
+
+  }
+
   .layer-vue-title {
     overflow: hidden;
     width: 100%;
@@ -126,6 +136,16 @@
     border-radius: 5px;
     color: white;
 
+    .layer-vue-border {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      border-radius: 5px;
+      border: 3px solid rgba(2, 85, 239, 1);
+    }
+
     svg {
       fill: #FFF;
       font-size: 14px;
@@ -169,7 +189,16 @@
     color: #FFF;
     border: 3px solid transparent;
     backdrop-filter: blur(5px);
-    // border-top: 0;
+
+    .layer-vue-border {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      border-radius: 5px;
+      border: 3px solid transparent;
+    }
 
     svg {
       fill: #FFF;
@@ -255,6 +284,16 @@
     border: 3px solid transparent;
     backdrop-filter: blur(5px);
     background: white;
+
+    .layer-vue-border {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      border-radius: 5px;
+      border: 3px solid transparent;
+    }
 
     svg {
       fill: #FFF;

@@ -67,7 +67,8 @@ export default {
         parent: this,
         // id: "{id:1}",
         zindex: 999,
-        shade: [1, 1],
+        shade: [0.8, '#393D49'],
+        // shadeClose:true,
         el: "#app1",
         skin: {
           //窗口阴影
@@ -151,7 +152,9 @@ export default {
       await this.$layer.close(this.layer2);
       this.layer2 = this.$layer({
         parent: this,
-        destroyOnClose: false,
+        destroyOnClose: true,
+        shade:'',
+        el:'body',
         // area: [466, 355],
         offset: "r",
         settop: true,

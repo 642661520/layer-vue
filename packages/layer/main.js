@@ -2,7 +2,7 @@ import LayerVue, { merge } from "./main.vue";
 LayerVue.install = function(Vue) {
   Vue.component(LayerVue.name, LayerVue);
 };
-const version = "0.2.3";
+const version = "0.2.4";
 const versions = [
   "0.0.1",
   "0.0.2",
@@ -25,7 +25,8 @@ const versions = [
   "0.2.0",
   "0.2.1",
   "0.2.2",
-  "0.2.3"
+  "0.2.3",
+  "0.2.4"
 ];
 const findIndex = (id,Vue) => {
   let index = -1;
@@ -118,6 +119,7 @@ const LayerBox = function(Vue) {
         ...options
       }
     });
+    instance._el = options.el;
     instance._ishtml = options.ishtml;
     instance._isnewDOM = options.isnewDOM;
     instance._isComponent = options.isComponent;
@@ -131,7 +133,15 @@ const LayerBox = function(Vue) {
     if (instance._ishtml) {
       if (options.content.parentNode) {
         let parentDiv = options.content.parentNode;
+        if (document.querySelector(options.el)) {
+          const solt = document.createElement("div");
+          solt.className = 'layer-vue-solt-' + index;
+          parentDiv.insertBefore(solt,options.content)
+          document.querySelector(options.el).appendChild(instance.vm.$el);
+        } else {
+          
         parentDiv.insertBefore(instance.vm.$el, options.content);
+        }
       } else {
         if (document.querySelector(options.el)) {
           document.querySelector(options.el).appendChild(instance.vm.$el);
