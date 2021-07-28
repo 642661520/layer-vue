@@ -674,16 +674,16 @@ export default {
                   // 还原内容区位置
 
                   const _el = document.querySelector(instances.instance._el);
-                  if (_el) {
-                    const solt = document.querySelector(
+                  const solt = document.querySelector(
                       ".layer-vue-solt-" + this.index
                     );
+                  if (_el && solt.parentNode) {
                     const parentDiv = solt.parentNode;
                     content.children[0].style.display = this.display;
                     parentDiv.insertBefore(content.children[0], solt);
                     _el.removeChild(layerDOM);
                     parentDiv.removeChild(solt);
-                  } else {
+                  } else{
                     const parentDiv = layerDOM.parentNode;
                     content.children[0].style.display = this.display;
                     parentDiv.insertBefore(content.children[0], layerDOM);
@@ -713,8 +713,8 @@ export default {
         }
         let node = document.body;
         // 判断#app是否存在
-        if (document.querySelector(this.el)) {
-          node = document.querySelector(this.el);
+        if (document.querySelector(instances.instance._el)) {
+          node = document.querySelector(instances.instance._el);
         }
         // 判断layer窗口是否存在
         if (layerDOM) {
