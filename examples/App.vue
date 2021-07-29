@@ -69,7 +69,7 @@ export default {
         parent: this,
         // id: "{id:1}",
         zindex: 999,
-        shade: [0.8, '#393D49'],
+        shade: [0.8, '#ffff49'],
         // shadeClose:true,
         el: "#app1",
         skin: {
@@ -156,7 +156,7 @@ export default {
         parent: this,
         destroyOnClose: true,
         shade:'1',
-        // el:'body',
+        el:'body',
         area: [466, 355],
         offset: "r",
         settop: true,

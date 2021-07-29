@@ -9,12 +9,12 @@ const skin = {
   background: "#fff",
   boxShadow: "1px 1px 50px rgb(0 0 0 / 30%)",
   title: {
-    background: "#fff",
+    background: "transparent",
     color: "#000",
     borderBottom: '1px solid #f0f0f0'
   },
   content: {
-    background: "#fff",
+    background: "transparent",
     color: "#000"
   },
   maxmin: {

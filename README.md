@@ -26,7 +26,9 @@ Vue.use(LayerVue,{
     //全局配置窗口皮肤
     skin:{
     	//具体参数参见配置项：skin
-	}
+    },
+  //控制台打印相关信息
+    log:true,
 })
 new Vue({render: h => h(App)}).$mount('#app')
 ```
@@ -53,7 +55,9 @@ new Vue({render: h => h(App)}).$mount('#app')
       //全局配置窗口皮肤
       skin:{
       	//具体参数参见配置项：skin
-	        }
+          },
+      //控制台打印相关信息
+      log:true,
       })
       new Vue({
         el:'#app',
@@ -358,7 +362,7 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
 
 类型：Number，默认：1
 
-一般用于解决和其它组件的层叠冲突，不能和settop一起使用。
+一般用于解决和其它组件的层叠冲突，不能和settop一起使用，可全局配置
 
 ### settop - 窗口置顶
 
@@ -448,7 +452,7 @@ Vue.use(LayerVue,{
     //此项设置置顶窗口的初始值，默认为100，一般无需配置，和其他组件冲突时可在此配置
     zindex:100,
     //全局配置窗口皮肤
-    skin：{
+    skin:{
   		maxmin: {
    			backgroundHover: "#6666",
   		},
@@ -499,17 +503,48 @@ this.$layer({
 
 正常情况下无需设置该项，如修改样式时，对layer外层容器添加了上下方向border，设置该值为上线方向border的平均值，来修正layer内部高度的计算。
 
-### log - layer警告信息
-
-类型：Boolean，默认：false
-
-默认在控制台输出警告信息，如需查看，设置为true
-
 ### isMax - 最大化显示
 
 类型：Boolean，默认：false
 
 用于初始化时全屏显示，添加.sync也可以作为组件模式下切换最大化的方法
+
+## 全局配置项
+
+### log - layer警告信息
+
+类型：Boolean，默认：false
+
+默认不在控制台输出警告信息，如需查看，设置为true,可全局配置
+
+```js
+Vue.use(LayerVue,{
+  //控制台打印相关信息
+    log:true,
+})
+
+```
+
+### skin - 自定义皮肤
+
+```js
+Vue.use(LayerVue,{
+    skin:{
+    	//具体参数参见配置项：skin
+    },
+})
+
+```
+
+### zindex - 层叠顺序
+
+```js
+Vue.use(LayerVue,{
+    //此项设置置顶窗口的初始值，默认为100，一般无需配置，和其他组件冲突时可在此配置
+    zindex:100,
+})
+
+```
 
 ## 回调函数
 

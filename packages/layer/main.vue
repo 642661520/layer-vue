@@ -2,39 +2,12 @@
   <div
     v-cloak
     v-if="destroyOnClose ? defvisible : true"
-    οndragstart="return false;"
     :data-index="index"
-    :data-anim="anim"
     :data-id="id"
     class="layer-vue"
     :id="'layer-vue-' + index"
     :data-skin="typeof defskin === 'string' ? defskin : ''"
-    :class="{
-      'layer-vue-ismax': maxbtn,
-      'layer-vue-ismin': minbtn,
-      'layer-vue-startanim': defvisible,
-      'layer-vue-endanim': isOutAnim && (!visible || endanim),
-    }"
-    :style="{
-      '--mc': defskin.maxmin ? defskin.maxmin.color : '',
-      '--cc': defskin.close ? defskin.close.color : '',
-      '--mbc': defskin.maxmin ? defskin.maxmin.background : '',
-      '--cbc': defskin.close ? defskin.close.background : '',
-      '--mch': defskin.maxmin ? defskin.maxmin.colorHover : '',
-      '--cch': defskin.close ? defskin.close.colorHover : '',
-      '--mbch': defskin.maxmin ? defskin.maxmin.backgroundHover : '',
-      '--cbch': defskin.close ? defskin.close.backgroundHover : '',
-      'box-shadow': defskin.boxShadow,
-      background: defskin.background,
-      width: width + 'px',
-      height: height + 'px',
-      top: y + 'px',
-      left: x + 'px',
-      'z-index': zIndex,
-      display: defvisible ? '' : 'none',
-      position: fixed ? 'fixed' : 'absolute',
-    }"
-    @mousedown="settopfun"
+    :style="{ display: defvisible ? '' : 'none' }"
   >
     <div
       class="layer-vue-shade"
@@ -42,78 +15,110 @@
       :style="{ background: defshade }"
       @mousedown="shadeClosefun"
     ></div>
-    <div class="layer-vue-border"></div>
     <div
-      v-if="deftitle"
-      class="layer-vue-title"
-      :style="{
-        background: defskin.title ? defskin.title.background : '',
-        color: defskin.title ? defskin.title.color : '',
-        'border-bottom': defskin.title ? defskin.title.borderBottom : '',
-        height: titleheight + 'px',
-        'line-height': titleheight + 'px',
+      οndragstart="return false;"
+      class="layer-vue-box"
+      :data-anim="anim"
+      :class="{
+        'layer-vue-ismax': maxbtn,
+        'layer-vue-ismin': minbtn,
+        'layer-vue-startanim': defvisible,
+        'layer-vue-endanim': isOutAnim && (!visible || endanim),
       }"
-      @mousedown="minmovefun"
+      :style="{
+        '--mc': defskin.maxmin ? defskin.maxmin.color : '',
+        '--cc': defskin.close ? defskin.close.color : '',
+        '--mbc': defskin.maxmin ? defskin.maxmin.background : '',
+        '--cbc': defskin.close ? defskin.close.background : '',
+        '--mch': defskin.maxmin ? defskin.maxmin.colorHover : '',
+        '--cch': defskin.close ? defskin.close.colorHover : '',
+        '--mbch': defskin.maxmin ? defskin.maxmin.backgroundHover : '',
+        '--cbch': defskin.close ? defskin.close.backgroundHover : '',
+        'box-shadow': defskin.boxShadow,
+        background: defskin.background,
+        width: width + 'px',
+        height: height + 'px',
+        top: y + 'px',
+        left: x + 'px',
+        'z-index': zIndex,
+
+        position: fixed ? 'fixed' : 'absolute',
+      }"
+      @mousedown="settopfun"
     >
+      <div class="layer-vue-border"></div>
       <div
-        class="layer-vue-title-text"
-        :title="deftitle"
-        :style="{ width: textwidth + 'px' }"
-      >
-        {{ deftitle }}
-      </div>
-      <div
-        class="layer-vue-tools"
+        v-if="deftitle"
+        class="layer-vue-title"
         :style="{
+          background: defskin.title ? defskin.title.background : '',
+          color: defskin.title ? defskin.title.color : '',
+          'border-bottom': defskin.title ? defskin.title.borderBottom : '',
           height: titleheight + 'px',
           'line-height': titleheight + 'px',
         }"
+        @mousedown="minmovefun"
       >
-        <span v-show="maxmin[1]" class="layer-vue-min" @click="minfun">
-          <icon-min v-show="!minbtn" />
-          <icon-restroe v-show="minbtn" />
-        </span>
-        <span
-          v-show="maxmin[0] && !minbtn"
-          class="layer-vue-max"
-          @click="maxfun"
+        <div
+          class="layer-vue-title-text"
+          :title="deftitle"
+          :style="{ width: textwidth + 'px' }"
         >
-          <icon-max v-show="!maxbtn" />
-          <icon-restroe v-show="maxbtn" />
-        </span>
-        <span v-show="closeBtn" class="layer-vue-close" @click="closefun">
-          <IconClose />
-        </span>
+          {{ deftitle }}
+        </div>
+        <div
+          class="layer-vue-tools"
+          :style="{
+            height: titleheight + 'px',
+            'line-height': titleheight + 'px',
+          }"
+        >
+          <span v-show="maxmin[1]" class="layer-vue-min" @click="minfun">
+            <icon-min v-show="!minbtn" />
+            <icon-restroe v-show="minbtn" />
+          </span>
+          <span
+            v-show="maxmin[0] && !minbtn"
+            class="layer-vue-max"
+            @click="maxfun"
+          >
+            <icon-max v-show="!maxbtn" />
+            <icon-restroe v-show="maxbtn" />
+          </span>
+          <span v-show="closeBtn" class="layer-vue-close" @click="closefun">
+            <IconClose />
+          </span>
+        </div>
       </div>
-    </div>
-    <span
-      v-show="closeBtn && !title"
-      :class="{ 'layer-vue-close2': !title }"
-      @click="closefun"
-    >
-      <IconClose />
-    </span>
-    <div
-      v-if="resize[0] && !maxbtn"
-      class="layer-vue-resize"
-      @mousedown="rbresizefun"
-    ></div>
-    <div
-      v-if="resize[1] && !maxbtn"
-      class="layer-vue-lbresize"
-      @mousedown="lbresizefun"
-    ></div>
-    <div
-      ref="content"
-      class="layer-vue-content"
-      :style="{
-        'border-radius': title ? '0 0 2px 2px' : '2px',
-        background: defskin.content ? defskin.content.background : '',
-        color: defskin.content ? defskin.content.color : '',
-        height: contentheight + 'px',
-      }"
-    >
-      <slot>{{ !model ? content : null }}</slot>
+      <span
+        v-show="closeBtn && !title"
+        :class="{ 'layer-vue-close2': !title }"
+        @click="closefun"
+      >
+        <IconClose />
+      </span>
+      <div
+        v-if="resize[0] && !maxbtn"
+        class="layer-vue-resize"
+        @mousedown="rbresizefun"
+      ></div>
+      <div
+        v-if="resize[1] && !maxbtn"
+        class="layer-vue-lbresize"
+        @mousedown="lbresizefun"
+      ></div>
+      <div
+        ref="content"
+        class="layer-vue-content"
+        :style="{
+          'border-radius': title ? '0 0 2px 2px' : '2px',
+          background: defskin.content ? defskin.content.background : '',
+          color: defskin.content ? defskin.content.color : '',
+          height: contentheight + 'px',
+        }"
+      >
+        <slot>{{ !model ? content : null }}</slot>
+      </div>
     </div>
   </div>
 </template>
@@ -178,8 +183,8 @@ export default {
   },
   props: {
     title: { type: [String, Boolean], default: "信息" },
-    area: { type: [String,Number, Array], default: "auto" },
-    minarea: { type: [String,Number, Array], default: () => [300, 200] },
+    area: { type: [String, Number, Array], default: "auto" },
+    minarea: { type: [String, Number, Array], default: () => [300, 200] },
     offset: { type: [String, Array, Number], default: "auto" },
     settop: { type: Boolean, default: false },
     moveOut: { type: Array, default: () => [0, 0, 0, 0] },
@@ -204,13 +209,13 @@ export default {
     titleheight: { type: Number, default: 42 },
     skin: { type: [Object, String] },
     id: { type: String, default: undefined },
-    el: {type: String,},
+    el: { type: String },
     fixed: { type: Boolean, default: true },
     isOutAnim: { type: [Boolean, Number], default: true },
     boderwidth: { type: Number, default: 0 },
     isMax: { type: Boolean, default: false },
     ratio: { type: Boolean, default: false },
-    shade: {type: [String,Number, Array], default: 1},
+    shade: { type: [String, Number, Array], default: 1 },
     shadeClose: { type: Boolean, default: false },
   },
   computed: {
@@ -666,7 +671,12 @@ export default {
                   const solt = document.querySelector(
                     ".layer-vue-solt-" + this.index
                   );
-                  if (_el && solt.parentNode) {
+                  if (_el && !solt) {
+                      console.error(
+                        "[layer-error] can not find .layer-vue-solt-" + this.index+" dom location error !"
+                      );
+                  }
+                  if (_el && solt && solt.parentNode) {
                     const parentDiv = solt.parentNode;
                     content.children[0].style.display = this.display;
                     parentDiv.insertBefore(content.children[0], solt);

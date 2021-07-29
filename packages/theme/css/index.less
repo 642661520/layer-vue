@@ -1,23 +1,19 @@
-[v-cloak] {
-  display: none;
-}
-
 .layer-vue {
-  border-radius: 2px;
-  background: white;
-  box-sizing: border-box;
+  .layer-vue-box {
+    border-radius: 2px;
+    box-sizing: border-box;
+  }
 
   .layer-vue-shade {
-    width:10000px;
-    height:10000px;
-    top:-5000px;
-    right:-5000px;
+    width: 10000px;
+    height: 10000px;
+    top: -5000px;
+    right: -5000px;
     position: fixed;
-    z-index: -2;
-
   }
 
   .layer-vue-title {
+    user-select: none;
     overflow: hidden;
     width: 100%;
     padding: 0 0 0px 20px;
@@ -132,9 +128,12 @@
   }
 
   &[data-skin='winxp'] {
-    border: 3px solid rgba(2, 85, 239, 1);
-    border-radius: 5px;
-    color: white;
+    .layer-vue-box {
+      border: 3px solid rgba(2, 85, 239, 1);
+      border-radius: 5px;
+      color: white;
+    }
+
 
     .layer-vue-border {
       width: 100%;
@@ -184,11 +183,14 @@
   }
 
   &[data-skin='win7'] {
-    background: transparent;
-    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.466);
-    color: #FFF;
-    border: 3px solid transparent;
-    backdrop-filter: blur(5px);
+    .layer-vue-box {
+      background: transparent;
+      box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.466);
+      color: #FFF;
+      border: 3px solid transparent;
+      backdrop-filter: blur(5px);
+    }
+
 
     .layer-vue-border {
       width: 100%;
@@ -279,11 +281,13 @@
   }
 
   &[data-skin='mac'] {
-    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.466);
-    color: #FFF;
-    border: 3px solid transparent;
-    backdrop-filter: blur(5px);
-    background: white;
+    .layer-vue-box {
+      box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.466);
+      color: #FFF;
+      border: 3px solid transparent;
+      backdrop-filter: blur(5px);
+      background: white;
+    }
 
     .layer-vue-border {
       width: 100%;
@@ -376,43 +380,43 @@
     }
   }
 
-  &.layer-vue-startanim[data-anim='1'] {
+  .layer-vue-startanim[data-anim='1'] {
     animation: layervuetartanim1 0.3s;
   }
 
-  &.layer-vue-endanim[data-anim='1'] {
+  .layer-vue-endanim[data-anim='1'] {
     animation: layervueendanim1 0.35s;
   }
 
-  &.layer-vue-startanim[data-anim='2'] {
+  .layer-vue-startanim[data-anim='2'] {
     animation: layervuetartanim2 0.3s;
   }
 
-  &.layer-vue-endanim[data-anim='2'] {
+  .layer-vue-endanim[data-anim='2'] {
     animation: layervueendanim2 0.35s;
   }
 
-  &.layer-vue-startanim[data-anim='3'] {
+  .layer-vue-startanim[data-anim='3'] {
     animation: layervuetartanim3 0.3s;
   }
 
-  &.layer-vue-endanim[data-anim='3'] {
+  .layer-vue-endanim[data-anim='3'] {
     animation: layervueendanim3 0.35s;
   }
 
-  &.layer-vue-startanim[data-anim='4'] {
+  .layer-vue-startanim[data-anim='4'] {
     animation: layervuetartanim4 0.3s;
   }
 
-  &.layer-vue-endanim[data-anim='4'] {
+  .layer-vue-endanim[data-anim='4'] {
     animation: layervueendanim4 0.35s;
   }
 
-  &.layer-vue-startanim[data-anim='5'] {
+  .layer-vue-startanim[data-anim='5'] {
     animation: layervuetartanim5 0.3s;
   }
 
-  &.layer-vue-endanim[data-anim='5'] {
+  .layer-vue-endanim[data-anim='5'] {
     animation: layervueendanim5 0.35s;
   }
 }
