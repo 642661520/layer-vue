@@ -162,6 +162,7 @@ export default {
         settop: true,
         // anim:0,
         skin: "winxp",
+        move:".layer-vue-content",
         id: "123",
         content: this.$refs.test.$el,
         end: () => {

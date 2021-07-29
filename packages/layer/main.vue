@@ -215,7 +215,7 @@ export default {
     boderwidth: { type: Number, default: 0 },
     isMax: { type: Boolean, default: false },
     ratio: { type: Boolean, default: false },
-    shade: { type: [String, Number, Array], default: 1 },
+    shade: { type: [String, Number, Array], default: 0 },
     shadeClose: { type: Boolean, default: false },
   },
   computed: {
@@ -666,15 +666,20 @@ export default {
                 // 判断窗口父元素是否存在
                 if (layerDOM.parentNode) {
                   // 还原内容区位置
-
+                  if (this.$el.querySelector(this.move)) {
+                    this.$el.querySelector(this.move).style.cursor = "default";
+                    this.$el.querySelector(this.move).onmousedown = null;
+                  }
                   const _el = document.querySelector(this.el);
                   const solt = document.querySelector(
                     ".layer-vue-solt-" + this.index
                   );
                   if (_el && !solt) {
-                      console.error(
-                        "[layer-error] can not find .layer-vue-solt-" + this.index+" dom location error !"
-                      );
+                    console.error(
+                      "[layer-error] can not find .layer-vue-solt-" +
+                        this.index +
+                        " dom location error !"
+                    );
                   }
                   if (_el && solt && solt.parentNode) {
                     const parentDiv = solt.parentNode;
@@ -931,10 +936,7 @@ export default {
       this.$el.querySelector(this.move).style.cursor = "move";
     },
     movefun(move) {
-      if (
-        this.$el.querySelector(move) &&
-        this.$el.querySelector(move).onmousedown === null
-      ) {
+      if (this.$el.querySelector(move)) {
         this.$el.querySelector(move).style.cursor = "move";
         this.$el.querySelector(move).onmousedown = (e1) => {
           if (this.$el.className.indexOf("layer-vue-ismax") >= 0) {
