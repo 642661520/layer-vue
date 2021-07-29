@@ -493,7 +493,7 @@ export default {
         if (this.area[1]) {
           height = this.tf(this.area[1], "clientHeight");
         } else {
-          height = children ? this.$refs.content.children[0].scrollHeight : 0;
+          height = children ? (this.$refs.content.children[0].scrollHeight+this.titleheight) : 0;
         }
       } else {
         if (this.area === "auto") {
@@ -501,7 +501,7 @@ export default {
         } else {
           width = this.tf(this.area, "clientWidth");
         }
-        height = children ? this.$refs.content.children[0].scrollHeight : 0;
+        height = children ? (this.$refs.content.children[0].scrollHeight+this.titleheight) : 0;
       }
       if (
         width > document.documentElement.clientWidth &&
