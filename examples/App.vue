@@ -9,9 +9,9 @@
     <el-button @click="reset = !reset">重置窗口3</el-button>
     <el-button @click="closeAll">关闭全部</el-button>
     <div id="test">test<Test :id="visible" ref="test"></Test></div>
-    <!-- <layer-vue :isMax="isMax" :reset="reset" id="31321" :end="end" :cancel="cancel" skin="win7" :maxmin="[1, 1]" content="3131">
+    <layer-vue :isMax="isMax" :reset="reset" id="31321" :end="end" :cancel="cancel" skin="win7" :maxmin="[1, 1]" content="3131">
       <Test :id="visible"></Test>
-    </layer-vue> -->
+    </layer-vue>
     <!-- <LayerVue :visible="true" :maxmin="[1, 1]" :end="end" offset="l" :cancel="cancel" skin="mac" :resize="[0, 1]" :destroyOnClose="true"
       ><div id="videobox">
         <video muted autoplay="true" id="video" controls="true" controlsList="nodownload"></video>
@@ -56,6 +56,7 @@ export default {
   mounted() {
     // this.open1();
     // this.open2();
+    setTimeout(()=>{this.$layer.close("31321")},2000)
   },
   methods: {
     open1() {
@@ -73,53 +74,53 @@ export default {
         el: "#app1",
         skin: {
           //窗口阴影
-          boxShadow: "1px 1px 50px rgb(0 0 0 / 30%)",
-          background: "url(" + require("./bg.png") + ")  0 0/100% 100%",
+          // boxShadow: "1px 1px 50px rgb(0 0 0 / 30%)",
+          // background: "url(" + require("./bg.png") + ")  0 0/100% 100%",
           //标题栏
-          title: {
-            //标题栏背景
-            background: "#5ba",
-            //标题栏文本色
-            color: "#bfa",
-            //标题栏和内容区分割线颜色
-            borderBottom: "5px solid #123",
-          },
-          //内容区
-          content: {
-            //内容区背景
-            background: "red",
-            //内容区文本色
-            color: "#ddd",
-          },
-          //最大化最小化按钮
-          maxmin: {
-            //最大化最小化按钮背景
-            background: "#fff",
-            //最大化最小化按钮
-            color: "#000",
-            //鼠标移入时最大化最小化按钮文本色
-            backgroundHover: "#6666",
-            //鼠标移入时最大化最小化按钮
-            colorHover: "#008afc",
-          },
-          //关闭按钮
-          close: {
-            //关闭按钮背景
-            background: "#323",
-            //关闭按钮文本色
-            color: "red",
-            //鼠标移入时关闭按钮背景
-            backgroundHover: "#999",
-            //鼠标移入时关闭按钮文本色
-            colorHover: "#fff",
-          },
+          // title: {
+          //   //标题栏背景
+          //   background: "#5ba",
+          //   //标题栏文本色
+          //   color: "#bfa",
+          //   //标题栏和内容区分割线颜色
+          //   borderBottom: "5px solid #123",
+          // },
+          // //内容区
+          // content: {
+          //   //内容区背景
+          //   background: "red",
+          //   //内容区文本色
+          //   color: "#ddd",
+          // },
+          // //最大化最小化按钮
+          // maxmin: {
+          //   //最大化最小化按钮背景
+          //   background: "#fff",
+          //   //最大化最小化按钮
+          //   color: "#000",
+          //   //鼠标移入时最大化最小化按钮文本色
+          //   backgroundHover: "#6666",
+          //   //鼠标移入时最大化最小化按钮
+          //   colorHover: "#008afc",
+          // },
+          // //关闭按钮
+          // close: {
+          //   //关闭按钮背景
+          //   background: "#323",
+          //   //关闭按钮文本色
+          //   color: "red",
+          //   //鼠标移入时关闭按钮背景
+          //   backgroundHover: "#999",
+          //   //鼠标移入时关闭按钮文本色
+          //   colorHover: "#fff",
+          // },
         },
         // destroyOnClose: false,
         titleheight: 30,
         title: true,
         // move: "#movetest",
         maxmin: [1, 1],
-        // area: [1200, 250],
+        area: [120, 550],
         // isOutAnim: 0,
         // minarea: ["123", "112"],
         offset: "b",
@@ -154,9 +155,9 @@ export default {
       this.layer2 = this.$layer({
         parent: this,
         destroyOnClose: true,
-        shade:'',
-        el:'body',
-        // area: [466, 355],
+        shade:'1',
+        // el:'body',
+        area: [466, 355],
         offset: "r",
         settop: true,
         // anim:0,

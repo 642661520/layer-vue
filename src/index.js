@@ -18,13 +18,13 @@ const skin = {
     color: "#000"
   },
   maxmin: {
-    background: "#fff",
+    background: "transparent",
     color: "#000",
     backgroundHover: "#6666",
     colorHover: "#008afc"
   },
   close: {
-    background: "#fff",
+    background: "transparent",
     color: "#000",
     backgroundHover: "#f00",
     colorHover: "#fff"

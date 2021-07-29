@@ -91,21 +91,7 @@
       :class="{ 'layer-vue-close2': !title }"
       @click="closefun"
     >
-      <svg
-        t="1623989504811"
-        class="icon"
-        viewBox="0 0 1024 1024"
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        p-id="2061"
-        width="16"
-        height="16"
-      >
-        <path
-          d="M563.3 509l352.3-352.3c13.9-13.9 13.9-36.4 0-50.3-13.9-13.9-36.4-13.9-50.3 0L513 458.7 160.7 106.4c-13.9-13.9-36.4-13.9-50.3 0-13.9 13.9-13.9 36.4 0 50.3L462.7 509 110.4 861.3c-13.9 13.9-13.9 36.4 0 50.3 6.9 6.9 16.1 10.4 25.2 10.4s18.2-3.5 25.2-10.4L513 559.3l352.3 352.3c6.9 6.9 16.1 10.4 25.2 10.4s18.2-3.5 25.2-10.4c13.9-13.9 13.9-36.4 0-50.3L563.3 509z"
-          p-id="2062"
-        ></path>
-      </svg>
+      <IconClose />
     </span>
     <div
       v-if="resize[0] && !maxbtn"
@@ -192,7 +178,8 @@ export default {
   },
   props: {
     title: { type: [String, Boolean], default: "信息" },
-    area: { type: [String, Array], default: "auto" },
+    area: { type: [String,Number, Array], default: "auto" },
+    minarea: { type: [String,Number, Array], default: () => [300, 200] },
     offset: { type: [String, Array, Number], default: "auto" },
     settop: { type: Boolean, default: false },
     moveOut: { type: Array, default: () => [0, 0, 0, 0] },
@@ -217,16 +204,13 @@ export default {
     titleheight: { type: Number, default: 42 },
     skin: { type: [Object, String] },
     id: { type: String, default: undefined },
-    reset: { type: Boolean },
-    el: {},
+    el: {type: String,},
     fixed: { type: Boolean, default: true },
-    minarea: { type: [Number, Array], default: () => [300, 200] },
     isOutAnim: { type: [Boolean, Number], default: true },
     boderwidth: { type: Number, default: 0 },
     isMax: { type: Boolean, default: false },
-    // shape: { type: Array, default: () => [0, 0] },
     ratio: { type: Boolean, default: false },
-    shade: {},
+    shade: {type: [String,Number, Array], default: 1},
     shadeClose: { type: Boolean, default: false },
   },
   computed: {
@@ -275,9 +259,6 @@ export default {
         });
       }
     },
-    reset: function () {
-      this.resetfun();
-    },
     isMax: function (newvalue) {
       if (newvalue !== this.maxbtn && this.$el.querySelector(this.move)) {
         this.maxfun();
@@ -297,8 +278,6 @@ export default {
     },
   },
   created() {
-    console.log(this.el);
-    
     if (!this.visible) {
       this.defvisible = this.visible;
     }
@@ -306,7 +285,9 @@ export default {
     this.defskin = this.$layer.o.skin;
     if (this.shade) {
       if (typeof this.shade === "number") {
-        this.defshade = `rgba(0, 0, 0,${this.shade})`;
+        if (this.shade !== 1) {
+          this.defshade = `rgba(0, 0, 0,${this.shade})`;
+        }
       } else if (this.shade instanceof Array && this.shade.length >= 2) {
         this.defshade = `${this.shade[1]}${(this.shade[0] * 255).toString(16)}`;
       } else if (typeof this.shade === "string") {
@@ -471,22 +452,22 @@ export default {
       }
     },
     minareainit() {
-      let width = 0;
-      let height = 0;
+      let width = 300;
+      let height = 200;
       if (this.minarea instanceof Array) {
-        width = this.minarea[0];
-        height = this.minarea[1];
-        height = +height;
-        width = +width;
-        if (isNaN(height)) {
-          height = 200;
-        }
-        if (isNaN(width)) {
-          width = 300;
-        }
-      } else {
-        width = 300;
+        width = this.tf(this.minarea[0], "clientWidth");
+        height = this.tf(this.minarea[1], "clientHeight");
+      } else if (
+        typeof this.minarea === "string" ||
+        typeof this.minarea === "number"
+      ) {
+        width = this.tf(this.minarea[0], "clientWidth");
+      }
+      if (isNaN(height)) {
         height = 200;
+      }
+      if (isNaN(width)) {
+        width = 300;
       }
       return { height, width };
     },
@@ -862,7 +843,14 @@ export default {
               (this.l.height * this.initdata.width) / this.initdata.height;
             newX = x - (this.l.width - width);
           }
+          if (this.l.height <= minheight) {
+            this.l.height = minheight;
+            this.l.width =
+              (this.l.height * this.initdata.width) / this.initdata.height;
+            newX = x - (this.l.width - width);
+          }
         }
+
         this.width = this.l.width;
         this.height = this.l.height;
         this.x = newX;
@@ -907,6 +895,11 @@ export default {
             this.l.height + y >= document.documentElement.clientHeight
           ) {
             this.l.height = document.documentElement.clientHeight - y;
+            this.l.width =
+              (this.l.height * this.initdata.width) / this.initdata.height;
+          }
+          if (this.l.height <= minheight) {
+            this.l.height = minheight;
             this.l.width =
               (this.l.height * this.initdata.width) / this.initdata.height;
           }
