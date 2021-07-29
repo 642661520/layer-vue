@@ -111,15 +111,12 @@ const LayerBox = function(Vue) {
       }
     }
     let index = Vue.prototype.$layer.o.instances.length;
-    if (!options.el) {
-      options.el = "#app";
-    }
     let instance = new LayerBoxConstructor({
       propsData: {
         ...options
       }
     });
-    instance._el = options.el;
+    instance._el = options.el? options.el:'#app';
     instance._ishtml = options.ishtml;
     instance._isnewDOM = options.isnewDOM;
     instance._isComponent = options.isComponent;
@@ -139,12 +136,11 @@ const LayerBox = function(Vue) {
           parentDiv.insertBefore(solt,options.content)
           document.querySelector(options.el).appendChild(instance.vm.$el);
         } else {
-          
         parentDiv.insertBefore(instance.vm.$el, options.content);
         }
       } else {
-        if (document.querySelector(options.el)) {
-          document.querySelector(options.el).appendChild(instance.vm.$el);
+        if (document.querySelector(instance._el)) {
+          document.querySelector(instance._el).appendChild(instance.vm.$el);
         } else {
           document.body.appendChild(instance.vm.$el);
         }
@@ -169,8 +165,8 @@ const LayerBox = function(Vue) {
             console.warn("[layer warn]:Incorrect content type");
           break;
       }
-      if (document.querySelector(options.el)) {
-        document.querySelector(options.el).appendChild(instance.vm.$el);
+      if (document.querySelector(instance._el)) {
+        document.querySelector(instance._el).appendChild(instance.vm.$el);
       } else {
         document.body.appendChild(instance.vm.$el);
       }

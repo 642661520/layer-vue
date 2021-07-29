@@ -297,6 +297,8 @@ export default {
     },
   },
   created() {
+    console.log(this.el);
+    
     if (!this.visible) {
       this.defvisible = this.visible;
     }
@@ -679,7 +681,7 @@ export default {
                 if (layerDOM.parentNode) {
                   // 还原内容区位置
 
-                  const _el = document.querySelector(instances.instance._el);
+                  const _el = document.querySelector(this.el);
                   const solt = document.querySelector(
                     ".layer-vue-solt-" + this.index
                   );
@@ -718,7 +720,7 @@ export default {
           }
         }
         let node = document.body;
-        // 判断#app是否存在
+        // 判断el是否存在
         if (document.querySelector(instances.instance._el)) {
           node = document.querySelector(instances.instance._el);
         }

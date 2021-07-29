@@ -1,5 +1,5 @@
 <template>
-  <div id="app1">
+  <div>
     <el-button @click="open1">打开窗口1</el-button>
     <el-button @click="close1">关闭窗口1</el-button>
     <el-button @click="restore">还原窗口1</el-button>
@@ -62,6 +62,7 @@ export default {
       this.layer1 = this.$layer.open({
         // isMax: true,
         id:'site_w',
+        // el:"#123",
         ratio:true,
         moveOut:[1,1,1,1],
         parent: this,
