@@ -615,37 +615,37 @@ async open() {
 
 ### $layer.reset(index/id)
 
-参数：窗口序号/窗口id,返回值：Boolean数组,标识每个窗口的执行结果，true代表成功，false表示该窗口不存在或者已经是关闭状态
+参数：窗口序号/窗口id,返回值：Boolean,标识窗口的执行结果，true代表成功，false表示该窗口不存在或者已经是关闭状态
 
 重置layer窗口大小和定位的方法
 
 ### $layer.full(index/id)
 
-参数：窗口序号/窗口id,返回值：Boolean数组,标识每个窗口的执行结果，true代表成功，false表示该窗口不存在或者已经是关闭状态
+参数：窗口序号/窗口id,返回值：Boolean,标识窗口的执行结果，true代表成功，false表示该窗口不存在或者已经是关闭状态
 
 最大化layer窗口大小
 
 ### $layer.min(index/id)
 
-参数：窗口序号/窗口id,返回值：Boolean数组,标识每个窗口的执行结果，true代表成功，false表示该窗口不存在或者已经是关闭状态
+参数：窗口序号/窗口id,返回值：Boolean,标识窗口的执行结果，true代表成功，false表示该窗口不存在或者已经是关闭状态
 
 最小化layer窗口大小
 
 ### $layer.restore(index/id)
 
-参数：窗口序号/窗口id,返回值：Boolean数组,标识每个窗口的执行结果，true代表成功，false表示该窗口不存在或者已经是关闭状态
+参数：窗口序号/窗口id,返回值：Boolean,标识窗口的执行结果，true代表成功，false表示该窗口不存在或者已经是关闭状态
 
 退出最大、最小化
 
 ### $layer.openAgain(index/id)
 
-参数：窗口序号/窗口id,返回值：Boolean数组,标识每个窗口的执行结果，true代表成功，false表示该窗口不存在或者已经是关闭状态
+参数：窗口序号/窗口id,返回值：Boolean,标识窗口的执行结果，true代表成功，false表示该窗口不存在或者已经是关闭状态
 
 重新打开指定的layer窗口
 
 ### $layer.setTitle(index/id,value) - 【方法模式专用】
 
-参数：窗口序号/窗口id,新的title值,返回值：Boolean数组,标识每个窗口的执行结果，true代表成功，false表示该窗口不存在或者已经是关闭状态
+参数：窗口序号/窗口id,新的title值,返回值：Boolean,标识窗口的执行结果，true代表成功，false表示该窗口不存在或者已经是关闭状态
 
 重新设置title，通过父组件watch可更新title
 
@@ -686,7 +686,7 @@ export default {
 
 ### $layer.setContent(index/id,value) - 【方法模式专用】
 
-参数：窗口序号/窗口id,新的content值,返回值：Boolean数组,标识每个窗口的执行结果，true代表成功，false表示该窗口不存在或者已经是关闭状态
+参数：窗口序号/窗口id,新的content值,返回值：Boolean,标识窗口的执行结果，true代表成功，false表示该窗口不存在或者已经是关闭状态
 
 重新设置内容，使用方式同setTitle，当内容区是组件时，传入新的props即可，layer会重新挂载子组件
 
@@ -756,7 +756,13 @@ export default {
 </script>
 ```
 
+### $layer.reloadAutoArea()
 
+参数：窗口序号/窗口id,返回值：Boolean
+
+手动重置窗口大小，只在area为默认值时有效
+
+内容区高度发生变化时，手动执行该方法重置高宽
 
 ### $layer.closeAll()
 

@@ -127,6 +127,13 @@ import IconClose from "../theme/icon/IconClose.vue";
 import IconMax from "../theme/icon/IconMax.vue";
 import IconMin from "../theme/icon/IconMin.vue";
 import IconRestroe from "../theme/icon/IconRestroe.vue";
+
+/**
+ * 合并函数
+ * @param {Object} options 配置
+ * @param {Object} def 需要合并到主数据的配置
+ * @returns {Object} options 合并后的配置
+ */
 const merge = (options, def) => {
   for (let key in def) {
     if (options[key] === undefined) {
@@ -150,20 +157,25 @@ export default {
     return {
       // 默认开启
       defvisible: true,
+      // 控制关闭动画的类
       endanim: false,
       // 最大化按钮
       maxbtn: false,
+      // 最小化按钮
       minbtn: false,
       // 最小宽度
       minwidth: 300,
       // 最小高度
       minheight: 200,
-      // left
+      // 左偏移量
       x: 0,
-      // top
+      // 上偏移量
       y: 0,
+      // 窗口宽度
       width: 0,
+      // 窗口高度
       height: 0,
+      // 窗口zindex
       zIndex: 1,
       // 序号
       index: undefined,
@@ -171,54 +183,94 @@ export default {
       model: undefined,
       // display
       display: undefined,
-      // 皮肤
+      // 默认皮肤
       defskin: {},
       // 用于记录初始状态
       initdata: { x: 0, y: 0, width: 300, height: 200 },
+      // 默认外边框宽度
       defborderwidth: 0,
+      // 用于记录窗口发生最大最小化前的窗口信息
       l: {},
+      // 默认标题
       deftitle: undefined,
+      // 默认阴影色
       defshade: "rgba(0, 0, 0, 0.3)",
     };
   },
   props: {
+    // 标题
     title: { type: [String, Boolean], default: "信息" },
+    // 高宽
     area: { type: [String, Number, Array], default: "auto" },
+    // 最小高宽
     minarea: { type: [String, Number, Array], default: () => [300, 200] },
+    // 打开位置
     offset: { type: [String, Array, Number], default: "auto" },
+    // 置顶
     settop: { type: Boolean, default: false },
+    // 移动限制
     moveOut: { type: Array, default: () => [0, 0, 0, 0] },
+    // 显示
     visible: { visible: [Number, Boolean], default: true },
+    // 窗口zindex
     zindex: { type: Number, default: 1 },
+    // 关闭按钮
     closeBtn: { type: [Number, Boolean], default: true },
+    // 最大最小化按钮
     maxmin: { type: Array, default: () => [0, 0] },
+    // 拉伸
     resize: { type: Array, default: () => [1, 1] },
+    // 移动结束回调
     moveEnd: { type: Function },
+    // 拖动目标
     move: { type: [String, Boolean], default: ".layer-vue-title-text" },
+    // 关闭窗口回调
     cancel: { type: Function },
+    // 打开窗口回调
     success: { type: Function },
+    // 销毁窗口回调
     end: { type: Function },
+    // 最大化回调
     full: { type: Function },
+    // 最小化回调
     min: { type: Function },
+    // 还原回调
     restore: { type: Function },
+    // 拉伸时回调
     resizing: { type: Function },
+    // 拉伸结束回调
     resizeEnd: { type: Function },
+    // 清除内容
     destroyOnClose: { type: [Number, Boolean], default: false },
+    // 动画
     anim: { type: Number, default: 1 },
+    // 内容区
     content: {},
+    // 标题高度
     titleheight: { type: Number, default: 42 },
+    // 皮肤
     skin: { type: [Object, String] },
+    // id
     id: { type: String, default: undefined },
+    // 父元素
     el: { type: String },
+    // fixed
     fixed: { type: Boolean, default: true },
+    // 关闭的动画
     isOutAnim: { type: [Boolean, Number], default: true },
+    // 边框宽度
     boderwidth: { type: Number, default: 0 },
+    // 打开时最大化
     isMax: { type: Boolean, default: false },
+    // 是否保持高宽比例
     ratio: { type: Boolean, default: false },
+    // 阴影
     shade: { type: [String, Number, Array], default: 0 },
+    // 点击阴影关闭
     shadeClose: { type: Boolean, default: false },
   },
   computed: {
+    // 计算属性-内容区高度
     contentheight: function () {
       let h = this.height - (this.title ? this.titleheight : 0);
       if (this.boderwidth <= 0) {
@@ -232,6 +284,7 @@ export default {
       h <= 0 ? (h = 0) : null;
       return h;
     },
+    // 计算属性-标题文本宽度
     textwidth: function () {
       return (
         this.width -
@@ -240,6 +293,7 @@ export default {
     },
   },
   watch: {
+    // 监测visible变化后改变defvisible
     visible: function (newvalue) {
       if (this.anim) {
         setTimeout(() => {
@@ -249,6 +303,7 @@ export default {
         this.defvisible = newvalue;
       }
     },
+    // 监测defvisible变化后触发置顶和初始化
     defvisible: function (newvalue) {
       if (newvalue) {
         if (this.settop) {
@@ -264,11 +319,13 @@ export default {
         });
       }
     },
+    // 监测isMax变化触发最大化函数
     isMax: function (newvalue) {
       if (newvalue !== this.maxbtn && this.$el.querySelector(this.move)) {
         this.maxfun();
       }
     },
+    // 检测最小化状态，切换鼠标手势
     minbtn: function (newvalue) {
       if (this.move != ".layer-vue-title-text") {
         if (newvalue) {
@@ -278,11 +335,13 @@ export default {
         }
       }
     },
+    // 监测title变化传递给deftitle
     title: function (newvalue) {
       this.deftitle = newvalue;
     },
   },
   created() {
+    // 初始化数据
     if (!this.visible) {
       this.defvisible = this.visible;
     }
@@ -364,6 +423,7 @@ export default {
     window.removeEventListener("resize", this.resizefun);
   },
   methods: {
+    // 最小化时的拖动函数
     minmovefun(e1) {
       e1.preventDefault();
       if (this.minbtn && this.move != ".layer-vue-title-text") {
@@ -387,29 +447,37 @@ export default {
         this.f();
       }
     },
+    // 浏览器发生resize时重置窗口
     resizefun() {
+      // ! 窗口最大化时调整窗口大小贴合浏览器，退出调整
       if (this.maxbtn) {
         this.width = document.documentElement.clientWidth;
         this.height = document.documentElement.clientHeight;
         return;
       }
+      // 调整左偏移保证窗口在屏幕内
       if (this.x + this.width >= document.documentElement.clientWidth) {
         this.x = document.documentElement.clientWidth - this.width;
       }
+      // 左平移为0时停止调整
       if (this.x <= 0) {
         this.x = 0;
       }
+      // ! 窗口最小化时调整上偏移，退出调整
       if (this.minbtn) {
         this.y = document.documentElement.clientHeight - this.height;
         return;
       }
+      // 调整上偏移
       if (this.y + this.height >= document.documentElement.clientHeight) {
         this.y = document.documentElement.clientHeight - this.height;
       }
+      // 上平移为0时停止调整
       if (this.y <= 0) {
         this.y = 0;
       }
-      if (this.resize[0] || this.resize[1]) {
+      // 窗口允许拉伸时，调整窗口大小保持在浏览器内部
+      if (!this.ratio && (this.resize[0] || this.resize[1])) {
         if (this.width >= document.documentElement.clientWidth) {
           this.width = document.documentElement.clientWidth;
         }
@@ -489,19 +557,22 @@ export default {
         children = true;
       }
       if (this.area instanceof Array) {
-        width = this.tf(this.area[0], "clientWidth");
+        width = this.tf(this.area[0], "clientWidth")+ (this.defborderwidth?this.defborderwidth*2:0 );
         if (this.area[1]) {
-          height = this.tf(this.area[1], "clientHeight");
+          height = this.tf(this.area[1], "clientHeight")+ (this.defborderwidth?this.defborderwidth*2:0 );
         } else {
-          height = children ? (this.$refs.content.children[0].scrollHeight+this.titleheight) : 0;
+          height = 
+          children? this.$refs.content.children[0].scrollHeight + this.titleheight + (this.defborderwidth?this.defborderwidth*2:0 ): 0;
         }
       } else {
         if (this.area === "auto") {
-          width = children ? this.$refs.content.children[0].scrollWidth : 0;
+          width = children ? this.$refs.content.children[0].scrollWidth+ (this.defborderwidth?this.defborderwidth*2:0 ): 0;
         } else {
-          width = this.tf(this.area, "clientWidth");
+          width = this.tf(this.area, "clientWidth") +(this.defborderwidth?this.defborderwidth*2:0 );
         }
-        height = children ? (this.$refs.content.children[0].scrollHeight+this.titleheight) : 0;
+        height = children
+          ? this.$refs.content.children[0].scrollHeight + this.titleheight+(this.defborderwidth?this.defborderwidth*2:0 )
+          : 0;
       }
       if (
         width > document.documentElement.clientWidth &&
@@ -1004,6 +1075,15 @@ export default {
         this.closefun();
       }
     },
+    reloadAutoAreafun(){
+      if(this.area==='auto'){
+      const { height, width } = this.areainit();
+      this.initdata.width =  width;
+      this.initdata.height =  height;
+      this.width = width;
+      this.height = height;
+      }
+    }
   },
 };
 export { merge };

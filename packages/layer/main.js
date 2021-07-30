@@ -2,7 +2,7 @@ import LayerVue, { merge } from "./main.vue";
 LayerVue.install = function(Vue) {
   Vue.component(LayerVue.name, LayerVue);
 };
-const version = "0.3.0";
+const version = "0.3.1";
 const versions = [
   "0.0.1",
   "0.0.2",
@@ -28,7 +28,8 @@ const versions = [
   "0.2.3",
   "0.2.4",
   "0.2.6",
-  "0.3.0"
+  "0.3.0",
+  "0.3.1"
 ];
 const findIndex = (id,Vue) => {
   let index = -1;
@@ -327,6 +328,15 @@ const LayerBox = function(Vue) {
       return false;
     }
   };
+  layer.reloadAutoArea = index => {
+    index = findIndex(index, Vue);
+    const instance = Vue.prototype.$layer.o.instances[index].instance;
+    if (instance.model) {
+      instance.reloadAutoAreafun();
+      return true;
+    }
+    return false;
+  }
   layer.version = version;
   layer.versions = versions;
   return layer;

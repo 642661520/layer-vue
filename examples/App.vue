@@ -9,9 +9,18 @@
     <el-button @click="reset = !reset">重置窗口3</el-button>
     <el-button @click="closeAll">关闭全部</el-button>
     <div id="test">test<Test :id="visible" ref="test"></Test></div>
-    <layer-vue :isMax="isMax" :reset="reset" id="31321" :end="end" :cancel="cancel" skin="win7" :maxmin="[1, 1]" content="3131">
+    <!-- <layer-vue
+      :isMax="isMax"
+      :reset="reset"
+      id="31321"
+      :end="end"
+      :cancel="cancel"
+      skin="win7"
+      :maxmin="[1, 1]"
+      content="3131"
+    >
       <Test :id="visible"></Test>
-    </layer-vue>
+    </layer-vue> -->
     <!-- <LayerVue :visible="true" :maxmin="[1, 1]" :end="end" offset="l" :cancel="cancel" skin="mac" :resize="[0, 1]" :destroyOnClose="true"
       ><div id="videobox">
         <video muted autoplay="true" id="video" controls="true" controlsList="nodownload"></video>
@@ -56,20 +65,22 @@ export default {
   mounted() {
     // this.open1();
     // this.open2();
-    setTimeout(()=>{this.$layer.close("31321")},2000)
+    setTimeout(() => {
+      this.$layer.close("31321");
+    }, 2000);
   },
   methods: {
     open1() {
       this.layer1 = this.$layer.open({
         // isMax: true,
-        id:'site_w',
+        id: "site_w",
         // el:"#123",
-        ratio:true,
-        moveOut:[1,1,1,1],
+        ratio: true,
+        moveOut: [1, 1, 1, 1],
         parent: this,
         // id: "{id:1}",
         zindex: 999,
-        shade: [0.8, '#ffff49'],
+        shade: [0.8, "#ffff49"],
         // shadeClose:true,
         el: "#app1",
         skin: {
@@ -149,30 +160,35 @@ export default {
     },
     async open2() {
       console.log(this.$refs.test.$el);
-      
       this.zindex += 1;
       await this.$layer.close(this.layer2);
       this.layer2 = this.$layer({
         parent: this,
         destroyOnClose: true,
-        shade:'1',
-        el:'body',
-        area: [466, 355],
+        // shade:'1',
+        el: "body",
+        maxmin: [1, 1],
+        // area: [466, 355],
         offset: "r",
         settop: true,
+        resize: [0, 0],
         // anim:0,
-        skin: "winxp",
-        move:".layer-vue-content",
+        // skin: "winxp",
+        move: ".layer-vue-content",
         id: "123",
-        content: this.$refs.test.$el,
+        content: document.getElementById("test"),
         end: () => {
           console.log("end");
         },
         cancel: () => {
           console.log("cancel");
         },
-        success: function (e, width, height) {
-          console.log(e, width, height);
+        success: function (e, index, id) {
+          console.log(e, index, id);
+          setTimeout(() => {
+            document.getElementById("test").style.height = 300 + "px";
+            this.$layer.reloadAutoArea(index);
+          },2000);
         },
         resizing: (e, width, height) => {
           // console.log(e,width,height);
