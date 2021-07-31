@@ -505,12 +505,13 @@ export default {
       this.maxbtn = false;
       this.minbtn = false;
       if (this.$refs.content.children.length) {
-        if (
-          this.display === "none" ||
-          getComputedStyle(this.$refs.content.children[0]).display === "none"
-        ) {
-          this.$refs.content.children[0].style.display = "block";
-        }
+        this.$refs.content.children[0].style.display = "block";
+        // if (
+        //   this.display === "none" ||
+        //   getComputedStyle(this.$refs.content.children[0]).display === "none"
+        // ) {
+        //   this.$refs.content.children[0].style.display = "block";
+        // }
       }
       const { height, width } = this.areainit();
       const { x, y } = this.offsetinit(this.offset, width, height);

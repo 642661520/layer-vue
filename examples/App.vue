@@ -27,15 +27,18 @@
         <button class="btn" id="download" onclick="download()">下载</button>
       </div>
     </LayerVue> -->
+    <t-1/>
   </div>
 </template>
 <script>
 import Test from "./test.vue";
+import T1 from './t1.vue';
 let span = document.createElement("span");
 span.innerHTML = "<div>13123</div>";
 export default {
   components: {
     Test,
+    T1,
   },
   name: "app",
   data() {
