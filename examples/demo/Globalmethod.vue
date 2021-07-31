@@ -1,11 +1,11 @@
 <template>
   <div>
-    <layer-vue :visible.sync="visible1" :resizing="resizing" id="reloadAutoArea" :resize="[0,0]" :minarea="[100,100]" :anim="0">
-      <el-tabs style="width: 700px;" v-model="activeName" @tab-click="handleClick">
-    <el-tab-pane :lazy="true" label="用户管理" name="first">用户管理
+    <layer-vue :visible.sync="visible1"  title="切换标签页触发reloadAutoArea" :resizing="resizing" id="reloadAutoArea" :resize="[0,0]" :anim="0">
+      <el-tabs style="width: 700px" v-model="activeName" @tab-click="handleClick">
+    <el-tab-pane :lazy="true" style="height: 300px;"  label="用户管理" name="first">用户管理
       <el-table
       :data="tableData"
-      style="width: 100%;height: 300px;">
+      style="width: 100%;height: 100%;">
       <el-table-column
         prop="date"
         label="日期"
@@ -22,9 +22,7 @@
       </el-table-column>
     </el-table>
     </el-tab-pane>
-    <el-tab-pane :lazy="true" label="配置管理" name="second">配置管理</el-tab-pane>
-    <el-tab-pane :lazy="true" label="角色管理" name="third">角色管理</el-tab-pane>
-    <el-tab-pane :lazy="true" label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane>
+    <el-tab-pane :lazy="true"  label="配置管理" name="second">配置管理</el-tab-pane>
   </el-tabs></layer-vue>
     <h2>全局方法</h2>
     <el-row>
@@ -34,12 +32,9 @@
       <el-col :span="4">
         <el-button type="primary" @click="close1">$layer.close({{layer1?layer1:''}})</el-button>
       </el-col>
-      <el-col :span="2">
-        <el-button type="primary" @click="visible1=true">打开一个标签页</el-button>
+      <el-col :span="4">
+        <el-button type="primary" @click="visible1=true">reloadAutoArea</el-button>
       </el-col>
-      <!-- <el-col :span="3">
-        <el-button type="primary" @click="open4">reloadAutoArea</el-button>
-      </el-col> -->
       <el-col :span="3">
         <el-button type="primary" @click="open5">resizeEnd</el-button>
       </el-col>
@@ -61,7 +56,7 @@ export default {
       height: 200,
       visible1: false,
       layer1:undefined,
-      activeName: 'first',
+       activeName: 'first',
       tableData: [{
             date: '2016-05-02',
             name: '王小虎',
@@ -134,7 +129,8 @@ export default {
     },
     handleClick() {
       this.$nextTick(()=>{
-this.$layer.reloadAutoArea('reloadAutoArea');
+    this.$layer.reloadAutoArea('reloadAutoArea');
+      
       })
       
     },
@@ -164,3 +160,4 @@ this.$layer.reloadAutoArea('reloadAutoArea');
   },
 };
 </script>
+
