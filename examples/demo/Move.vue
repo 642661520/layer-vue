@@ -2,7 +2,7 @@
   <div>
     <layer-vue :visible.sync="visible1" :move="false">:move="false"</layer-vue>
     <layer-vue :visible.sync="visible2" :anim="1">move="layer-vue-title"</layer-vue>
-    <layer-vue :visible.sync="visible3" move=".layer-vue-content" reset>move=".layer-vue-content"</layer-vue>
+    <layer-vue :visible.sync="visible3" move=".layer-vue-content" :maxmin="[1,1]">move=".layer-vue-content"</layer-vue>
     <layer-vue :visible.sync="visible4" :moveOut="[1, 1, 1, 1]">:moveOut="[1, 1, 1, 1]" <br/>可以移动到浏览器视口外，可以分别指定4个方向(默认只能在浏览器视口内)</layer-vue>
     <h2>拖动窗口</h2>
     <el-row>

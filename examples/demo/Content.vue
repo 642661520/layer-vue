@@ -2,7 +2,7 @@
   <div>
     <LayerVue :visible.sync="visible1" :settop="true" :content="inputcontent"></LayerVue>
     <h2>内容区</h2>
-    <div id="content1" style="color: #409EFF; background: #444;text-align: center;line-height: 30px;  border-radius:5px">内容区是这个dom元素,提前绑定响应式数据，是方法模式下改变内容区的最佳方案｛{{ input }}｝</div>
+    <div id="content1" style="color: #409EFF; background: #444;text-align: center;line-height: 30px;  border-radius:5px;">内容区是这个dom元素,提前绑定响应式数据，是方法模式下改变内容区的最佳方案｛{{ input }}｝</div>
     <el-row>
       <el-col :span="5">
         <el-button type="primary" @click="open">内容区是上面的div</el-button>
@@ -33,7 +33,6 @@ export default {
     async open() {
       await this.$layer.closeAll();
       this.layer3 = await this.$layer({
-        anim:0,
         settop: true,
         content: document.getElementById("content1"),
       });

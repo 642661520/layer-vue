@@ -57,7 +57,6 @@
           height: titleheight + 'px',
           'line-height': titleheight + 'px',
         }"
-        @mousedown="minmovefun"
       >
         <div
           class="layer-vue-title-text"
@@ -403,6 +402,18 @@ export default {
       try {
         if (this.$refs.content.children.length) {
           this.display = this.$refs.content.children[0].style.display;
+          this.$refs.content.children[0].style.display = "block";
+          this.childrenW = parseInt(
+            getComputedStyle(this.$refs.content.children[0]).width
+          );
+          if (this.childrenW === 0 || isNaN(this.childrenW)) {
+            this.childrenW = 0;
+            this.childrenH = 0;
+          } else {
+            this.childrenH = parseInt(
+              getComputedStyle(this.$refs.content.children[0]).height
+            );
+          }
         }
       } catch (error) {
         this.$layer.o.log && console.warn("[layer warn]:not find children");
@@ -424,27 +435,29 @@ export default {
   },
   methods: {
     // 最小化时的拖动函数
-    minmovefun(e1) {
-      e1.preventDefault();
-      if (this.minbtn && this.move != ".layer-vue-title-text") {
-        const { x } = this;
-        let clientX = e1.clientX;
-        document.onmousemove = (e2) => {
-          e2.preventDefault();
-          let moveX = e2.clientX - clientX;
-          let newX = parseInt(x) + parseInt(moveX);
-          if (!parseInt(this.moveOut[3]) && newX <= 0) {
-            newX = 0;
-          }
-          if (
-            !parseInt(this.moveOut[1]) &&
-            newX >= document.documentElement.clientWidth - this.minwidth
-          ) {
-            newX = document.documentElement.clientWidth - this.minwidth;
-          }
-          this.x = newX;
+    minmovefun() {
+      if (this.$el.querySelector(".layer-vue-title-text")) {
+        this.$el.querySelector(".layer-vue-title-text").onmousedown = (e1) => {
+          e1.preventDefault();
+          const { x } = this;
+          let clientX = e1.clientX;
+          document.onmousemove = (e2) => {
+            e2.preventDefault();
+            let moveX = e2.clientX - clientX;
+            let newX = parseInt(x) + parseInt(moveX);
+            if (!parseInt(this.moveOut[3]) && newX <= 0) {
+              newX = 0;
+            }
+            if (
+              !parseInt(this.moveOut[1]) &&
+              newX >= document.documentElement.clientWidth - 200
+            ) {
+              newX = document.documentElement.clientWidth - 200;
+            }
+            this.x = newX;
+          };
+          this.f();
         };
-        this.f();
       }
     },
     // 浏览器发生resize时重置窗口
@@ -513,6 +526,7 @@ export default {
         //   this.$refs.content.children[0].style.display = "block";
         // }
       }
+
       const { height, width } = this.areainit();
       const { x, y } = this.offsetinit(this.offset, width, height);
       this.initdata = { width, height, x, y };
@@ -549,31 +563,38 @@ export default {
     areainit() {
       let height = 0;
       let width = 0;
-      let children = false;
-      if (
-        this.$refs.content &&
-        this.$refs.content.children &&
-        this.$refs.content.children.length > 0
-      ) {
-        children = true;
+      try {
+        if (this.$refs.content.children.length) {
+          this.childrenW = parseInt(
+            getComputedStyle(this.$refs.content.children[0]).width
+          );
+          if (this.childrenW === 0 || isNaN(this.childrenW)) {
+            this.childrenW = 0;
+            this.childrenH = 0;
+          } else {
+            this.childrenH = parseInt(
+              getComputedStyle(this.$refs.content.children[0]).height
+            );
+          }
+        }
+      } catch (error) {
+        this.$layer.o.log && console.warn("[layer warn]:not find children");
       }
       if (this.area instanceof Array) {
-        width = this.tf(this.area[0], "clientWidth")+ (this.defborderwidth?this.defborderwidth*2:0 );
+        width = this.tf(this.area[0], "clientWidth") + this.defborderwidth * 2;
         if (this.area[1]) {
-          height = this.tf(this.area[1], "clientHeight")+ (this.defborderwidth?this.defborderwidth*2:0 );
+          height =
+            this.tf(this.area[1], "clientHeight") + this.defborderwidth * 2;
         } else {
-          height = 
-          children? this.$refs.content.children[0].scrollHeight + this.titleheight + (this.defborderwidth?this.defborderwidth*2:0 ): 0;
+          height = this.childrenH + this.titleheight + this.defborderwidth * 2;
         }
       } else {
         if (this.area === "auto") {
-          width = children ? this.$refs.content.children[0].scrollWidth+ (this.defborderwidth?this.defborderwidth*2:0 ): 0;
+          width = this.childrenW + this.defborderwidth * 2;
         } else {
-          width = this.tf(this.area, "clientWidth") +(this.defborderwidth?this.defborderwidth*2:0 );
+          width = this.tf(this.area, "clientWidth") + this.defborderwidth * 2;
         }
-        height = children
-          ? this.$refs.content.children[0].scrollHeight + this.titleheight+(this.defborderwidth?this.defborderwidth*2:0 )
-          : 0;
+        height = this.childrenH + this.titleheight + this.defborderwidth * 2;
       }
       if (
         width > document.documentElement.clientWidth &&
@@ -823,10 +844,10 @@ export default {
     maxfun() {
       this.maxbtn = !this.maxbtn;
       this.$emit("update:isMax", this.maxbtn);
-
       if (this.maxbtn) {
         if (this.move && this.$el.querySelector(this.move)) {
           this.$el.querySelector(this.move).style.cursor = "not-allowed";
+          this.$el.querySelector(this.move).onmousedown = null;
         }
         if (this.minbtn) {
           this.minbtn = false;
@@ -842,6 +863,7 @@ export default {
         this.height = document.documentElement.clientHeight;
         this.full && this.full(this.$el, this.index, this.id);
       } else {
+        this.movefun(this.move);
         this.x = this.l.x;
         this.y = this.l.y;
         this.width = this.l.width;
@@ -855,9 +877,7 @@ export default {
     minfun() {
       this.minbtn = !this.minbtn;
       if (this.minbtn) {
-        if (this.move && this.$el.querySelector(this.move)) {
-          this.$el.querySelector(this.move).style.cursor = "move";
-        }
+        this.minmovefun();
         if (this.maxbtn) {
           this.maxbtn = false;
         } else {
@@ -872,6 +892,7 @@ export default {
         this.width = 200;
         this.min && this.min(this.$el, this.index, this.id);
       } else {
+        this.movefun(this.move);
         this.x = this.l.x;
         this.y = this.l.y;
         this.width = this.l.width;
@@ -1010,6 +1031,7 @@ export default {
     movefun(move) {
       if (this.$el.querySelector(move)) {
         this.$el.querySelector(move).style.cursor = "move";
+        this.$el.querySelector(".layer-vue-title-text").onmousedown = null;
         this.$el.querySelector(move).onmousedown = (e1) => {
           if (this.$el.className.indexOf("layer-vue-ismax") >= 0) {
             return;
@@ -1076,15 +1098,15 @@ export default {
         this.closefun();
       }
     },
-    reloadAutoAreafun(){
-      if(this.area==='auto'){
-      const { height, width } = this.areainit();
-      this.initdata.width =  width;
-      this.initdata.height =  height;
-      this.width = width;
-      this.height = height;
+    reloadAutoAreafun() {
+      if (this.area === "auto") {
+        const { height, width } = this.areainit();
+        this.initdata.width = width;
+        this.initdata.height = height;
+        this.width = width;
+        this.height = height;
       }
-    }
+    },
   },
 };
 export { merge };

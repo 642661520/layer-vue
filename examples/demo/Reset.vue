@@ -19,6 +19,11 @@ data() {
     visible1:false,
   }
 },
+methods: {
+    reset(){
+      this.$layer.reset("reset")
+    }
+  },
 }
 </script>
 
