@@ -2,7 +2,17 @@
   <div>
     <LayerVue :visible.sync="visible1" :settop="true" :content="inputcontent"></LayerVue>
     <h2>内容区</h2>
-    <div id="content1" style="color: #409EFF; background: #444;text-align: center;line-height: 30px;  border-radius:5px;">内容区是这个dom元素,提前绑定响应式数据，是方法模式下改变内容区的最佳方案｛{{ input }}｝</div>
+    <div id="content1" style="display: none; color: #409EFF;padding: 20px; background: #444;text-align: center;line-height: 30px;  border-radius:5px;width: 500px;overflow: hidden;box-sizing:border-box">
+      111111111111111
+      11111111
+      1111111111111111
+      1111111111111
+      11111111111111111111
+      111111111111111111
+      1111111111111111111
+      1111111111111111111
+      11111111111111
+      1111111111内容区是这个dom元素,提前绑定响应式数据，是方法模式下改变内容区的最佳方案｛{{ input }}｝</div>
     <el-row>
       <el-col :span="5">
         <el-button type="primary" @click="open">内容区是上面的div</el-button>

@@ -41,7 +41,6 @@
         top: y + 'px',
         left: x + 'px',
         'z-index': zIndex,
-
         position: fixed ? 'fixed' : 'absolute',
       }"
       @mousedown="settopfun"
@@ -272,13 +271,6 @@ export default {
     // 计算属性-内容区高度
     contentheight: function () {
       let h = this.height - (this.title ? this.titleheight : 0);
-      if (this.boderwidth <= 0) {
-        if (typeof this.skin === "string") {
-          this.defborderwidth = 3;
-        } else {
-          this.defborderwidth = 0;
-        }
-      }
       h = h - this.defborderwidth * 2;
       h <= 0 ? (h = 0) : null;
       return h;
@@ -346,6 +338,15 @@ export default {
     }
     this.deftitle = this.title;
     this.defskin = this.$layer.o.skin;
+    if (this.boderwidth === 0) {
+      if (typeof this.skin === "string") {
+        this.defborderwidth = 3;
+      } else {
+        this.defborderwidth = 0;
+      }
+    } else {
+      this.defborderwidth = this.boderwidth;
+    }
     if (this.shade) {
       if (typeof this.shade === "number") {
         if (this.shade !== 1) {
@@ -565,16 +566,60 @@ export default {
       let width = 0;
       try {
         if (this.$refs.content.children.length) {
-          this.childrenW = parseInt(
-            getComputedStyle(this.$refs.content.children[0]).width
+          let borderbox = false;
+          if (
+            getComputedStyle(this.$refs.content.children[0]).boxSizing ===
+            "border-box"
+          ) {
+            borderbox = true;
+          }
+          console.log(
+            getComputedStyle(this.$refs.content.children[0]).borderBottomWidth
           );
+
+          this.childrenW =
+            parseInt(getComputedStyle(this.$refs.content.children[0]).width) +
+            (borderbox
+              ? 0
+              : parseInt(
+                  getComputedStyle(this.$refs.content.children[0]).paddingLeft
+                ) +
+                parseInt(
+                  getComputedStyle(this.$refs.content.children[0]).paddingRight
+                ) +
+                parseInt(
+                  getComputedStyle(this.$refs.content.children[0])
+                    .borderLeftWidth
+                ) +
+                parseInt(
+                  getComputedStyle(this.$refs.content.children[0])
+                    .borderRightWidth
+                ));
           if (this.childrenW === 0 || isNaN(this.childrenW)) {
             this.childrenW = 0;
             this.childrenH = 0;
           } else {
-            this.childrenH = parseInt(
-              getComputedStyle(this.$refs.content.children[0]).height
-            );
+            this.childrenH =
+              parseInt(
+                getComputedStyle(this.$refs.content.children[0]).height
+              ) +
+              (borderbox
+                ? 0
+                : parseInt(
+                    getComputedStyle(this.$refs.content.children[0]).paddingTop
+                  ) +
+                  parseInt(
+                    getComputedStyle(this.$refs.content.children[0])
+                      .paddingBottom
+                  ) +
+                  parseInt(
+                    getComputedStyle(this.$refs.content.children[0])
+                      .borderTopWidth
+                  ) +
+                  parseInt(
+                    getComputedStyle(this.$refs.content.children[0])
+                      .borderBottomWidth
+                  ));
           }
         }
       } catch (error) {

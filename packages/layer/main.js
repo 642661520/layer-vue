@@ -1,5 +1,7 @@
-import LayerVue, { merge } from "./main.vue";
-LayerVue.install = function(Vue) {
+import LayerVue, {
+  merge
+} from "./main.vue";
+LayerVue.install = function (Vue) {
   Vue.component(LayerVue.name, LayerVue);
 };
 const version = "0.3.3";
@@ -31,24 +33,28 @@ const versions = [
   "0.3.0",
   "0.3.1",
   "0.3.2",
-  "0.3.3" 
+  "0.3.3"
 ];
-const findIndex = (id,Vue) => {
+const findIndex = (id, Vue) => {
   let index = -1;
   if (typeof id === "number") {
     index = id;
   } else if (typeof id === "string") {
-    index = Vue.prototype.$layer.o.instances.findIndex(value => {
+    const arr = [...Vue.prototype.$layer.o.instances]
+    index = arr.reverse().findIndex(value => {
       if (value) {
         return value.instance.id === id;
       }
     });
+    if (index >= 0) {
+      index = arr.length - 1 - index
+    }
   }
   return index;
 };
-const LayerBox = function(Vue) {
+const LayerBox = function (Vue) {
   const LayerBoxConstructor = Vue.extend(LayerVue);
-  const layer = function(options) {
+  const layer = function (options) {
     return layer.open(options);
   };
   layer.open = (options = {}) => {
@@ -56,7 +62,7 @@ const LayerBox = function(Vue) {
       options.title = options.parent.title;
     }
     if (options.id) {
-      let index = findIndex(options.id,Vue);
+      let index = findIndex(options.id, Vue);
       if (index >= 0) {
         let instance = Vue.prototype.$layer.o.instances[index].instance;
         if (!instance.destroyOnClose) {
@@ -77,10 +83,11 @@ const LayerBox = function(Vue) {
     // 强制删除传入的visible属性
     delete options.visible;
     // 合并全局皮肤配置到默认配置
-    const { skin } = Vue.prototype.$layer.o;
+    const {
+      skin
+    } = Vue.prototype.$layer.o;
     if (options.skin) {
-      if (typeof options.skin === "string") {
-      } else {
+      if (typeof options.skin === "string") {} else {
         options.skin = merge(options.skin, skin);
       }
     } else {
@@ -121,7 +128,7 @@ const LayerBox = function(Vue) {
         ...options
       }
     });
-    instance._el = options.el? options.el:'#app';
+    instance._el = options.el ? options.el : '#app';
     instance._ishtml = options.ishtml;
     instance._isnewDOM = options.isnewDOM;
     instance._isComponent = options.isComponent;
@@ -138,10 +145,10 @@ const LayerBox = function(Vue) {
         if (document.querySelector(options.el)) {
           const solt = document.createElement("div");
           solt.className = 'layer-vue-solt-' + index;
-          parentDiv.insertBefore(solt,options.content)
+          parentDiv.insertBefore(solt, options.content)
           document.querySelector(options.el).appendChild(instance.vm.$el);
         } else {
-        parentDiv.insertBefore(instance.vm.$el, options.content);
+          parentDiv.insertBefore(instance.vm.$el, options.content);
         }
       } else {
         if (document.querySelector(instance._el)) {
@@ -176,11 +183,13 @@ const LayerBox = function(Vue) {
         document.body.appendChild(instance.vm.$el);
       }
     }
-    Vue.prototype.$layer.o.instances.push({ instance });
+    Vue.prototype.$layer.o.instances.push({
+      instance
+    });
     return index;
   };
   layer.close = async index => {
-    index = findIndex(index,Vue);
+    index = findIndex(index, Vue);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
       let result = await instances.instance.closefun();
@@ -194,7 +203,7 @@ const LayerBox = function(Vue) {
     }
   };
   layer.reset = index => {
-    index = findIndex(index,Vue);
+    index = findIndex(index, Vue);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
       instances.instance.resetfun();
@@ -218,7 +227,7 @@ const LayerBox = function(Vue) {
     return result;
   };
   layer.full = index => {
-    index = findIndex(index,Vue);
+    index = findIndex(index, Vue);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances && instances.instance.maxbtn === false) {
       instances.instance.maxfun();
@@ -232,7 +241,7 @@ const LayerBox = function(Vue) {
     }
   };
   layer.min = index => {
-    index = findIndex(index,Vue);
+    index = findIndex(index, Vue);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances && instances.instance.minbtn === false) {
       instances.instance.minfun();
@@ -246,7 +255,7 @@ const LayerBox = function(Vue) {
     }
   };
   layer.restore = index => {
-    index = findIndex(index,Vue);
+    index = findIndex(index, Vue);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
       instances.instance.restorefun();
@@ -261,7 +270,7 @@ const LayerBox = function(Vue) {
   };
   layer.openAgain = index => {
     if (typeof index !== "object") {
-      index = findIndex(index,Vue);
+      index = findIndex(index, Vue);
       if (index >= 0 && index < Vue.prototype.$layer.o.instances.length) {
         let instance = Vue.prototype.$layer.o.instances[index].instance;
         if (!instance.destroyOnClose && instance.defvisible === false) {
@@ -283,7 +292,7 @@ const LayerBox = function(Vue) {
     }
   };
   layer.setTitle = (index, value) => {
-    index = findIndex(index,Vue);
+    index = findIndex(index, Vue);
     const instance = Vue.prototype.$layer.o.instances[index].instance;
     if (instance.model) {
       instance.$data.deftitle = value;
@@ -292,18 +301,17 @@ const LayerBox = function(Vue) {
     return false;
   };
   layer.setContent = (index, value) => {
-    index = findIndex(index,Vue);
+    index = findIndex(index, Vue);
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances.instance.model) {
-      if (instances.instance._ishtml) {
-      } else if (instances.instance._isComponent) {
+      if (instances.instance._ishtml) {} else if (instances.instance._isComponent) {
         document
           .getElementById("layer-vue-" + instances.instance.index)
           .querySelector(".layer-vue-content")
           .removeChild(
             document
-              .getElementById("layer-vue-" + instances.instance.index)
-              .querySelector(".layer-vue-content").children[0]
+            .getElementById("layer-vue-" + instances.instance.index)
+            .querySelector(".layer-vue-content").children[0]
           );
         let chlidinstance = new instances.instance.content.component({
           parent: instances.instance,
@@ -345,4 +353,9 @@ const LayerBox = function(Vue) {
 };
 
 export default LayerBox;
-export { LayerVue, merge, version, versions };
+export {
+  LayerVue,
+  merge,
+  version,
+  versions
+};

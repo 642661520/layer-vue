@@ -1,7 +1,7 @@
 <template>
   <div>
     <layer-vue :visible.sync="visible1"  title="切换标签页触发reloadAutoArea" :resizing="resizing" id="reloadAutoArea" :resize="[0,0]" :anim="0">
-      <el-tabs style="width: 700px" v-model="activeName" @tab-click="handleClick">
+      <el-tabs class="tabs" v-model="activeName" @tab-click="handleClick">
     <el-tab-pane :lazy="true" style="height: 300px;"  label="用户管理" name="first">用户管理
       <el-table
       :data="tableData"
