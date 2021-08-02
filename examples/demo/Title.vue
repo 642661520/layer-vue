@@ -1,6 +1,6 @@
 <template>
   <div>
-    <LayerVue :visible.sync="visible1" :settop="true" :title="false"><div>不显示标题</div></LayerVue>
+    <LayerVue :visible.sync="visible1" :settop="true" :title="false" move=".layer-vue-content"><div>不显示标题</div></LayerVue>
       <LayerVue :visible.sync="visible2" :settop="true" :title="inputtitle"><div>自定义标题</div></LayerVue>
       <LayerVue :visible.sync="visible3" :settop="true" :titleheight="inputtitleheight">
         <div>标题高度{{ inputtitleheight }}，layer未限制该值大小，请勿设置离谱儿的数值</div>

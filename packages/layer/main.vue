@@ -142,7 +142,8 @@ const merge = (options, def) => {
   }
   return options;
 };
-
+const docelm = document.documentElement;
+const titleText = ".layer-vue-title-text";
 export default {
   name: "LayerVue",
   components: {
@@ -205,7 +206,7 @@ export default {
     // 打开位置
     offset: { type: [String, Array, Number], default: "auto" },
     // 置顶
-    settop: { type: Boolean, default: false },
+    settop: { type: [Number, Boolean], default: false },
     // 移动限制
     moveOut: { type: Array, default: () => [0, 0, 0, 0] },
     // 显示
@@ -312,17 +313,17 @@ export default {
     },
     // 监测isMax变化触发最大化函数
     isMax: function (newvalue) {
-      if (newvalue !== this.maxbtn && this.$el.querySelector(this.move)) {
+      if (newvalue !== this.maxbtn && this.$(this.move)) {
         this.maxfun();
       }
     },
     // 检测最小化状态，切换鼠标手势
     minbtn: function (newvalue) {
-      if (this.move != ".layer-vue-title-text") {
+      if (this.move != ".layer-vue-title-text" && this.$(titleText)) {
         if (newvalue) {
-          this.$el.querySelector(".layer-vue-title-text").style.cursor = "move";
+          this.$(titleText).style.cursor = "move";
         } else {
-          this.$el.querySelector(".layer-vue-title-text").style.cursor = "";
+          this.$(titleText).style.cursor = "";
         }
       }
     },
@@ -437,8 +438,8 @@ export default {
   methods: {
     // 最小化时的拖动函数
     minmovefun() {
-      if (this.$el.querySelector(".layer-vue-title-text")) {
-        this.$el.querySelector(".layer-vue-title-text").onmousedown = (e1) => {
+      if (this.$(titleText)) {
+        this.$(titleText).onmousedown = (e1) => {
           e1.preventDefault();
           const { x } = this;
           let clientX = e1.clientX;
@@ -451,9 +452,9 @@ export default {
             }
             if (
               !parseInt(this.moveOut[1]) &&
-              newX >= document.documentElement.clientWidth - 200
+              newX >= docelm.clientWidth - 200
             ) {
-              newX = document.documentElement.clientWidth - 200;
+              newX = docelm.clientWidth - 200;
             }
             this.x = newX;
           };
@@ -465,13 +466,13 @@ export default {
     resizefun() {
       // ! 窗口最大化时调整窗口大小贴合浏览器，退出调整
       if (this.maxbtn) {
-        this.width = document.documentElement.clientWidth;
-        this.height = document.documentElement.clientHeight;
+        this.width = docelm.clientWidth;
+        this.height = docelm.clientHeight;
         return;
       }
       // 调整左偏移保证窗口在屏幕内
-      if (this.x + this.width >= document.documentElement.clientWidth) {
-        this.x = document.documentElement.clientWidth - this.width;
+      if (this.x + this.width >= docelm.clientWidth) {
+        this.x = docelm.clientWidth - this.width;
       }
       // 左平移为0时停止调整
       if (this.x <= 0) {
@@ -479,12 +480,12 @@ export default {
       }
       // ! 窗口最小化时调整上偏移，退出调整
       if (this.minbtn) {
-        this.y = document.documentElement.clientHeight - this.height;
+        this.y = docelm.clientHeight - this.height;
         return;
       }
       // 调整上偏移
-      if (this.y + this.height >= document.documentElement.clientHeight) {
-        this.y = document.documentElement.clientHeight - this.height;
+      if (this.y + this.height >= docelm.clientHeight) {
+        this.y = docelm.clientHeight - this.height;
       }
       // 上平移为0时停止调整
       if (this.y <= 0) {
@@ -492,14 +493,14 @@ export default {
       }
       // 窗口允许拉伸时，调整窗口大小保持在浏览器内部
       if (!this.ratio && (this.resize[0] || this.resize[1])) {
-        if (this.width >= document.documentElement.clientWidth) {
-          this.width = document.documentElement.clientWidth;
+        if (this.width >= docelm.clientWidth) {
+          this.width = docelm.clientWidth;
         }
         if (this.width <= this.minwidth) {
           this.width = this.minwidth;
         }
-        if (this.height >= document.documentElement.clientHeight) {
-          this.height = document.documentElement.clientHeight;
+        if (this.height >= docelm.clientHeight) {
+          this.height = docelm.clientHeight;
         }
         if (this.height <= this.minheight) {
           this.height = this.minheight;
@@ -573,10 +574,6 @@ export default {
           ) {
             borderbox = true;
           }
-          console.log(
-            getComputedStyle(this.$refs.content.children[0]).borderBottomWidth
-          );
-
           this.childrenW =
             parseInt(getComputedStyle(this.$refs.content.children[0]).width) +
             (borderbox
@@ -641,19 +638,16 @@ export default {
         }
         height = this.childrenH + this.titleheight + this.defborderwidth * 2;
       }
-      if (
-        width > document.documentElement.clientWidth &&
-        document.documentElement.clientWidth > this.minwidth
-      ) {
-        width = document.documentElement.clientWidth;
+      if (width > docelm.clientWidth && docelm.clientWidth > this.minwidth) {
+        width = docelm.clientWidth;
       } else if (width <= this.minwidth) {
         width = this.minwidth;
       }
       if (
-        height > document.documentElement.clientHeight &&
-        document.documentElement.clientHeight > this.minheight
+        height > docelm.clientHeight &&
+        docelm.clientHeight > this.minheight
       ) {
-        height = document.documentElement.clientHeight;
+        height = docelm.clientHeight;
       } else if (height <= this.minheight) {
         height = this.minheight;
       }
@@ -690,10 +684,7 @@ export default {
       } else if (offset.substr(-2).indexOf("px") === 0) {
         y = parseInt(offset.slice(0, -2));
       } else if (offset.substr(-1).indexOf("%") === 0) {
-        y =
-          document.documentElement.clientHeight *
-          parseInt(offset.slice(0, -1)) *
-          0.01;
+        y = docelm.clientHeight * parseInt(offset.slice(0, -1)) * 0.01;
       } else {
         switch (offset) {
           case "auto":
@@ -704,12 +695,12 @@ export default {
             x = (document.documentElement.clientWidth - width) * 0.5;
             break;
           case "r":
-            x = document.documentElement.clientWidth - w;
+            x = docelm.clientWidth - w;
             y = (document.documentElement.clientHeight - height) * 0.5;
             break;
           case "b":
             x = (document.documentElement.clientWidth - width) * 0.5;
-            y = document.documentElement.clientHeight - h;
+            y = docelm.clientHeight - h;
             break;
           case "l":
             y = (document.documentElement.clientHeight - height) * 0.5;
@@ -717,14 +708,14 @@ export default {
           case "lt":
             break;
           case "lb":
-            y = document.documentElement.clientHeight - h;
+            y = docelm.clientHeight - h;
             break;
           case "rt":
-            x = document.documentElement.clientWidth - w;
+            x = docelm.clientWidth - w;
             break;
           case "rb":
-            x = document.documentElement.clientWidth - w;
-            y = document.documentElement.clientHeight - h;
+            x = docelm.clientWidth - w;
+            y = docelm.clientHeight - h;
             break;
           default:
             x = (document.documentElement.clientWidth - width) * 0.5;
@@ -804,9 +795,9 @@ export default {
                 // 判断窗口父元素是否存在
                 if (layerDOM.parentNode) {
                   // 还原内容区位置
-                  if (this.$el.querySelector(this.move)) {
-                    this.$el.querySelector(this.move).style.cursor = "default";
-                    this.$el.querySelector(this.move).onmousedown = null;
+                  if (this.$(this.move)) {
+                    this.$(this.move).style.cursor = "default";
+                    this.$(this.move).onmousedown = null;
                   }
                   const _el = document.querySelector(this.el);
                   const solt = document.querySelector(
@@ -890,9 +881,9 @@ export default {
       this.maxbtn = !this.maxbtn;
       this.$emit("update:isMax", this.maxbtn);
       if (this.maxbtn) {
-        if (this.move && this.$el.querySelector(this.move)) {
-          this.$el.querySelector(this.move).style.cursor = "not-allowed";
-          this.$el.querySelector(this.move).onmousedown = null;
+        if (this.move && this.$(this.move)) {
+          this.$(this.move).style.cursor = "not-allowed";
+          this.$(this.move).onmousedown = null;
         }
         if (this.minbtn) {
           this.minbtn = false;
@@ -904,8 +895,8 @@ export default {
         }
         this.x = 0;
         this.y = 0;
-        this.width = document.documentElement.clientWidth;
-        this.height = document.documentElement.clientHeight;
+        this.width = docelm.clientWidth;
+        this.height = docelm.clientHeight;
         this.full && this.full(this.$el, this.index, this.id);
       } else {
         this.movefun(this.move);
@@ -914,8 +905,8 @@ export default {
         this.width = this.l.width;
         this.height = this.l.height;
         this.restore && this.restore(this.$el, this.index, this.id);
-        if (this.move && this.$el.querySelector(this.move)) {
-          this.$el.querySelector(this.move).style.cursor = "move";
+        if (this.move && this.$(this.move)) {
+          this.$(this.move).style.cursor = "move";
         }
       }
     },
@@ -932,7 +923,7 @@ export default {
           this.l.height = this.height;
         }
         this.x = this.l.x;
-        this.y = document.documentElement.clientHeight - this.titleheight;
+        this.y = docelm.clientHeight - this.titleheight;
         this.height = this.titleheight;
         this.width = 200;
         this.min && this.min(this.$el, this.index, this.id);
@@ -989,9 +980,9 @@ export default {
 
           if (
             !parseInt(this.moveOut[3]) &&
-            this.l.height + this.y >= document.documentElement.clientHeight
+            this.l.height + this.y >= docelm.clientHeight
           ) {
-            this.l.height = document.documentElement.clientHeight - this.y;
+            this.l.height = docelm.clientHeight - this.y;
             this.l.width =
               (this.l.height * this.initdata.width) / this.initdata.height;
             newX = x - (this.l.width - width);
@@ -1027,27 +1018,27 @@ export default {
         }
         if (
           !parseInt(this.moveOut[2]) &&
-          this.l.width + x >= document.documentElement.clientWidth
+          this.l.width + x >= docelm.clientWidth
         ) {
-          this.l.width = document.documentElement.clientWidth - x;
+          this.l.width = docelm.clientWidth - x;
         }
         if (this.l.height <= minheight) {
           this.l.height = minheight;
         }
         if (
           !parseInt(this.moveOut[3]) &&
-          this.l.height + y >= document.documentElement.clientHeight
+          this.l.height + y >= docelm.clientHeight
         ) {
-          this.l.height = document.documentElement.clientHeight - y;
+          this.l.height = docelm.clientHeight - y;
         }
         if (ratio) {
           this.l.height =
             (this.l.width * this.initdata.height) / this.initdata.width;
           if (
             !parseInt(this.moveOut[3]) &&
-            this.l.height + y >= document.documentElement.clientHeight
+            this.l.height + y >= docelm.clientHeight
           ) {
-            this.l.height = document.documentElement.clientHeight - y;
+            this.l.height = docelm.clientHeight - y;
             this.l.width =
               (this.l.height * this.initdata.width) / this.initdata.height;
           }
@@ -1071,13 +1062,16 @@ export default {
       this.y = this.l.y;
       this.width = this.l.width;
       this.height = this.l.height;
-      this.$el.querySelector(this.move).style.cursor = "move";
+      this.$(this.move).style.cursor = "move";
     },
     movefun(move) {
-      if (this.$el.querySelector(move)) {
-        this.$el.querySelector(move).style.cursor = "move";
-        this.$el.querySelector(".layer-vue-title-text").onmousedown = null;
-        this.$el.querySelector(move).onmousedown = (e1) => {
+      if (this.$(move)) {
+        this.$(move).style.cursor = "move";
+        if (this.$(titleText)) {
+          this.$(titleText).onmousedown = null;
+        }
+
+        this.$(move).onmousedown = (e1) => {
           if (this.$el.className.indexOf("layer-vue-ismax") >= 0) {
             return;
           }
@@ -1093,9 +1087,9 @@ export default {
               }
               if (
                 !parseInt(this.moveOut[1]) &&
-                newX >= document.documentElement.clientWidth - this.minwidth
+                newX >= docelm.clientWidth - this.minwidth
               ) {
-                newX = document.documentElement.clientWidth - this.minwidth;
+                newX = docelm.clientWidth - this.minwidth;
               }
               this.x = newX;
             };
@@ -1114,9 +1108,9 @@ export default {
               }
               if (
                 !parseInt(this.moveOut[1]) &&
-                newX >= document.documentElement.clientWidth - this.width
+                newX >= docelm.clientWidth - this.width
               ) {
-                newX = document.documentElement.clientWidth - this.width;
+                newX = docelm.clientWidth - this.width;
               }
               let newY = parseInt(y) + parseInt(moveY);
               if (!parseInt(this.moveOut[0]) && newY <= 0) {
@@ -1124,9 +1118,9 @@ export default {
               }
               if (
                 !parseInt(this.moveOut[2]) &&
-                newY >= document.documentElement.clientHeight - this.height
+                newY >= docelm.clientHeight - this.height
               ) {
-                newY = document.documentElement.clientHeight - this.height;
+                newY = docelm.clientHeight - this.height;
               }
               this.x = newX;
               this.y = newY;
@@ -1151,6 +1145,9 @@ export default {
         this.width = width;
         this.height = height;
       }
+    },
+    $(dom) {
+      return this.$el.querySelector(dom);
     },
   },
 };

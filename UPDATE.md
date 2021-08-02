@@ -4,6 +4,8 @@
 
 优化 area自适应时高度自动获取padding和border值
 
+修复 标题不存在时move报错
+
 ## 0.3.3
 
 修复area自适应时高度获取异常
