@@ -4,7 +4,7 @@ import LayerVue, {
 LayerVue.install = function (Vue) {
   Vue.component(LayerVue.name, LayerVue);
 };
-const version = "0.3.4";
+const version = "0.3.5";
 const versions = [
   "0.0.1",
   "0.0.2",
@@ -34,7 +34,8 @@ const versions = [
   "0.3.1",
   "0.3.2",
   "0.3.3",
-  "0.3.4"
+  "0.3.4",
+  "0.3.5"
 ];
 const findIndex = (id, Vue) => {
   let index = -1;
@@ -191,6 +192,9 @@ const LayerBox = function (Vue) {
   };
   layer.close = async index => {
     index = findIndex(index, Vue);
+    if (index < 0) {
+      return false;
+    }
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
       let result = await instances.instance.closefun();
@@ -205,6 +209,9 @@ const LayerBox = function (Vue) {
   };
   layer.reset = index => {
     index = findIndex(index, Vue);
+    if (index < 0) {
+      return false;
+    }
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
       instances.instance.resetfun();
@@ -229,6 +236,9 @@ const LayerBox = function (Vue) {
   };
   layer.full = index => {
     index = findIndex(index, Vue);
+    if (index < 0) {
+      return false;
+    }
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances && instances.instance.maxbtn === false) {
       instances.instance.maxfun();
@@ -243,6 +253,9 @@ const LayerBox = function (Vue) {
   };
   layer.min = index => {
     index = findIndex(index, Vue);
+    if (index < 0) {
+      return false;
+    }
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances && instances.instance.minbtn === false) {
       instances.instance.minfun();
@@ -257,6 +270,9 @@ const LayerBox = function (Vue) {
   };
   layer.restore = index => {
     index = findIndex(index, Vue);
+    if (index < 0) {
+      return false;
+    }
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
       instances.instance.restorefun();
@@ -294,6 +310,9 @@ const LayerBox = function (Vue) {
   };
   layer.setTitle = (index, value) => {
     index = findIndex(index, Vue);
+    if (index < 0) {
+      return false;
+    }
     const instance = Vue.prototype.$layer.o.instances[index].instance;
     if (instance.model) {
       instance.$data.deftitle = value;
@@ -303,6 +322,9 @@ const LayerBox = function (Vue) {
   };
   layer.setContent = (index, value) => {
     index = findIndex(index, Vue);
+    if (index < 0) {
+      return false;
+    }
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances.instance.model) {
       if (instances.instance._ishtml) {} else if (instances.instance._isComponent) {
@@ -341,6 +363,9 @@ const LayerBox = function (Vue) {
   };
   layer.reloadAutoArea = index => {
     index = findIndex(index, Vue);
+    if (index < 0) {
+      return false;
+    }
     const instance = Vue.prototype.$layer.o.instances[index].instance;
     if (instance) {
       instance.reloadAutoAreafun();

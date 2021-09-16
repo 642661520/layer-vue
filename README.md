@@ -124,14 +124,14 @@ http://layer-vue.cn/#/demo
 
 从github或gitee下载
 
-  https://github.com/642661520/vuelayer/archive/refs/heads/master.zip
+  https://github.com/642661520/layer-vue/archive/refs/heads/master.zip
 
   下载依赖
 
 ```npm
 npm i
 
-//或 
+//或
 yarn
 ```
 
@@ -548,7 +548,7 @@ Vue.use(LayerVue,{
 
 ```
 
-## 回调函数
+## 回调函数/自定义事件
 
 ### success - 层弹出后的成功回调方法
 

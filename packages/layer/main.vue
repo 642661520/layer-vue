@@ -23,7 +23,7 @@
         'layer-vue-ismax': maxbtn,
         'layer-vue-ismin': minbtn,
         'layer-vue-startanim': defvisible,
-        'layer-vue-endanim': isOutAnim && (!visible || endanim),
+        'layer-vue-endanim': isOutAnim && (!visible || endanim)
       }"
       :style="{
         '--mc': defskin.maxmin ? defskin.maxmin.color : '',
@@ -41,7 +41,7 @@
         top: y + 'px',
         left: x + 'px',
         'z-index': zIndex,
-        position: fixed ? 'fixed' : 'absolute',
+        position: fixed ? 'fixed' : 'absolute'
       }"
       @mousedown="settopfun"
     >
@@ -54,42 +54,38 @@
           color: defskin.title ? defskin.title.color : '',
           'border-bottom': defskin.title ? defskin.title.borderBottom : '',
           height: titleheight + 'px',
-          'line-height': titleheight + 'px',
+          'line-height': titleheight + 'px'
         }"
       >
-        <div
-          class="layer-vue-title-text"
-          :title="deftitle"
-          :style="{ width: textwidth + 'px' }"
-        >
+        <div class="layer-vue-title-text" :style="{ width: textwidth + 'px' }">
           {{ deftitle }}
         </div>
         <div
           class="layer-vue-tools"
           :style="{
             height: titleheight + 'px',
-            'line-height': titleheight + 'px',
+            'line-height': titleheight + 'px'
           }"
         >
-          <span v-show="maxmin[1]" class="layer-vue-min" @click="minfun">
-            <icon-min v-show="!minbtn" />
-            <icon-restroe v-show="minbtn" />
+          <span v-if="maxmin[1]" class="layer-vue-min" @click="minfun">
+            <icon-min v-if="!minbtn" />
+            <icon-restroe v-if="minbtn" />
           </span>
           <span
-            v-show="maxmin[0] && !minbtn"
+            v-if="maxmin[0] && !minbtn"
             class="layer-vue-max"
             @click="maxfun"
           >
-            <icon-max v-show="!maxbtn" />
-            <icon-restroe v-show="maxbtn" />
+            <icon-max v-if="!maxbtn" />
+            <icon-restroe v-if="maxbtn" />
           </span>
-          <span v-show="closeBtn" class="layer-vue-close" @click="closefun">
+          <span v-if="closeBtn" class="layer-vue-close" @click="closefun">
             <IconClose />
           </span>
         </div>
       </div>
       <span
-        v-show="closeBtn && !title"
+        v-if="closeBtn && !title"
         :class="{ 'layer-vue-close2': !title }"
         @click="closefun"
       >
@@ -112,7 +108,7 @@
           'border-radius': title ? '0 0 2px 2px' : '2px',
           background: defskin.content ? defskin.content.background : '',
           color: defskin.content ? defskin.content.color : '',
-          height: contentheight + 'px',
+          height: contentheight + 'px'
         }"
       >
         <slot>{{ !model ? content : null }}</slot>
@@ -150,7 +146,7 @@ export default {
     IconClose,
     IconMax,
     IconMin,
-    IconRestroe,
+    IconRestroe
   },
   data() {
     return {
@@ -193,7 +189,7 @@ export default {
       // 默认标题
       deftitle: undefined,
       // 默认阴影色
-      defshade: "rgba(0, 0, 0, 0.3)",
+      defshade: "rgba(0, 0, 0, 0.3)"
     };
   },
   props: {
@@ -219,10 +215,10 @@ export default {
     maxmin: { type: Array, default: () => [0, 0] },
     // 拉伸
     resize: { type: Array, default: () => [1, 1] },
-    // 移动结束回调
-    moveEnd: { type: Function },
     // 拖动目标
     move: { type: [String, Boolean], default: ".layer-vue-title-text" },
+    // 移动结束回调
+    moveEnd: { type: Function },
     // 关闭窗口回调
     cancel: { type: Function },
     // 打开窗口回调
@@ -266,27 +262,27 @@ export default {
     // 阴影
     shade: { type: [String, Number, Array], default: 0 },
     // 点击阴影关闭
-    shadeClose: { type: Boolean, default: false },
+    shadeClose: { type: Boolean, default: false }
   },
   computed: {
     // 计算属性-内容区高度
-    contentheight: function () {
+    contentheight: function() {
       let h = this.height - (this.title ? this.titleheight : 0);
       h = h - this.defborderwidth * 2;
       h <= 0 ? (h = 0) : null;
       return h;
     },
     // 计算属性-标题文本宽度
-    textwidth: function () {
+    textwidth: function() {
       return (
         this.width -
         ((this.maxmin[0] ? 35 : 0) + (this.maxmin[1] ? 35 : 0) + 50)
       );
-    },
+    }
   },
   watch: {
     // 监测visible变化后改变defvisible
-    visible: function (newvalue) {
+    visible: function(newvalue) {
       if (this.anim) {
         setTimeout(() => {
           this.defvisible = newvalue;
@@ -296,7 +292,7 @@ export default {
       }
     },
     // 监测defvisible变化后触发置顶和初始化
-    defvisible: function (newvalue) {
+    defvisible: function(newvalue) {
       if (newvalue) {
         if (this.settop) {
           const zindex = this.$layer.o.settop();
@@ -307,18 +303,22 @@ export default {
         this.$nextTick(() => {
           this.endanim = false;
           this.init();
-          this.success && this.success(this.$el, this.index, this.id);
+          if (this.model) {
+            this.success && this.success(this.$el, this.index, this.id);
+          } else {
+            this.$emit("success", this.$el, this.index, this.id);
+          }
         });
       }
     },
     // 监测isMax变化触发最大化函数
-    isMax: function (newvalue) {
+    isMax: function(newvalue) {
       if (newvalue !== this.maxbtn && this.$(this.move)) {
         this.maxfun();
       }
     },
     // 检测最小化状态，切换鼠标手势
-    minbtn: function (newvalue) {
+    minbtn: function(newvalue) {
       if (this.move != ".layer-vue-title-text" && this.$(titleText)) {
         if (newvalue) {
           this.$(titleText).style.cursor = "move";
@@ -328,9 +328,9 @@ export default {
       }
     },
     // 监测title变化传递给deftitle
-    title: function (newvalue) {
+    title: function(newvalue) {
       this.deftitle = newvalue;
-    },
+    }
   },
   created() {
     // 初始化数据
@@ -392,7 +392,7 @@ export default {
       if (this.content && this.content.component) {
         let instance = new this.content.component({
           parent: this,
-          propsData: this.content.data,
+          propsData: this.content.data
         });
         instance.vm = instance.$mount();
         this.$layer.o.instances[this.index].Vuecomponent = instance;
@@ -428,7 +428,11 @@ export default {
           this.zIndex = this.zindex;
         }
         this.init();
-        this.success && this.success(this.$el, this.index, this.id);
+        if (this.model) {
+          this.success && this.success(this.$el, this.index, this.id);
+        } else {
+          this.$emit("success", this.$el, this.index, this.id);
+        }
       }
     });
   },
@@ -439,11 +443,11 @@ export default {
     // 最小化时的拖动函数
     minmovefun() {
       if (this.$(titleText)) {
-        this.$(titleText).onmousedown = (e1) => {
+        this.$(titleText).onmousedown = e1 => {
           e1.preventDefault();
           const { x } = this;
           let clientX = e1.clientX;
-          document.onmousemove = (e2) => {
+          document.onmousemove = e2 => {
             e2.preventDefault();
             let moveX = e2.clientX - clientX;
             let newX = parseInt(x) + parseInt(moveX);
@@ -458,7 +462,7 @@ export default {
             }
             this.x = newX;
           };
-          this.f();
+          this.f('moveEnd');
         };
       }
     },
@@ -763,8 +767,10 @@ export default {
         if (this.visible) {
           this.$emit("update:visible", false);
         }
+        this.$emit("cancel", this.$el, this.index, this.id);
+      } else {
+        this.cancel && this.cancel(this.$el, this.index, this.id);
       }
-      this.cancel && this.cancel(this.$el, this.index, this.id);
       if (!this.destroyOnClose) {
         return true;
       }
@@ -860,7 +866,11 @@ export default {
           return false;
         }
       }
-      this.end && this.end(this.$el, this.index, this.id);
+      if (this.model) {
+        this.end && this.end(this.$el, this.index, this.id);
+      } else {
+        this.$emit("end", this.$el, this.index, this.id);
+      }
       return true;
     },
     closefun() {
@@ -897,14 +907,22 @@ export default {
         this.y = 0;
         this.width = docelm.clientWidth;
         this.height = docelm.clientHeight;
-        this.full && this.full(this.$el, this.index, this.id);
+        if (this.model) {
+          this.full && this.full(this.$el, this.index, this.id);
+        } else {
+          this.$emit("full", this.$el, this.index, this.id);
+        }
       } else {
         this.movefun(this.move);
         this.x = this.l.x;
         this.y = this.l.y;
         this.width = this.l.width;
         this.height = this.l.height;
-        this.restore && this.restore(this.$el, this.index, this.id);
+        if (this.model) {
+          this.restore && this.restore(this.$el, this.index, this.id);
+        } else {
+          this.$emit("restore", this.$el, this.index, this.id);
+        }
         if (this.move && this.$(this.move)) {
           this.$(this.move).style.cursor = "move";
         }
@@ -926,14 +944,22 @@ export default {
         this.y = docelm.clientHeight - this.titleheight;
         this.height = this.titleheight;
         this.width = 200;
-        this.min && this.min(this.$el, this.index, this.id);
+        if (this.model) {
+          this.min && this.min(this.$el, this.index, this.id);
+        } else {
+          this.$emit("min", this.$el, this.index, this.id);
+        }
       } else {
         this.movefun(this.move);
         this.x = this.l.x;
         this.y = this.l.y;
         this.width = this.l.width;
         this.height = this.l.height;
-        this.restore && this.restore(this.$el, this.index, this.id);
+        if (this.model) {
+          this.restore && this.restore(this.$el, this.index, this.id);
+        } else {
+          this.$emit("restore", this.$el, this.index, this.id);
+        }
       }
     },
     settopfun() {
@@ -942,9 +968,14 @@ export default {
       }
     },
     f(callback) {
-      document.onmouseup = (e) => {
+      document.onmouseup = e => {
         e.preventDefault();
-        callback && callback(this.$el, this.index, this.id);
+        if(this.model){
+          this[callback] && this[callback](this.$el, this.index, this.id);
+        }else{
+          this.$emit(callback,this.$el, this.index, this.id);
+        }
+        
         document.onmousemove = null;
         document.onmouseup = null;
       };
@@ -954,7 +985,7 @@ export default {
       const { minwidth, minheight, width, height, x, ratio } = this;
       const clientX = e1.clientX;
       const clientY = e1.clientY;
-      document.onmousemove = (e2) => {
+      document.onmousemove = e2 => {
         e2.preventDefault();
         let moveX = e2.clientX - clientX;
         let moveY = e2.clientY - clientY;
@@ -998,16 +1029,21 @@ export default {
         this.width = this.l.width;
         this.height = this.l.height;
         this.x = newX;
-        this.resizing && this.resizing(this.$el, this.width, this.height);
+        if (this.model) {
+          this.resizing && this.resizing(this.$el, this.width, this.height);
+        } else {
+          this.$emit("resizing", this.$el, this.width, this.height);
+        }
       };
-      this.f(this.resizeEnd);
+      this.f("resizeEnd");
+      
     },
     rbresizefun(e1) {
       e1.preventDefault();
       const { width, height, x, y, minwidth, minheight, ratio } = this;
       const clientX = e1.clientX;
       const clientY = e1.clientY;
-      document.onmousemove = (e2) => {
+      document.onmousemove = e2 => {
         e2.preventDefault();
         let moveX = e2.clientX - clientX;
         let moveY = e2.clientY - clientY;
@@ -1050,9 +1086,13 @@ export default {
         }
         this.width = this.l.width;
         this.height = this.l.height;
-        this.resizing && this.resizing(this.$el, this.width, this.height);
+        if (this.model) {
+          this.resizing && this.resizing(this.$el, this.width, this.height);
+        } else {
+          this.$emit("resizing", this.$el, this.width, this.height);
+        }
       };
-      this.f(this.resizeEnd);
+      this.f('resizeEnd');
     },
     restorefun() {
       this.minbtn = false;
@@ -1071,14 +1111,14 @@ export default {
           this.$(titleText).onmousedown = null;
         }
 
-        this.$(move).onmousedown = (e1) => {
+        this.$(move).onmousedown = e1 => {
           if (this.$el.className.indexOf("layer-vue-ismax") >= 0) {
             return;
           }
           if (this.$el.className.indexOf("layer-vue-ismin") >= 0) {
             const { x } = this;
             let clientX = e1.clientX;
-            document.onmousemove = (e2) => {
+            document.onmousemove = e2 => {
               e2.preventDefault();
               let moveX = e2.clientX - clientX;
               let newX = parseInt(x) + parseInt(moveX);
@@ -1093,12 +1133,12 @@ export default {
               }
               this.x = newX;
             };
-            this.f();
+            this.f('moveEnd');
           } else {
             const { x, y } = this;
             let clientX = e1.clientX;
             let clientY = e1.clientY;
-            document.onmousemove = (e2) => {
+            document.onmousemove = e2 => {
               e2.preventDefault();
               let moveX = e2.clientX - clientX;
               let moveY = e2.clientY - clientY;
@@ -1127,7 +1167,7 @@ export default {
               this.l.x = newX;
               this.l.y = newY;
             };
-            this.f(this.moveEnd);
+            this.f("moveEnd");
           }
         };
       }
@@ -1138,18 +1178,20 @@ export default {
       }
     },
     reloadAutoAreafun() {
-      if (this.area === "auto") {
-        const { height, width } = this.areainit();
-        this.initdata.width = width;
-        this.initdata.height = height;
-        this.width = width;
-        this.height = height;
-      }
+      this.$nextTick(() => {
+        if (this.area === "auto") {
+          const { height, width } = this.areainit();
+          this.initdata.width = width;
+          this.initdata.height = height;
+          this.width = width;
+          this.height = height;
+        }
+      });
     },
     $(dom) {
       return this.$el.querySelector(dom);
-    },
-  },
+    }
+  }
 };
 export { merge };
 </script>
