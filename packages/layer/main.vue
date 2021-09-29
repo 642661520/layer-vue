@@ -518,6 +518,7 @@ export default {
       this.y = this.initdata.y;
       this.width = this.initdata.width;
       this.height = this.initdata.height;
+      this.movefun(this.move);
     },
     // 初始化函数
     init() {
@@ -1103,6 +1104,7 @@ export default {
       this.width = this.l.width;
       this.height = this.l.height;
       this.$(this.move).style.cursor = "move";
+      this.movefun(this.move);
     },
     movefun(move) {
       if (this.$(move)) {
