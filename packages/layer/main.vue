@@ -1,20 +1,6 @@
 <template>
-  <div
-    v-cloak
-    v-if="destroyOnClose ? defvisible : true"
-    :data-index="index"
-    :data-id="id"
-    class="layer-vue"
-    :id="'layer-vue-' + index"
-    :data-skin="typeof defskin === 'string' ? defskin : ''"
-    :style="{ display: defvisible ? '' : 'none' }"
-  >
-    <div
-      class="layer-vue-shade"
-      v-if="shade"
-      :style="{ background: defshade }"
-      @mousedown="shadeClosefun"
-    ></div>
+  <div v-cloak v-if="destroyOnClose ? defvisible : true" :data-index="index" :data-id="id" class="layer-vue" :id="'layer-vue-' + index" :data-skin="typeof defskin === 'string' ? defskin : ''" :style="{ display: defvisible ? '' : 'none' }">
+    <div class="layer-vue-shade" v-if="shade" :style="{ background: defshade }" @mousedown="shadeClosefun"></div>
     <div
       οndragstart="return false;"
       class="layer-vue-box"
@@ -23,7 +9,7 @@
         'layer-vue-ismax': maxbtn,
         'layer-vue-ismin': minbtn,
         'layer-vue-startanim': defvisible,
-        'layer-vue-endanim': isOutAnim && (!visible || endanim)
+        'layer-vue-endanim': isOutAnim && (!visible || endanim),
       }"
       :style="{
         '--mc': defskin.maxmin ? defskin.maxmin.color : '',
@@ -41,7 +27,7 @@
         top: y + 'px',
         left: x + 'px',
         'z-index': zIndex,
-        position: fixed ? 'fixed' : 'absolute'
+        position: fixed ? 'fixed' : 'absolute',
       }"
       @mousedown="settopfun"
     >
@@ -54,7 +40,7 @@
           color: defskin.title ? defskin.title.color : '',
           'border-bottom': defskin.title ? defskin.title.borderBottom : '',
           height: titleheight + 'px',
-          'line-height': titleheight + 'px'
+          'line-height': titleheight + 'px',
         }"
       >
         <div class="layer-vue-title-text" :style="{ width: textwidth + 'px' }">
@@ -64,18 +50,14 @@
           class="layer-vue-tools"
           :style="{
             height: titleheight + 'px',
-            'line-height': titleheight + 'px'
+            'line-height': titleheight + 'px',
           }"
         >
           <span v-if="maxmin[1]" class="layer-vue-min" @click="minfun">
             <icon-min v-if="!minbtn" />
             <icon-restroe v-if="minbtn" />
           </span>
-          <span
-            v-if="maxmin[0] && !minbtn"
-            class="layer-vue-max"
-            @click="maxfun"
-          >
+          <span v-if="maxmin[0] && !minbtn" class="layer-vue-max" @click="maxfun">
             <icon-max v-if="!maxbtn" />
             <icon-restroe v-if="maxbtn" />
           </span>
@@ -84,23 +66,11 @@
           </span>
         </div>
       </div>
-      <span
-        v-if="closeBtn && !title"
-        :class="{ 'layer-vue-close2': !title }"
-        @click="closefun"
-      >
+      <span v-if="closeBtn && !title" :class="{ 'layer-vue-close2': !title }" @click="closefun">
         <IconClose />
       </span>
-      <div
-        v-if="resize[0] && !maxbtn"
-        class="layer-vue-resize"
-        @mousedown="rbresizefun"
-      ></div>
-      <div
-        v-if="resize[1] && !maxbtn"
-        class="layer-vue-lbresize"
-        @mousedown="lbresizefun"
-      ></div>
+      <div v-if="resize[0] && !maxbtn" class="layer-vue-resize" @mousedown="rbresizefun"></div>
+      <div v-if="resize[1] && !maxbtn" class="layer-vue-lbresize" @mousedown="lbresizefun"></div>
       <div
         ref="content"
         class="layer-vue-content"
@@ -108,7 +78,7 @@
           'border-radius': title ? '0 0 2px 2px' : '2px',
           background: defskin.content ? defskin.content.background : '',
           color: defskin.content ? defskin.content.color : '',
-          height: contentheight + 'px'
+          height: contentheight + 'px',
         }"
       >
         <slot>{{ !model ? content : null }}</slot>
@@ -146,7 +116,7 @@ export default {
     IconClose,
     IconMax,
     IconMin,
-    IconRestroe
+    IconRestroe,
   },
   data() {
     return {
@@ -189,16 +159,18 @@ export default {
       // 默认标题
       deftitle: undefined,
       // 默认阴影色
-      defshade: "rgba(0, 0, 0, 0.3)"
+      defshade: "rgba(0, 0, 0, 0.3)",
     };
   },
   props: {
     // 标题
-    title: { type: [String, Boolean], default: "信息" },
+    title: { type: [String, Boolean], default: "_$_l_a_y_e_r_v_u_e" },
     // 高宽
     area: { type: [String, Number, Array], default: "auto" },
     // 最小高宽
     minarea: { type: [String, Number, Array], default: () => [300, 200] },
+    // 最大高宽
+    maxarea: { type: [String, Number, Array], default: () => ["100%", "100%"] },
     // 打开位置
     offset: { type: [String, Array, Number], default: "auto" },
     // 置顶
@@ -262,27 +234,24 @@ export default {
     // 阴影
     shade: { type: [String, Number, Array], default: 0 },
     // 点击阴影关闭
-    shadeClose: { type: Boolean, default: false }
+    shadeClose: { type: Boolean, default: false },
   },
   computed: {
     // 计算属性-内容区高度
-    contentheight: function() {
+    contentheight: function () {
       let h = this.height - (this.title ? this.titleheight : 0);
       h = h - this.defborderwidth * 2;
       h <= 0 ? (h = 0) : null;
       return h;
     },
     // 计算属性-标题文本宽度
-    textwidth: function() {
-      return (
-        this.width -
-        ((this.maxmin[0] ? 35 : 0) + (this.maxmin[1] ? 35 : 0) + 50)
-      );
-    }
+    textwidth: function () {
+      return this.width - ((this.maxmin[0] ? 35 : 0) + (this.maxmin[1] ? 35 : 0) + 50);
+    },
   },
   watch: {
     // 监测visible变化后改变defvisible
-    visible: function(newvalue) {
+    visible: function (newvalue) {
       if (this.anim) {
         setTimeout(() => {
           this.defvisible = newvalue;
@@ -292,7 +261,7 @@ export default {
       }
     },
     // 监测defvisible变化后触发置顶和初始化
-    defvisible: function(newvalue) {
+    defvisible: function (newvalue) {
       if (newvalue) {
         if (this.settop) {
           const zindex = this.$layer.o.settop();
@@ -312,13 +281,13 @@ export default {
       }
     },
     // 监测isMax变化触发最大化函数
-    isMax: function(newvalue) {
+    isMax: function (newvalue) {
       if (newvalue !== this.maxbtn && this.$(this.move)) {
         this.maxfun();
       }
     },
     // 检测最小化状态，切换鼠标手势
-    minbtn: function(newvalue) {
+    minbtn: function (newvalue) {
       if (this.move != ".layer-vue-title-text" && this.$(titleText)) {
         if (newvalue) {
           this.$(titleText).style.cursor = "move";
@@ -328,16 +297,20 @@ export default {
       }
     },
     // 监测title变化传递给deftitle
-    title: function(newvalue) {
+    title: function (newvalue) {
       this.deftitle = newvalue;
-    }
+    },
   },
   created() {
     // 初始化数据
     if (!this.visible) {
       this.defvisible = this.visible;
     }
-    this.deftitle = this.title;
+    if (this.title === "_$_l_a_y_e_r_v_u_e") {
+      this.deftitle = this.$layer.o.title;
+    } else {
+      this.deftitle = this.title;
+    }
     this.defskin = this.$layer.o.skin;
     if (this.boderwidth === 0) {
       if (typeof this.skin === "string") {
@@ -392,7 +365,7 @@ export default {
       if (this.content && this.content.component) {
         let instance = new this.content.component({
           parent: this,
-          propsData: this.content.data
+          propsData: this.content.data,
         });
         instance.vm = instance.$mount();
         this.$layer.o.instances[this.index].Vuecomponent = instance;
@@ -405,16 +378,12 @@ export default {
         if (this.$refs.content.children.length) {
           this.display = this.$refs.content.children[0].style.display;
           this.$refs.content.children[0].style.display = "block";
-          this.childrenW = parseInt(
-            getComputedStyle(this.$refs.content.children[0]).width
-          );
+          this.childrenW = parseInt(getComputedStyle(this.$refs.content.children[0]).width);
           if (this.childrenW === 0 || isNaN(this.childrenW)) {
             this.childrenW = 0;
             this.childrenH = 0;
           } else {
-            this.childrenH = parseInt(
-              getComputedStyle(this.$refs.content.children[0]).height
-            );
+            this.childrenH = parseInt(getComputedStyle(this.$refs.content.children[0]).height);
           }
         }
       } catch (error) {
@@ -443,26 +412,23 @@ export default {
     // 最小化时的拖动函数
     minmovefun() {
       if (this.$(titleText)) {
-        this.$(titleText).onmousedown = e1 => {
+        this.$(titleText).onmousedown = (e1) => {
           e1.preventDefault();
           const { x } = this;
           let clientX = e1.clientX;
-          document.onmousemove = e2 => {
+          document.onmousemove = (e2) => {
             e2.preventDefault();
             let moveX = e2.clientX - clientX;
             let newX = parseInt(x) + parseInt(moveX);
             if (!parseInt(this.moveOut[3]) && newX <= 0) {
               newX = 0;
             }
-            if (
-              !parseInt(this.moveOut[1]) &&
-              newX >= docelm.clientWidth - 200
-            ) {
+            if (!parseInt(this.moveOut[1]) && newX >= docelm.clientWidth - 200) {
               newX = docelm.clientWidth - 200;
             }
             this.x = newX;
           };
-          this.f('moveEnd');
+          this.f("moveEnd");
         };
       }
     },
@@ -552,17 +518,31 @@ export default {
       if (this.minarea instanceof Array) {
         width = this.tf(this.minarea[0], "clientWidth");
         height = this.tf(this.minarea[1], "clientHeight");
-      } else if (
-        typeof this.minarea === "string" ||
-        typeof this.minarea === "number"
-      ) {
-        width = this.tf(this.minarea[0], "clientWidth");
+      } else if (typeof this.minarea === "string" || typeof this.minarea === "number") {
+        width = this.tf(this.minarea, "clientWidth");
       }
       if (isNaN(height)) {
         height = 200;
       }
       if (isNaN(width)) {
         width = 300;
+      }
+      return { height, width };
+    },
+    maxareainit() {
+      let width = docelm.clientWidth;
+      let height = docelm.clientHeight;
+      if (this.maxarea instanceof Array) {
+        width = this.tf(this.maxarea[0], "clientWidth");
+        height = this.tf(this.maxarea[1], "clientHeight");
+      } else if (typeof this.maxarea === "string" || typeof this.maxarea === "number") {
+        width = this.tf(this.maxarea, "clientWidth");
+      }
+      if (isNaN(height)) {
+        height = docelm.clientHeight;
+      }
+      if (isNaN(width)) {
+        width = docelm.clientWidth;
       }
       return { height, width };
     },
@@ -573,55 +553,29 @@ export default {
       try {
         if (this.$refs.content.children.length) {
           let borderbox = false;
-          if (
-            getComputedStyle(this.$refs.content.children[0]).boxSizing ===
-            "border-box"
-          ) {
+          if (getComputedStyle(this.$refs.content.children[0]).boxSizing === "border-box") {
             borderbox = true;
           }
           this.childrenW =
             parseInt(getComputedStyle(this.$refs.content.children[0]).width) +
             (borderbox
               ? 0
-              : parseInt(
-                  getComputedStyle(this.$refs.content.children[0]).paddingLeft
-                ) +
-                parseInt(
-                  getComputedStyle(this.$refs.content.children[0]).paddingRight
-                ) +
-                parseInt(
-                  getComputedStyle(this.$refs.content.children[0])
-                    .borderLeftWidth
-                ) +
-                parseInt(
-                  getComputedStyle(this.$refs.content.children[0])
-                    .borderRightWidth
-                ));
+              : parseInt(getComputedStyle(this.$refs.content.children[0]).paddingLeft) +
+                parseInt(getComputedStyle(this.$refs.content.children[0]).paddingRight) +
+                parseInt(getComputedStyle(this.$refs.content.children[0]).borderLeftWidth) +
+                parseInt(getComputedStyle(this.$refs.content.children[0]).borderRightWidth));
           if (this.childrenW === 0 || isNaN(this.childrenW)) {
             this.childrenW = 0;
             this.childrenH = 0;
           } else {
             this.childrenH =
-              parseInt(
-                getComputedStyle(this.$refs.content.children[0]).height
-              ) +
+              parseInt(getComputedStyle(this.$refs.content.children[0]).height) +
               (borderbox
                 ? 0
-                : parseInt(
-                    getComputedStyle(this.$refs.content.children[0]).paddingTop
-                  ) +
-                  parseInt(
-                    getComputedStyle(this.$refs.content.children[0])
-                      .paddingBottom
-                  ) +
-                  parseInt(
-                    getComputedStyle(this.$refs.content.children[0])
-                      .borderTopWidth
-                  ) +
-                  parseInt(
-                    getComputedStyle(this.$refs.content.children[0])
-                      .borderBottomWidth
-                  ));
+                : parseInt(getComputedStyle(this.$refs.content.children[0]).paddingTop) +
+                  parseInt(getComputedStyle(this.$refs.content.children[0]).paddingBottom) +
+                  parseInt(getComputedStyle(this.$refs.content.children[0]).borderTopWidth) +
+                  parseInt(getComputedStyle(this.$refs.content.children[0]).borderBottomWidth));
           }
         }
       } catch (error) {
@@ -630,8 +584,7 @@ export default {
       if (this.area instanceof Array) {
         width = this.tf(this.area[0], "clientWidth") + this.defborderwidth * 2;
         if (this.area[1]) {
-          height =
-            this.tf(this.area[1], "clientHeight") + this.defborderwidth * 2;
+          height = this.tf(this.area[1], "clientHeight") + this.defborderwidth * 2;
         } else {
           height = this.childrenH + this.titleheight + this.defborderwidth * 2;
         }
@@ -648,13 +601,17 @@ export default {
       } else if (width <= this.minwidth) {
         width = this.minwidth;
       }
-      if (
-        height > docelm.clientHeight &&
-        docelm.clientHeight > this.minheight
-      ) {
+      if (height > docelm.clientHeight && docelm.clientHeight > this.minheight) {
         height = docelm.clientHeight;
       } else if (height <= this.minheight) {
         height = this.minheight;
+      }
+      const { width: maxWidth, height: maxHeight } = this.maxareainit();
+      if (width > maxWidth) {
+        width = maxWidth;
+      }
+      if (height > maxHeight) {
+        height = maxHeight;
       }
       if (isNaN(height)) {
         height = this.minheight;
@@ -680,12 +637,12 @@ export default {
         if (offset[1]) {
           x = this.tf(offset[1], "clientWidth");
         } else {
-          x = (document.documentElement.clientWidth - width) * 0.5;
+          x = (docelm.clientWidth - width) * 0.5;
         }
         y = this.tf(offset[0], "clientHeight");
       } else if (typeof offset === "number") {
         y = offset;
-        x = (document.documentElement.clientWidth - width) * 0.5;
+        x = (docelm.clientWidth - width) * 0.5;
       } else if (offset.substr(-2).indexOf("px") === 0) {
         y = parseInt(offset.slice(0, -2));
       } else if (offset.substr(-1).indexOf("%") === 0) {
@@ -693,22 +650,22 @@ export default {
       } else {
         switch (offset) {
           case "auto":
-            x = (document.documentElement.clientWidth - width) * 0.5;
-            y = (document.documentElement.clientHeight - height) * 0.5;
+            x = (docelm.clientWidth - width) * 0.5;
+            y = (docelm.clientHeight - height) * 0.5;
             break;
           case "t":
-            x = (document.documentElement.clientWidth - width) * 0.5;
+            x = (docelm.clientWidth - width) * 0.5;
             break;
           case "r":
             x = docelm.clientWidth - w;
-            y = (document.documentElement.clientHeight - height) * 0.5;
+            y = (docelm.clientHeight - height) * 0.5;
             break;
           case "b":
-            x = (document.documentElement.clientWidth - width) * 0.5;
+            x = (docelm.clientWidth - width) * 0.5;
             y = docelm.clientHeight - h;
             break;
           case "l":
-            y = (document.documentElement.clientHeight - height) * 0.5;
+            y = (docelm.clientHeight - height) * 0.5;
             break;
           case "lt":
             break;
@@ -723,17 +680,17 @@ export default {
             y = docelm.clientHeight - h;
             break;
           default:
-            x = (document.documentElement.clientWidth - width) * 0.5;
-            y = (document.documentElement.clientHeight - height) * 0.5;
+            x = (docelm.clientWidth - width) * 0.5;
+            y = (docelm.clientHeight - height) * 0.5;
             break;
         }
       }
 
       if (isNaN(x)) {
-        x = (document.documentElement.clientWidth - width) * 0.5;
+        x = (docelm.clientWidth - width) * 0.5;
       }
       if (isNaN(y)) {
-        y = (document.documentElement.clientHeight - height) * 0.5;
+        y = (docelm.clientHeight - height) * 0.5;
       }
       return { x, y };
     },
@@ -745,10 +702,7 @@ export default {
       } else if (value.substr(-2).indexOf("px") === 0) {
         name = parseInt(value.slice(0, -2));
       } else if (value.substr(-1).indexOf("%") === 0) {
-        name =
-          document.documentElement[client] *
-          parseInt(value.slice(0, -1)) *
-          0.01;
+        name = docelm[client] * parseInt(value.slice(0, -1)) * 0.01;
       } else {
         name = parseInt(value);
       }
@@ -758,8 +712,7 @@ export default {
     close() {
       // 隐藏窗口
       if (!this.defvisible) {
-        this.$layer.o.log &&
-          console.warn("[layer-warn]layer-vue-" + this.index + " is closed");
+        this.$layer.o.log && console.warn("[layer-warn]layer-vue-" + this.index + " is closed");
         return false;
       }
       this.defvisible = false;
@@ -777,10 +730,7 @@ export default {
       }
       // 获取窗口DOM元素
       const layerDOM = document.getElementById("layer-vue-" + this.index);
-      const warn = () =>
-        console.warn(
-          "[layer-warn]:No layer with id ：layer-vue-" + this.index + "found"
-        );
+      const warn = () => console.warn("[layer-warn]:No layer with id ：layer-vue-" + this.index + "found");
       // 判断当前layer窗口打开模式（true：以$layer.open()打开，false:以组件形式）
       if (this.model) {
         // this.visible=false
@@ -807,15 +757,9 @@ export default {
                     this.$(this.move).onmousedown = null;
                   }
                   const _el = document.querySelector(this.el);
-                  const solt = document.querySelector(
-                    ".layer-vue-solt-" + this.index
-                  );
+                  const solt = document.querySelector(".layer-vue-solt-" + this.index);
                   if (_el && !solt) {
-                    console.error(
-                      "[layer-error] can not find .layer-vue-solt-" +
-                        this.index +
-                        " dom location error !"
-                    );
+                    console.error("[layer-error] can not find .layer-vue-solt-" + this.index + " dom location error !");
                   }
                   if (_el && solt && solt.parentNode) {
                     const parentDiv = solt.parentNode;
@@ -969,14 +913,14 @@ export default {
       }
     },
     f(callback) {
-      document.onmouseup = e => {
+      document.onmouseup = (e) => {
         e.preventDefault();
-        if(this.model){
+        if (this.model) {
           this[callback] && this[callback](this.$el, this.index, this.id);
-        }else{
-          this.$emit(callback,this.$el, this.index, this.id);
+        } else {
+          this.$emit(callback, this.$el, this.index, this.id);
         }
-        
+
         document.onmousemove = null;
         document.onmouseup = null;
       };
@@ -984,9 +928,10 @@ export default {
     lbresizefun(e1) {
       e1.preventDefault();
       const { minwidth, minheight, width, height, x, ratio } = this;
+      const { witdh: maxWidth, height: maxHeight } = this.maxareainit();
       const clientX = e1.clientX;
       const clientY = e1.clientY;
-      document.onmousemove = e2 => {
+      document.onmousemove = (e2) => {
         e2.preventDefault();
         let moveX = e2.clientX - clientX;
         let moveY = e2.clientY - clientY;
@@ -1002,27 +947,28 @@ export default {
         if (this.l.height <= minheight) {
           this.l.height = minheight;
         }
+        if (this.l.height > maxHeight) {
+          this.l.height = maxHeight;
+        }
+        if (this.l.width > maxWidth) {
+          this.l.width = maxWidth;
+          newX = x + width - maxWidth;
+        }
         if (!parseInt(this.moveOut[3]) && newX <= 0) {
           newX = 0;
           this.l.width = x + width;
         }
-        if (ratio) {
-          this.l.height =
-            (this.l.width * this.initdata.height) / this.initdata.width;
 
-          if (
-            !parseInt(this.moveOut[3]) &&
-            this.l.height + this.y >= docelm.clientHeight
-          ) {
+        if (ratio) {
+          this.l.height = (this.l.width * this.initdata.height) / this.initdata.width;
+          if (!parseInt(this.moveOut[3]) && this.l.height + this.y >= docelm.clientHeight) {
             this.l.height = docelm.clientHeight - this.y;
-            this.l.width =
-              (this.l.height * this.initdata.width) / this.initdata.height;
+            this.l.width = (this.l.height * this.initdata.width) / this.initdata.height;
             newX = x - (this.l.width - width);
           }
           if (this.l.height <= minheight) {
             this.l.height = minheight;
-            this.l.width =
-              (this.l.height * this.initdata.width) / this.initdata.height;
+            this.l.width = (this.l.height * this.initdata.width) / this.initdata.height;
             newX = x - (this.l.width - width);
           }
         }
@@ -1037,14 +983,14 @@ export default {
         }
       };
       this.f("resizeEnd");
-      
     },
     rbresizefun(e1) {
       e1.preventDefault();
       const { width, height, x, y, minwidth, minheight, ratio } = this;
+      const { witdh: maxWidth, height: maxHeight } = this.maxareainit();
       const clientX = e1.clientX;
       const clientY = e1.clientY;
-      document.onmousemove = e2 => {
+      document.onmousemove = (e2) => {
         e2.preventDefault();
         let moveX = e2.clientX - clientX;
         let moveY = e2.clientY - clientY;
@@ -1053,36 +999,30 @@ export default {
         if (this.l.width <= minwidth) {
           this.l.width = minwidth;
         }
-        if (
-          !parseInt(this.moveOut[2]) &&
-          this.l.width + x >= docelm.clientWidth
-        ) {
+        if (this.l.height > maxHeight) {
+          this.l.height = maxHeight;
+        }
+        if (this.l.width > maxWidth) {
+          this.l.width = maxWidth;
+        }
+        if (!parseInt(this.moveOut[2]) && this.l.width + x >= docelm.clientWidth) {
           this.l.width = docelm.clientWidth - x;
         }
         if (this.l.height <= minheight) {
           this.l.height = minheight;
         }
-        if (
-          !parseInt(this.moveOut[3]) &&
-          this.l.height + y >= docelm.clientHeight
-        ) {
+        if (!parseInt(this.moveOut[3]) && this.l.height + y >= docelm.clientHeight) {
           this.l.height = docelm.clientHeight - y;
         }
         if (ratio) {
-          this.l.height =
-            (this.l.width * this.initdata.height) / this.initdata.width;
-          if (
-            !parseInt(this.moveOut[3]) &&
-            this.l.height + y >= docelm.clientHeight
-          ) {
+          this.l.height = (this.l.width * this.initdata.height) / this.initdata.width;
+          if (!parseInt(this.moveOut[3]) && this.l.height + y >= docelm.clientHeight) {
             this.l.height = docelm.clientHeight - y;
-            this.l.width =
-              (this.l.height * this.initdata.width) / this.initdata.height;
+            this.l.width = (this.l.height * this.initdata.width) / this.initdata.height;
           }
           if (this.l.height <= minheight) {
             this.l.height = minheight;
-            this.l.width =
-              (this.l.height * this.initdata.width) / this.initdata.height;
+            this.l.width = (this.l.height * this.initdata.width) / this.initdata.height;
           }
         }
         this.width = this.l.width;
@@ -1093,7 +1033,7 @@ export default {
           this.$emit("resizing", this.$el, this.width, this.height);
         }
       };
-      this.f('resizeEnd');
+      this.f("resizeEnd");
     },
     restorefun() {
       this.minbtn = false;
@@ -1113,34 +1053,31 @@ export default {
           this.$(titleText).onmousedown = null;
         }
 
-        this.$(move).onmousedown = e1 => {
+        this.$(move).onmousedown = (e1) => {
           if (this.$el.className.indexOf("layer-vue-ismax") >= 0) {
             return;
           }
           if (this.$el.className.indexOf("layer-vue-ismin") >= 0) {
             const { x } = this;
             let clientX = e1.clientX;
-            document.onmousemove = e2 => {
+            document.onmousemove = (e2) => {
               e2.preventDefault();
               let moveX = e2.clientX - clientX;
               let newX = parseInt(x) + parseInt(moveX);
               if (!parseInt(this.moveOut[3]) && newX <= 0) {
                 newX = 0;
               }
-              if (
-                !parseInt(this.moveOut[1]) &&
-                newX >= docelm.clientWidth - this.minwidth
-              ) {
+              if (!parseInt(this.moveOut[1]) && newX >= docelm.clientWidth - this.minwidth) {
                 newX = docelm.clientWidth - this.minwidth;
               }
               this.x = newX;
             };
-            this.f('moveEnd');
+            this.f("moveEnd");
           } else {
             const { x, y } = this;
             let clientX = e1.clientX;
             let clientY = e1.clientY;
-            document.onmousemove = e2 => {
+            document.onmousemove = (e2) => {
               e2.preventDefault();
               let moveX = e2.clientX - clientX;
               let moveY = e2.clientY - clientY;
@@ -1148,20 +1085,14 @@ export default {
               if (!parseInt(this.moveOut[3]) && newX <= 0) {
                 newX = 0;
               }
-              if (
-                !parseInt(this.moveOut[1]) &&
-                newX >= docelm.clientWidth - this.width
-              ) {
+              if (!parseInt(this.moveOut[1]) && newX >= docelm.clientWidth - this.width) {
                 newX = docelm.clientWidth - this.width;
               }
               let newY = parseInt(y) + parseInt(moveY);
               if (!parseInt(this.moveOut[0]) && newY <= 0) {
                 newY = 0;
               }
-              if (
-                !parseInt(this.moveOut[2]) &&
-                newY >= docelm.clientHeight - this.height
-              ) {
+              if (!parseInt(this.moveOut[2]) && newY >= docelm.clientHeight - this.height) {
                 newY = docelm.clientHeight - this.height;
               }
               this.x = newX;
@@ -1192,8 +1123,8 @@ export default {
     },
     $(dom) {
       return this.$el.querySelector(dom);
-    }
-  }
+    },
+  },
 };
 export { merge };
 </script>

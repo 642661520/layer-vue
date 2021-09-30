@@ -5,6 +5,8 @@
       move=".layer-vue-content"
       :maxmin="[1, 1]"
       :destroyOnClose="true"
+      :area="2500"
+      :maxarea="500"
       @cancel="cancel"
       @success="success"
       @resizing="resizing"

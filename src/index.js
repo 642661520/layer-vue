@@ -49,6 +49,7 @@ const install = function(Vue, options={}) {
   }
   Vue.prototype.$layer.o = {
     log: options && options.log ? options.log : false,
+    title:options && options.title ? options.title : '信息',
     zindex: options && options.zindex ? options.zindex : 100,
     skin: newskin,
     settop: () => {
