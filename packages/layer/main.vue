@@ -226,7 +226,7 @@ export default {
     // 关闭的动画
     isOutAnim: { type: [Boolean, Number], default: true },
     // 边框宽度
-    boderwidth: { type: Number, default: 0 },
+    borderwidth: { type: Number, default: 0 },
     // 打开时最大化
     isMax: { type: Boolean, default: false },
     // 是否保持高宽比例
@@ -312,14 +312,14 @@ export default {
       this.deftitle = this.title;
     }
     this.defskin = this.$layer.o.skin;
-    if (this.boderwidth === 0) {
+    if (this.borderwidth === 0) {
       if (typeof this.skin === "string") {
         this.defborderwidth = 3;
       } else {
         this.defborderwidth = 0;
       }
     } else {
-      this.defborderwidth = this.boderwidth;
+      this.defborderwidth = this.borderwidth;
     }
     if (this.shade) {
       if (typeof this.shade === "number") {
