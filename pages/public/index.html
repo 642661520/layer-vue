@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" href="<%= BASE_URL %>logo.png" />
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/layer-vue/lib/index.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
+    <!-- <link href="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.7.2/styles/ir-black.min.css" rel="stylesheet"> -->
+    <!-- 引入组件库 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script> -->
+    <script src="https://unpkg.com/layer-vue"></script>
+    <script>
+      //挂载layer组件    
+        Vue.use(LayerVue,{
+        //此项设置置顶窗口的初始值，默认为100，一般无需配置，和其他组件冲突时可在此 配置
+        zindex:100,
+        //全局配置窗口皮肤
+        skin:{
+          //具体参数参见配置项：skin
+            }
+        });
+      </script>
+  </head>
+  <body>
+
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+
+</html>
