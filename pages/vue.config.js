@@ -1,5 +1,6 @@
 module.exports = {
   outputDir: "../docs",
+  publicPath:'/layer-vue',
   configureWebpack: {
     externals: {
       vue: "Vue",
