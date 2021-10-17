@@ -42,7 +42,7 @@ export default {
   },
   async created() {
     try {
-      const result = await axios.get(`/layer-vue/${this.codename}.md`);
+      const result = await axios.get(`./${this.codename}.md`);
       this.code = result.data;
     } catch (error) {
       this.$message.error("文档错误，加载失败！");
