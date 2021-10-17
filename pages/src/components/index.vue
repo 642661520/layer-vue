@@ -26,12 +26,12 @@
         >&nbsp;&nbsp;<router-link to="/doc"><span>查看文档</span></router-link
         >&nbsp;&nbsp;
         <span
-          ><a href="https://gitee.com/finalsummer/vuelayer" target="_blank"
+          ><a href="https://gitee.com/finalsummer/layer-vue" target="_blank"
             >Gitee</a
           ></span
         >&nbsp;&nbsp;
         <span
-          ><a href="https://github.com/642661520/vuelayer" target="_blank"
+          ><a href="https://github.com/642661520/layer-vue" target="_blank"
             >github</a
           ></span
         >

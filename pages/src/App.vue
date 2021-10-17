@@ -46,8 +46,8 @@
     </main>
     <footer class="footer">
       <span>@fianlsummer</span>
-      <a href="/react" target="_blank">基于React后台demo </a>
-      <a href="/forum" target="_blank">基于React论坛demo </a>
+      <!-- <a href="/react" target="_blank">基于React后台demo </a>
+      <a href="/forum" target="_blank">基于React论坛demo </a> -->
       <a href="https://beian.miit.gov.cn/" target="_blank"
         >浙ICP备2021016502号</a
       >
