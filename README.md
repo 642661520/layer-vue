@@ -271,6 +271,12 @@ this.$layer({
 
 id现在可以在组件模式下配置，配置之后可以使用layer全局方法。
 
+### append-to-body 【组件模式专用】
+
+类型：Boolean，默认：false
+
+是否插入至 body 元素上,嵌套的LayerVue强烈建议设置为true
+
 ### el - 父元素选择器【方法模式专用】
 
 类型：String，默认：'#app'

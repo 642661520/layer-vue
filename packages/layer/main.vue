@@ -235,6 +235,8 @@ export default {
     shade: { type: [String, Number, Array], default: 0 },
     // 点击阴影关闭
     shadeClose: { type: Boolean, default: false },
+    // 是否添加到body
+    appendToBody:{ type: Boolean, default: false},
   },
   computed: {
     // 计算属性-内容区高度
@@ -345,6 +347,9 @@ export default {
     }
   },
   mounted() {
+    if(this.appendToBody){
+      document.body.appendChild(this.$el)
+    }
     const { width, height } = this.minareainit();
     this.minwidth = width;
     this.minheight = height;

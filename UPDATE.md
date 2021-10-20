@@ -4,6 +4,8 @@
 
 修复设置borderwidth无效
 
+添加配置项append-to-body
+
 ## 0.3.7
 
 添加全局配置项title

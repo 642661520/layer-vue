@@ -4,9 +4,10 @@
     <layer-vue
       move=".layer-vue-content"
       :maxmin="[1, 1]"
-      :destroyOnClose="true"
+      destroyOnClose
       :area="2500"
       :maxarea="500"
+      append-to-body
       @cancel="cancel"
       @success="success"
       @resizing="resizing"
