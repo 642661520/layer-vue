@@ -5,8 +5,10 @@
       move=".layer-vue-content"
       :maxmin="[1, 1]"
       destroyOnClose
-      :area="2500"
-      :maxarea="500"
+      :area="600"
+      :anim="0"
+      ratio
+      id="test"
       append-to-body
       @cancel="cancel"
       @success="success"
@@ -17,7 +19,9 @@
       @min="min"
       @restore="restore"
       @resizeEnd="resizeEnd"
-    />
+    >
+      <video style="width: 100%"></video>
+    </layer-vue>
     <!--  // 关闭窗口回调
     // 移动结束回调
     moveEnd: { type: Function },
@@ -42,13 +46,11 @@
 import Demo from "./demo/Demo.vue";
 export default {
   components: {
-    Demo
+    Demo,
   },
   name: "app",
-  mounted(){
+  mounted() {
     console.log(this.$layer.reloadAutoArea("13222222222222"));
-    
-    
   },
   methods: {
     cancel(a, b, c) {
@@ -68,8 +70,7 @@ export default {
     },
     moveEnd(a, b, c) {
       console.log("moveEnd", a, b, c);
-    }
-,
+    },
     min(a, b, c) {
       console.log("min", a, b, c);
     },
@@ -78,10 +79,10 @@ export default {
     },
     resizeEnd(a, b, c) {
       console.log("resizeEnd", a, b, c);
-    }
-      // @min="min"
-      // @restore="restore"
-      // @resizeEnd="resizeEnd"
-  }
+    },
+    // @min="min"
+    // @restore="restore"
+    // @resizeEnd="resizeEnd"
+  },
 };
 </script>

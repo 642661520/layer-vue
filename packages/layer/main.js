@@ -4,7 +4,7 @@ import LayerVue, {
 LayerVue.install = function (Vue) {
   Vue.component(LayerVue.name, LayerVue);
 };
-const version = "0.3.8";
+const version = "0.3.9";
 const versions = [
   "0.0.1",
   "0.0.2",
@@ -38,7 +38,8 @@ const versions = [
   "0.3.5",
   "0.3.6",
   "0.3.7",
-  "0.3.8"
+  "0.3.8",
+  "0.3.9"
 ];
 const findIndex = (id, Vue) => {
   let index = -1;

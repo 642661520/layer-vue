@@ -965,7 +965,8 @@ export default {
         }
 
         if (ratio) {
-          this.l.height = (this.l.width * this.initdata.height) / this.initdata.width;
+          const titleheight=this.title?this.titleheight:0
+          this.l.height = ((this.l.width * (this.initdata.height-titleheight)) / this.initdata.width)+titleheight;
           if (!parseInt(this.moveOut[3]) && this.l.height + this.y >= docelm.clientHeight) {
             this.l.height = docelm.clientHeight - this.y;
             this.l.width = (this.l.height * this.initdata.width) / this.initdata.height;
@@ -1020,7 +1021,8 @@ export default {
           this.l.height = docelm.clientHeight - y;
         }
         if (ratio) {
-          this.l.height = (this.l.width * this.initdata.height) / this.initdata.width;
+          const titleheight=this.title?this.titleheight:0
+          this.l.height = ((this.l.width * (this.initdata.height-titleheight)) / this.initdata.width)+titleheight;
           if (!parseInt(this.moveOut[3]) && this.l.height + y >= docelm.clientHeight) {
             this.l.height = docelm.clientHeight - y;
             this.l.width = (this.l.height * this.initdata.width) / this.initdata.height;
