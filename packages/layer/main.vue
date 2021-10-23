@@ -1,65 +1,65 @@
 <template>
-  <div v-cloak v-if="destroyOnClose ? defvisible : true" :data-index="index" :data-id="id" class="layer-vue" :id="'layer-vue-' + index" :data-skin="typeof defskin === 'string' ? defskin : ''" :style="{ display: defvisible ? '' : 'none' }">
-    <div class="layer-vue-shade" v-if="shade" :style="{ background: defshade }" @mousedown="shadeClosefun"></div>
+  <div v-cloak v-if="destroyOnClose ? defVisible : true" :data-index="index" :data-id="id" class="layer-vue" :id="'layer-vue-' + index" :data-skin="typeof defSkin === 'string' ? defSkin : ''" :style="{ display: defVisible ? '' : 'none' }">
+    <div class="layer-vue-shade" v-if="shade" :style="{ background: defShade }" @mousedown="shadeClosefun"></div>
     <div
       οndragstart="return false;"
       class="layer-vue-box"
       :data-anim="anim"
       :class="{
-        'layer-vue-ismax': maxbtn,
-        'layer-vue-ismin': minbtn,
-        'layer-vue-startanim': defvisible,
-        'layer-vue-endanim': isOutAnim && (!visible || endanim),
+        'layer-vue-ismax': maxBtn,
+        'layer-vue-ismin': minBtn,
+        'layer-vue-startanim': defVisible,
+        'layer-vue-endanim': isOutAnim && (!visible || endAnim),
       }"
       :style="{
-        '--mc': defskin.maxmin ? defskin.maxmin.color : '',
-        '--cc': defskin.close ? defskin.close.color : '',
-        '--mbc': defskin.maxmin ? defskin.maxmin.background : '',
-        '--cbc': defskin.close ? defskin.close.background : '',
-        '--mch': defskin.maxmin ? defskin.maxmin.colorHover : '',
-        '--cch': defskin.close ? defskin.close.colorHover : '',
-        '--mbch': defskin.maxmin ? defskin.maxmin.backgroundHover : '',
-        '--cbch': defskin.close ? defskin.close.backgroundHover : '',
-        'box-shadow': defskin.boxShadow,
-        background: defskin.background,
+        '--mc': defSkin.maxmin ? defSkin.maxmin.color : '',
+        '--cc': defSkin.close ? defSkin.close.color : '',
+        '--mbc': defSkin.maxmin ? defSkin.maxmin.background : '',
+        '--cbc': defSkin.close ? defSkin.close.background : '',
+        '--mch': defSkin.maxmin ? defSkin.maxmin.colorHover : '',
+        '--cch': defSkin.close ? defSkin.close.colorHover : '',
+        '--mbch': defSkin.maxmin ? defSkin.maxmin.backgroundHover : '',
+        '--cbch': defSkin.close ? defSkin.close.backgroundHover : '',
+        'box-shadow': defSkin.boxShadow,
+        background: defSkin.background,
         width: width + 'px',
         height: height + 'px',
         top: y + 'px',
         left: x + 'px',
-        'z-index': zIndex,
+        'z-index': defZIndex,
         position: fixed ? 'fixed' : 'absolute',
       }"
-      @mousedown="settopfun"
+      @mousedown="setTopfun"
     >
       <div class="layer-vue-border"></div>
       <div
-        v-if="deftitle"
+        v-if="defTitle"
         class="layer-vue-title"
         :style="{
-          background: defskin.title ? defskin.title.background : '',
-          color: defskin.title ? defskin.title.color : '',
-          'border-bottom': defskin.title ? defskin.title.borderBottom : '',
-          height: titleheight + 'px',
-          'line-height': titleheight + 'px',
+          background: defSkin.title ? defSkin.title.background : '',
+          color: defSkin.title ? defSkin.title.color : '',
+          'border-bottom': defSkin.title ? defSkin.title.borderBottom : '',
+          height: titleHeight + 'px',
+          'line-height': titleHeight + 'px',
         }"
       >
         <div class="layer-vue-title-text" :style="{ width: textwidth + 'px' }">
-          {{ deftitle }}
+          {{ defTitle }}
         </div>
         <div
           class="layer-vue-tools"
           :style="{
-            height: titleheight + 'px',
-            'line-height': titleheight + 'px',
+            height: titleHeight + 'px',
+            'line-height': titleHeight + 'px',
           }"
         >
           <span v-if="maxmin[1]" class="layer-vue-min" @click="minfun">
-            <icon-min v-if="!minbtn" />
-            <icon-restroe v-if="minbtn" />
+            <icon-min v-if="!minBtn" />
+            <icon-restroe v-if="minBtn" />
           </span>
-          <span v-if="maxmin[0] && !minbtn" class="layer-vue-max" @click="maxfun">
-            <icon-max v-if="!maxbtn" />
-            <icon-restroe v-if="maxbtn" />
+          <span v-if="maxmin[0] && !minBtn" class="layer-vue-max" @click="maxfun">
+            <icon-max v-if="!maxBtn" />
+            <icon-restroe v-if="maxBtn" />
           </span>
           <span v-if="closeBtn" class="layer-vue-close" @click="closefun">
             <IconClose />
@@ -69,15 +69,15 @@
       <span v-if="closeBtn && !title" :class="{ 'layer-vue-close2': !title }" @click="closefun">
         <IconClose />
       </span>
-      <div v-if="resize[0] && !maxbtn" class="layer-vue-resize" @mousedown="rbresizefun"></div>
-      <div v-if="resize[1] && !maxbtn" class="layer-vue-lbresize" @mousedown="lbresizefun"></div>
+      <div v-if="resize[0] && !maxBtn" class="layer-vue-resize" @mousedown="rbresizefun"></div>
+      <div v-if="resize[1] && !maxBtn" class="layer-vue-lbresize" @mousedown="lbresizefun"></div>
       <div
         ref="content"
         class="layer-vue-content"
         :style="{
           'border-radius': title ? '0 0 2px 2px' : '2px',
-          background: defskin.content ? defskin.content.background : '',
-          color: defskin.content ? defskin.content.color : '',
+          background: defSkin.content ? defSkin.content.background : '',
+          color: defSkin.content ? defSkin.content.color : '',
           height: contentheight + 'px',
         }"
       >
@@ -121,17 +121,17 @@ export default {
   data() {
     return {
       // 默认开启
-      defvisible: true,
+      defVisible: true,
       // 控制关闭动画的类
-      endanim: false,
+      endAnim: false,
       // 最大化按钮
-      maxbtn: false,
+      maxBtn: false,
       // 最小化按钮
-      minbtn: false,
+      minBtn: false,
       // 最小宽度
-      minwidth: 300,
+      minWidth: 300,
       // 最小高度
-      minheight: 200,
+      minHeight: 200,
       // 左偏移量
       x: 0,
       // 上偏移量
@@ -140,8 +140,8 @@ export default {
       width: 0,
       // 窗口高度
       height: 0,
-      // 窗口zindex
-      zIndex: 1,
+      // 窗口zIndex
+      defZIndex: 1,
       // 序号
       index: undefined,
       // 模式
@@ -149,17 +149,17 @@ export default {
       // display
       display: undefined,
       // 默认皮肤
-      defskin: {},
+      defSkin: {},
       // 用于记录初始状态
-      initdata: { x: 0, y: 0, width: 300, height: 200 },
+      initData: { x: 0, y: 0, width: 300, height: 200 },
       // 默认外边框宽度
-      defborderwidth: 0,
+      defBorderWidth: 0,
       // 用于记录窗口发生最大最小化前的窗口信息
       l: {},
       // 默认标题
-      deftitle: undefined,
+      defTitle: undefined,
       // 默认阴影色
-      defshade: "rgba(0, 0, 0, 0.3)",
+      defShade: "rgba(0, 0, 0, 0.3)",
     };
   },
   props: {
@@ -168,19 +168,19 @@ export default {
     // 高宽
     area: { type: [String, Number, Array], default: "auto" },
     // 最小高宽
-    minarea: { type: [String, Number, Array], default: () => [300, 200] },
+    minArea: { type: [String, Number, Array], default: () => [300, 200] },
     // 最大高宽
-    maxarea: { type: [String, Number, Array], default: () => ["100%", "100%"] },
+    maxArea: { type: [String, Number, Array], default: () => ["100%", "100%"] },
     // 打开位置
     offset: { type: [String, Array, Number], default: "auto" },
     // 置顶
-    settop: { type: [Number, Boolean], default: false },
+    setTop: { type: [Number, Boolean], default: false },
     // 移动限制
     moveOut: { type: Array, default: () => [0, 0, 0, 0] },
     // 显示
     visible: { visible: [Number, Boolean], default: true },
-    // 窗口zindex
-    zindex: { type: Number, default: 1 },
+    // 窗口zIndex
+    zIndex: { type: Number, default: 1 },
     // 关闭按钮
     closeBtn: { type: [Number, Boolean], default: true },
     // 最大最小化按钮
@@ -214,7 +214,7 @@ export default {
     // 内容区
     content: {},
     // 标题高度
-    titleheight: { type: Number, default: 42 },
+    titleHeight: { type: Number, default: 42 },
     // 皮肤
     skin: { type: [Object, String] },
     // id
@@ -226,7 +226,7 @@ export default {
     // 关闭的动画
     isOutAnim: { type: [Boolean, Number], default: true },
     // 边框宽度
-    borderwidth: { type: Number, default: 0 },
+    borderWidth: { type: Number, default: 0 },
     // 打开时最大化
     isMax: { type: Boolean, default: false },
     // 是否保持高宽比例
@@ -241,8 +241,8 @@ export default {
   computed: {
     // 计算属性-内容区高度
     contentheight: function () {
-      let h = this.height - (this.title ? this.titleheight : 0);
-      h = h - this.defborderwidth * 2;
+      let h = this.height - (this.title ? this.titleHeight : 0);
+      h = h - this.defBorderWidth * 2;
       h <= 0 ? (h = 0) : null;
       return h;
     },
@@ -252,27 +252,27 @@ export default {
     },
   },
   watch: {
-    // 监测visible变化后改变defvisible
+    // 监测visible变化后改变defVisible
     visible: function (newvalue) {
       if (this.anim) {
         setTimeout(() => {
-          this.defvisible = newvalue;
+          this.defVisible = newvalue;
         }, 300);
       } else {
-        this.defvisible = newvalue;
+        this.defVisible = newvalue;
       }
     },
-    // 监测defvisible变化后触发置顶和初始化
-    defvisible: function (newvalue) {
+    // 监测defVisible变化后触发置顶和初始化
+    defVisible: function (newvalue) {
       if (newvalue) {
-        if (this.settop) {
-          const zindex = this.$layer.o.settop();
-          this.zIndex = zindex;
+        if (this.setTop) {
+          const zIndex = this.$layer.o.setTop();
+          this.defZIndex = zIndex;
         } else {
-          this.zIndex = this.zindex;
+          this.defZIndex = this.zIndex;
         }
         this.$nextTick(() => {
-          this.endanim = false;
+          this.endAnim = false;
           this.init();
           if (this.model) {
             this.success && this.success(this.$el, this.index, this.id);
@@ -284,12 +284,12 @@ export default {
     },
     // 监测isMax变化触发最大化函数
     isMax: function (newvalue) {
-      if (newvalue !== this.maxbtn && this.$(this.move)) {
+      if (newvalue !== this.maxBtn && this.$(this.move)) {
         this.maxfun();
       }
     },
     // 检测最小化状态，切换鼠标手势
-    minbtn: function (newvalue) {
+    minBtn: function (newvalue) {
       if (this.move != ".layer-vue-title-text" && this.$(titleText)) {
         if (newvalue) {
           this.$(titleText).style.cursor = "move";
@@ -298,73 +298,74 @@ export default {
         }
       }
     },
-    // 监测title变化传递给deftitle
+    // 监测title变化传递给defTitle
     title: function (newvalue) {
-      this.deftitle = newvalue;
+      this.defTitle = newvalue;
     },
   },
   created() {
     // 初始化数据
     if (!this.visible) {
-      this.defvisible = this.visible;
+      this.defVisible = this.visible;
     }
     if (this.title === "_$_l_a_y_e_r_v_u_e") {
-      this.deftitle = this.$layer.o.title;
+      this.defTitle = this.$layer.o.title;
     } else {
-      this.deftitle = this.title;
+      this.defTitle = this.title;
     }
-    this.defskin = this.$layer.o.skin;
-    if (this.borderwidth === 0) {
+    this.defSkin = this.$layer.o.skin;
+    if (this.borderWidth === 0) {
       if (typeof this.skin === "string") {
-        this.defborderwidth = 3;
+        this.defBorderWidth = 3;
       } else {
-        this.defborderwidth = 0;
+        this.defBorderWidth = 0;
       }
     } else {
-      this.defborderwidth = this.borderwidth;
+      this.defBorderWidth = this.borderWidth;
     }
     if (this.shade) {
       if (typeof this.shade === "number") {
         if (this.shade !== 1) {
-          this.defshade = `rgba(0, 0, 0,${this.shade})`;
+          this.defShade = `rgba(0, 0, 0,${this.shade})`;
         }
       } else if (this.shade instanceof Array && this.shade.length >= 2) {
-        this.defshade = `${this.shade[1]}${(this.shade[0] * 255).toString(16)}`;
+        this.defShade = `${this.shade[1]}${(this.shade[0] * 255).toString(16)}`;
       } else if (typeof this.shade === "string") {
         if (!this.shade === "1") {
-          this.defshade = this.shade;
+          this.defShade = this.shade;
         }
       }
     }
     window.addEventListener("resize", this.resizefun);
     if (this.visible || this.visible === undefined) {
-      if (this.settop) {
-        const zindex = this.$layer.o.settop();
-        this.zIndex = zindex;
+      if (this.setTop) {
+        const zIndex = this.$layer.o.setTop();
+        this.defZIndex = zIndex;
       } else {
-        this.zIndex = this.zindex;
+        this.defZIndex = this.zIndex;
       }
     }
   },
   mounted() {
-    if(this.appendToBody){
+    // 判断是否要转移到body
+    if(this.appendToBody && !this.model){
       document.body.appendChild(this.$el)
     }
-    const { width, height } = this.minareainit();
-    this.minwidth = width;
-    this.minheight = height;
+    const { width, height } = this.minAreainit();
+    this.minWidth = width;
+    this.minHeight = height;
     if (!this.model) {
       this.index = this.$layer.o.instances.length;
       this.$layer.o.instances.push({ instance: this });
     }
     if (typeof this.skin === "object") {
-      if (typeof this.defskin === "object") {
-        this.defskin = merge(this.skin, this.defskin);
+      if (typeof this.defSkin === "object") {
+        this.defSkin = merge(this.skin, this.defSkin);
       } else {
-        if (this.borderwidth) this.borderwidth = 3;
+        if (this.borderWidth) this.borderWidth = 3;
       }
     } else if (typeof this.skin === "string") {
-      this.defskin = this.skin;
+      this.defSkin = this.skin;
     }
     this.$nextTick(() => {
       if (this.content && this.content.component) {
@@ -395,11 +396,11 @@ export default {
         this.$layer.o.log && console.warn("[layer warn]:not find children");
       }
       if (this.visible || this.visible === undefined) {
-        if (this.settop) {
-          const zindex = this.$layer.o.settop();
-          this.zIndex = zindex;
+        if (this.setTop) {
+          const zIndex = this.$layer.o.setTop();
+          this.defZIndex = zIndex;
         } else {
-          this.zIndex = this.zindex;
+          this.defZIndex = this.zIndex;
         }
         this.init();
         if (this.model) {
@@ -433,14 +434,14 @@ export default {
             }
             this.x = newX;
           };
-          this.f("moveEnd");
+          this.callback("moveEnd");
         };
       }
     },
     // 浏览器发生resize时重置窗口
     resizefun() {
       // ! 窗口最大化时调整窗口大小贴合浏览器，退出调整
-      if (this.maxbtn) {
+      if (this.maxBtn) {
         this.width = docelm.clientWidth;
         this.height = docelm.clientHeight;
         return;
@@ -454,7 +455,7 @@ export default {
         this.x = 0;
       }
       // ! 窗口最小化时调整上偏移，退出调整
-      if (this.minbtn) {
+      if (this.minBtn) {
         this.y = docelm.clientHeight - this.height;
         return;
       }
@@ -471,30 +472,30 @@ export default {
         if (this.width >= docelm.clientWidth) {
           this.width = docelm.clientWidth;
         }
-        if (this.width <= this.minwidth) {
-          this.width = this.minwidth;
+        if (this.width <= this.minWidth) {
+          this.width = this.minWidth;
         }
         if (this.height >= docelm.clientHeight) {
           this.height = docelm.clientHeight;
         }
-        if (this.height <= this.minheight) {
-          this.height = this.minheight;
+        if (this.height <= this.minHeight) {
+          this.height = this.minHeight;
         }
       }
     },
     resetfun() {
-      this.maxbtn = false;
-      this.minbtn = false;
-      this.x = this.initdata.x;
-      this.y = this.initdata.y;
-      this.width = this.initdata.width;
-      this.height = this.initdata.height;
+      this.maxBtn = false;
+      this.minBtn = false;
+      this.x = this.initData.x;
+      this.y = this.initData.y;
+      this.width = this.initData.width;
+      this.height = this.initData.height;
       this.movefun(this.move);
     },
     // 初始化函数
     init() {
-      this.maxbtn = false;
-      this.minbtn = false;
+      this.maxBtn = false;
+      this.minBtn = false;
       if (this.$refs.content.children.length) {
         this.$refs.content.children[0].style.display = "block";
         // if (
@@ -507,7 +508,7 @@ export default {
 
       const { height, width } = this.areainit();
       const { x, y } = this.offsetinit(this.offset, width, height);
-      this.initdata = { width, height, x, y };
+      this.initData = { width, height, x, y };
       this.width = width;
       this.height = height;
       this.x = x;
@@ -517,14 +518,14 @@ export default {
         this.maxfun();
       }
     },
-    minareainit() {
+    minAreainit() {
       let width = 300;
       let height = 200;
-      if (this.minarea instanceof Array) {
-        width = this.tf(this.minarea[0], "clientWidth");
-        height = this.tf(this.minarea[1], "clientHeight");
-      } else if (typeof this.minarea === "string" || typeof this.minarea === "number") {
-        width = this.tf(this.minarea, "clientWidth");
+      if (this.minArea instanceof Array) {
+        width = this.tf(this.minArea[0], "clientWidth");
+        height = this.tf(this.minArea[1], "clientHeight");
+      } else if (typeof this.minArea === "string" || typeof this.minArea === "number") {
+        width = this.tf(this.minArea, "clientWidth");
       }
       if (isNaN(height)) {
         height = 200;
@@ -534,14 +535,14 @@ export default {
       }
       return { height, width };
     },
-    maxareainit() {
+    maxAreainit() {
       let width = docelm.clientWidth;
       let height = docelm.clientHeight;
-      if (this.maxarea instanceof Array) {
-        width = this.tf(this.maxarea[0], "clientWidth");
-        height = this.tf(this.maxarea[1], "clientHeight");
-      } else if (typeof this.maxarea === "string" || typeof this.maxarea === "number") {
-        width = this.tf(this.maxarea, "clientWidth");
+      if (this.maxArea instanceof Array) {
+        width = this.tf(this.maxArea[0], "clientWidth");
+        height = this.tf(this.maxArea[1], "clientHeight");
+      } else if (typeof this.maxArea === "string" || typeof this.maxArea === "number") {
+        width = this.tf(this.maxArea, "clientWidth");
       }
       if (isNaN(height)) {
         height = docelm.clientHeight;
@@ -587,31 +588,31 @@ export default {
         this.$layer.o.log && console.warn("[layer warn]:not find children");
       }
       if (this.area instanceof Array) {
-        width = this.tf(this.area[0], "clientWidth") + this.defborderwidth * 2;
+        width = this.tf(this.area[0], "clientWidth") + this.defBorderWidth * 2;
         if (this.area[1]) {
-          height = this.tf(this.area[1], "clientHeight") + this.defborderwidth * 2;
+          height = this.tf(this.area[1], "clientHeight") + this.defBorderWidth * 2;
         } else {
-          height = this.childrenH + this.titleheight + this.defborderwidth * 2;
+          height = this.childrenH + this.titleHeight + this.defBorderWidth * 2;
         }
       } else {
         if (this.area === "auto") {
-          width = this.childrenW + this.defborderwidth * 2;
+          width = this.childrenW + this.defBorderWidth * 2;
         } else {
-          width = this.tf(this.area, "clientWidth") + this.defborderwidth * 2;
+          width = this.tf(this.area, "clientWidth") + this.defBorderWidth * 2;
         }
-        height = this.childrenH + this.titleheight + this.defborderwidth * 2;
+        height = this.childrenH + this.titleHeight + this.defBorderWidth * 2;
       }
-      if (width > docelm.clientWidth && docelm.clientWidth > this.minwidth) {
+      if (width > docelm.clientWidth && docelm.clientWidth > this.minWidth) {
         width = docelm.clientWidth;
-      } else if (width <= this.minwidth) {
-        width = this.minwidth;
+      } else if (width <= this.minWidth) {
+        width = this.minWidth;
       }
-      if (height > docelm.clientHeight && docelm.clientHeight > this.minheight) {
+      if (height > docelm.clientHeight && docelm.clientHeight > this.minHeight) {
         height = docelm.clientHeight;
-      } else if (height <= this.minheight) {
-        height = this.minheight;
+      } else if (height <= this.minHeight) {
+        height = this.minHeight;
       }
-      const { width: maxWidth, height: maxHeight } = this.maxareainit();
+      const { width: maxWidth, height: maxHeight } = this.maxAreainit();
       if (width > maxWidth) {
         width = maxWidth;
       }
@@ -619,10 +620,10 @@ export default {
         height = maxHeight;
       }
       if (isNaN(height)) {
-        height = this.minheight;
+        height = this.minHeight;
       }
       if (isNaN(width)) {
-        width = this.minwidth;
+        width = this.minWidth;
       }
       return { height, width };
     },
@@ -716,11 +717,11 @@ export default {
     // 关闭窗口函数
     close() {
       // 隐藏窗口
-      if (!this.defvisible) {
+      if (!this.defVisible) {
         this.$layer.o.log && console.warn("[layer-warn]layer-vue-" + this.index + " is closed");
         return false;
       }
-      this.defvisible = false;
+      this.defVisible = false;
       if (!this.model) {
         // 若传入了visible，则更新visible为false
         if (this.visible) {
@@ -826,7 +827,7 @@ export default {
     closefun() {
       return new Promise((res, rej) => {
         if (this.anim && this.isOutAnim) {
-          this.endanim = true;
+          this.endAnim = true;
           setTimeout(() => {
             let result = this.close();
             res(result);
@@ -838,15 +839,15 @@ export default {
       });
     },
     maxfun() {
-      this.maxbtn = !this.maxbtn;
-      this.$emit("update:isMax", this.maxbtn);
-      if (this.maxbtn) {
+      this.maxBtn = !this.maxBtn;
+      this.$emit("update:isMax", this.maxBtn);
+      if (this.maxBtn) {
         if (this.move && this.$(this.move)) {
           this.$(this.move).style.cursor = "not-allowed";
           this.$(this.move).onmousedown = null;
         }
-        if (this.minbtn) {
-          this.minbtn = false;
+        if (this.minBtn) {
+          this.minBtn = false;
         } else {
           this.l.x = this.x;
           this.l.y = this.y;
@@ -879,11 +880,11 @@ export default {
       }
     },
     minfun() {
-      this.minbtn = !this.minbtn;
-      if (this.minbtn) {
+      this.minBtn = !this.minBtn;
+      if (this.minBtn) {
         this.minmovefun();
-        if (this.maxbtn) {
-          this.maxbtn = false;
+        if (this.maxBtn) {
+          this.maxBtn = false;
         } else {
           this.l.x = this.x;
           this.l.y = this.y;
@@ -891,8 +892,8 @@ export default {
           this.l.height = this.height;
         }
         this.x = this.l.x;
-        this.y = docelm.clientHeight - this.titleheight;
-        this.height = this.titleheight;
+        this.y = docelm.clientHeight - this.titleHeight;
+        this.height = this.titleHeight;
         this.width = 200;
         if (this.model) {
           this.min && this.min(this.$el, this.index, this.id);
@@ -912,12 +913,12 @@ export default {
         }
       }
     },
-    settopfun() {
-      if (this.settop) {
-        this.zIndex = this.$layer.o.settop();
+    setTopfun() {
+      if (this.setTop) {
+        this.defZIndex = this.$layer.o.setTop();
       }
     },
-    f(callback) {
+    callback(callback) {
       document.onmouseup = (e) => {
         e.preventDefault();
         if (this.model) {
@@ -932,8 +933,8 @@ export default {
     },
     lbresizefun(e1) {
       e1.preventDefault();
-      const { minwidth, minheight, width, height, x, ratio } = this;
-      const { width: maxWidth, height: maxHeight } = this.maxareainit();
+      const { minWidth, minHeight, width, height, x, ratio } = this;
+      const { width: maxWidth, height: maxHeight } = this.maxAreainit();
       const clientX = e1.clientX;
       const clientY = e1.clientY;
       document.onmousemove = (e2) => {
@@ -943,14 +944,14 @@ export default {
         this.l.width = parseInt(width) - parseInt(moveX);
         this.l.height = parseInt(height) + parseInt(moveY);
         let newX = parseInt(x) + parseInt(moveX);
-        if (this.l.width <= minwidth) {
-          this.l.width = minwidth;
+        if (this.l.width <= minWidth) {
+          this.l.width = minWidth;
         }
         if (this.l.width + newX >= x + width) {
           newX = x + width - this.l.width;
         }
-        if (this.l.height <= minheight) {
-          this.l.height = minheight;
+        if (this.l.height <= minHeight) {
+          this.l.height = minHeight;
         }
         if (this.l.height > maxHeight) {
           this.l.height = maxHeight;
@@ -965,25 +966,26 @@ export default {
         }
 
         if (ratio) {
-          const titleheight=this.title?this.titleheight:0
-          this.l.height = ((this.l.width * (this.initdata.height-titleheight)) / this.initdata.width)+titleheight;
+          const titleHeight=this.title?this.titleHeight:0
+          this.l.height = ((this.l.width * (this.initData.height-titleHeight)) / this.initData.width)+titleHeight;
           if (!parseInt(this.moveOut[3]) && this.l.height + this.y >= docelm.clientHeight) {
             this.l.height = docelm.clientHeight - this.y;
-            this.l.width = ((this.l.height-titleheight) * this.initdata.width) / (this.initdata.height-titleheight);
+            this.l.width = ((this.l.height-titleHeight) * this.initData.width) / (this.initData.height-titleHeight);
             newX = x - (this.l.width - width);
           }
-          if (this.l.height <= minheight) {
-            this.l.height = minheight;
-            this.l.width = (this.l.height * this.initdata.width) / this.initdata.height;
-            this.l.width = ((this.l.height-titleheight) * this.initdata.width) / (this.initdata.height-titleheight);
+          if (this.l.height <= minHeight) {
+            this.l.height = minHeight;
+            this.l.width = (this.l.height * this.initData.width) / this.initData.height;
+            this.l.width = ((this.l.height-titleHeight) * this.initData.width) / (this.initData.height-titleHeight);
             newX = x - (this.l.width - width);
           }
           if (this.l.height >= maxHeight) {
             this.l.height = maxHeight;
-            this.l.width = ((this.l.height-titleheight) * this.initdata.width) / (this.initdata.height-titleheight);
+            this.l.width = ((this.l.height-titleHeight) * this.initData.width) / (this.initData.height-titleHeight);
             newX = x - (this.l.width - width);
           }
         }
+
         this.width = this.l.width;
         this.height = this.l.height;
         this.x = newX;
@@ -993,12 +995,12 @@ export default {
           this.$emit("resizing", this.$el, this.width, this.height);
         }
       };
-      this.f("resizeEnd");
+      this.callback("resizeEnd");
     },
     rbresizefun(e1) {
       e1.preventDefault();
-      const { width, height, x, y, minwidth, minheight, ratio } = this;
-      const { width: maxWidth, height: maxHeight } = this.maxareainit();
+      const { width, height, x, y, minWidth, minHeight, ratio } = this;
+      const { width: maxWidth, height: maxHeight } = this.maxAreainit();
       const clientX = e1.clientX;
       const clientY = e1.clientY;
       document.onmousemove = (e2) => {
@@ -1007,8 +1009,8 @@ export default {
         let moveY = e2.clientY - clientY;
         this.l.width = parseInt(width) + parseInt(moveX);
         this.l.height = parseInt(height) + parseInt(moveY);
-        if (this.l.width <= minwidth) {
-          this.l.width = minwidth;
+        if (this.l.width <= minWidth) {
+          this.l.width = minWidth;
         }
         if (this.l.height > maxHeight) {
           this.l.height = maxHeight;
@@ -1019,26 +1021,27 @@ export default {
         if (!parseInt(this.moveOut[2]) && this.l.width + x >= docelm.clientWidth) {
           this.l.width = docelm.clientWidth - x;
         }
-        if (this.l.height <= minheight) {
-          this.l.height = minheight;
+        if (this.l.height <= minHeight) {
+          this.l.height = minHeight;
         }
         if (!parseInt(this.moveOut[3]) && this.l.height + y >= docelm.clientHeight) {
           this.l.height = docelm.clientHeight - y;
         }
         if (ratio) {
-          const titleheight=this.title?this.titleheight:0
-          this.l.height = ((this.l.width * (this.initdata.height-titleheight)) / this.initdata.width)+titleheight;
+          const titleHeight=this.title?this.titleHeight:0
+          this.l.height = ((this.l.width * (this.initData.height-titleHeight)) / this.initData.width)+titleHeight;
           if (!parseInt(this.moveOut[3]) && this.l.height + y >= docelm.clientHeight) {
             this.l.height = docelm.clientHeight - y;
-            this.l.width = ((this.l.height-titleheight) * this.initdata.width) / (this.initdata.height-titleheight);
+            this.l.width = ((this.l.height-titleHeight) * this.initData.width) / (this.initData.height-titleHeight);
           }
-          if (this.l.height <= minheight) {
-            this.l.height = minheight;
-            this.l.width = ((this.l.height-titleheight) * this.initdata.width) / (this.initdata.height-titleheight);
+          if (this.l.height <= minHeight) {
+            this.l.height = minHeight;
+            this.l.width = ((this.l.height-titleHeight) * this.initData.width) / (this.initData.height-titleHeight);
           }
           if (this.l.height >= maxHeight) {
             this.l.height = maxHeight;
-            this.l.width = ((this.l.height-titleheight) * this.initdata.width) / (this.initdata.height-titleheight);
+            this.l.width = ((this.l.height-titleHeight) * this.initData.width) / (this.initData.height-titleHeight);
+            newX = x - (this.l.width - width);
           }
         }
         this.width = this.l.width;
@@ -1049,12 +1052,12 @@ export default {
           this.$emit("resizing", this.$el, this.width, this.height);
         }
       };
-      this.f("resizeEnd");
+      this.callback("resizeEnd");
     },
     restorefun() {
-      this.minbtn = false;
-      this.maxbtn = false;
-      this.$emit("update:isMax", this.maxbtn);
+      this.minBtn = false;
+      this.maxBtn = false;
+      this.$emit("update:isMax", this.maxBtn);
       this.x = this.l.x;
       this.y = this.l.y;
       this.width = this.l.width;
@@ -1083,12 +1086,12 @@ export default {
               if (!parseInt(this.moveOut[3]) && newX <= 0) {
                 newX = 0;
               }
-              if (!parseInt(this.moveOut[1]) && newX >= docelm.clientWidth - this.minwidth) {
-                newX = docelm.clientWidth - this.minwidth;
+              if (!parseInt(this.moveOut[1]) && newX >= docelm.clientWidth - this.minWidth) {
+                newX = docelm.clientWidth - this.minWidth;
               }
               this.x = newX;
             };
-            this.f("moveEnd");
+            this.callback("moveEnd");
           } else {
             const { x, y } = this;
             let clientX = e1.clientX;
@@ -1116,7 +1119,7 @@ export default {
               this.l.x = newX;
               this.l.y = newY;
             };
-            this.f("moveEnd");
+            this.callback("moveEnd");
           }
         };
       }
@@ -1130,8 +1133,8 @@ export default {
       this.$nextTick(() => {
         if (this.area === "auto") {
           const { height, width } = this.areainit();
-          this.initdata.width = width;
-          this.initdata.height = height;
+          this.initData.width = width;
+          this.initData.height = height;
           this.width = width;
           this.height = height;
         }

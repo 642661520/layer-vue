@@ -1,9 +1,9 @@
 <template>
   <div>
-    <layer-vue :visible.sync="visible1" :settop="true"> 默认左下角，右下角均可拉伸 </layer-vue>
-    <layer-vue :visible.sync="visible2" :settop="true" :resize="[0, 1]">:resize="[0, 1]" 左下角拉伸 </layer-vue>
-    <layer-vue :visible.sync="visible3" :settop="true" :resize="[1, 0]">:resize="[1, 0]" 右下角拉伸 </layer-vue>
-    <layer-vue :visible.sync="visible4" :settop="true" :resize="[0, 0]">:resize="[0, 0]" 不允许拉伸 </layer-vue>
+    <layer-vue :visible.sync="visible1" :setTop="true"> 默认左下角，右下角均可拉伸 </layer-vue>
+    <layer-vue :visible.sync="visible2" :setTop="true" :resize="[0, 1]">:resize="[0, 1]" 左下角拉伸 </layer-vue>
+    <layer-vue :visible.sync="visible3" :setTop="true" :resize="[1, 0]">:resize="[1, 0]" 右下角拉伸 </layer-vue>
+    <layer-vue :visible.sync="visible4" :setTop="true" :resize="[0, 0]">:resize="[0, 0]" 不允许拉伸 </layer-vue>
     <h2>窗口拉伸</h2>
     <el-row>
       <el-col :span="3">

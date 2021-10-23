@@ -11,7 +11,7 @@
       <Content />
       <Anim />
       <Skin />
-      <Settop />
+      <setTop />
       <Callback />
       <Globalmethod />
     </div>
@@ -27,7 +27,7 @@ import Content from "./Content.vue";
 import Anim from "./Anim.vue";
 import Move from "./Move.vue";
 import Skin from "./Skin.vue";
-import Settop from "./Settop.vue";
+import setTop from "./setTop.vue";
 import Reset from "./Reset.vue";
 import Resize from "./Resize.vue";
 import Callback from "./Callback.vue";
@@ -42,7 +42,7 @@ export default {
     Anim,
     Move,
     Skin,
-    Settop,
+    setTop,
     Reset,
     Resize,
     Callback,

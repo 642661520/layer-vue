@@ -147,7 +147,13 @@ npm run dev
 npm run build
 ```
 
+## 重要提示
 
+0.4.0版本 不兼容修改：
+
+1.删除el配置项,可使用appendToBody;
+
+2.☆☆☆☆☆ 规范配置项为驼峰命名，影响的配置有：minArea,maxArea,zIndex,setTop,borderWidth;
 
 ## 配置项
 
@@ -271,17 +277,13 @@ this.$layer({
 
 id现在可以在组件模式下配置，配置之后可以使用layer全局方法。
 
-### append-to-body 【组件模式专用】
+### appendToBody
 
 类型：Boolean，默认：false
 
-是否插入至 body 元素上,嵌套的LayerVue强烈建议设置为true
+是否插入至 body 元素上,嵌套的LayerVue强烈建议设置为true,
 
-### el - 父元素选择器【方法模式专用】
-
-类型：String，默认：'#app'
-
-组件模式无需配置，layer在dom树的位置不会被改变，方法模式下，默认在id为app的dom节点下，若不存在app，则挂载在body下
+0.4.0版本开始，删除el配置项，对于内容区是页面内原有dom元素，可设置appendToBody，避免父元素带来的样式影响
 
 ### area - 宽高
 
@@ -293,7 +295,7 @@ id现在可以在组件模式下配置，配置之后可以使用layer全局方�
 
 请注意设置宽高要不小于最小宽高，否则不生效
 
-### minarea - 最小宽高
+### minArea - 最小宽高
 
 类型：String/Array/Number，默认：[300,200]，单位：px（默认可不带）/%
 
@@ -301,7 +303,7 @@ id现在可以在组件模式下配置，配置之后可以使用layer全局方�
 
 当你宽高都要定义时，你可以*area: ['200px', '200px']*或*area: [300, 200]*
 
-### maxarea - 最大宽高
+### maxArea - 最大宽高
 
 类型：String/Array/Number，默认：['100%','100%']，单位：px（默认可不带）/%
 
@@ -373,13 +375,13 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
 
 请注意设置宽高要不小于最小宽高，否则比例会超出预期
 
-### zindex - 层叠顺序
+### zIndex - 层叠顺序
 
 类型：Number，默认：1
 
 一般用于解决和其它组件的层叠冲突，不能和settop一起使用，可全局配置
 
-### settop - 窗口置顶
+### setTop - 窗口置顶
 
 类型：Boolean，默认：false
 
@@ -512,7 +514,7 @@ this.$layer({
 
 默认只能在窗口内拖拽，如果你想让拖到窗外，那么设定*moveOut: [1, 1, 1, 1]*即可。
 
-### borderwidth - 边框大小修正值
+### borderWidth - 边框大小修正值
 
 类型：Number，默认：0,单位：px
 
@@ -551,7 +553,7 @@ Vue.use(LayerVue,{
 
 ```
 
-### zindex - 层叠顺序
+### zIndex - 层叠顺序
 
 ```js
 Vue.use(LayerVue,{

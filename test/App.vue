@@ -5,8 +5,7 @@
       move=".layer-vue-content"
       :maxmin="[1, 1]"
       destroyOnClose
-      minarea='400'
-      :maxarea="['100%', '100%']"
+      :area="[700,300]"
       :anim="0"
       ratio
       id="test"
@@ -21,7 +20,7 @@
       @restore="restore"
       @resizeEnd="resizeEnd"
     >
-      <div :style="{width: '100%',height:height+'px'}"><el-button @click="test">test</el-button></div>
+      <video style="width: 100%"></video>
     </layer-vue>
     <!--  // 关闭窗口回调
     // 移动结束回调
@@ -46,13 +45,8 @@
 <script>
 import Demo from "./demo/Demo.vue";
 export default {
-  data() {
-    return {
-      height:400
-    }
-  },
   components: {
-    Demo
+    Demo,
   },
   name: "app",
   mounted() {
@@ -89,17 +83,6 @@ export default {
     // @min="min"
     // @restore="restore"
     // @resizeEnd="resizeEnd"
-    test(){
-      this.height=800;
-      console.log(131431);
-      this.$nextTick(()=>{
-        setTimeout(()=>{
-this.$layer.reloadAutoArea('test')
-        },300)
-        
-      })
-      
-    }
-  }
+  },
 };
 </script>

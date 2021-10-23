@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Settop2 from './Settop2.vue';
+import setTop2 from './setTop2.vue';
 export default {
   data() {
     return {
@@ -22,9 +22,9 @@ export default {
       this.$layer({
         parent:this,
         offset: [Math.random() * 90 + "%", Math.random() * 90 + "%"],
-        settop:1,
+        setTop:1,
         content:{
-          component:Settop2,
+          component:setTop2,
         }
       })
     }

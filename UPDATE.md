@@ -1,5 +1,11 @@
 # 版本更新笔记
 
+## 0.4.0
+
+1.删除el配置项,可使用appendToBody;
+
+2.☆☆☆☆☆ 规范配置项为驼峰命名，影响的配置有：minArea,maxArea,zIndex,setTop,borderWidth;
+
 ## 0.3.11
 
 修复minarea拉伸时无效
@@ -12,7 +18,7 @@
 
 修复设置borderwidth无效
 
-添加配置项append-to-body
+添加配置项appendToBody
 
 ## 0.3.7
 

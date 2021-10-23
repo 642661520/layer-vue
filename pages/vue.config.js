@@ -9,5 +9,11 @@ module.exports = {
       "highlight.js":'hljs',
     },
   },
-  
+  lintOnSave: false,
+    devServer: {
+        overlay: {
+            warning: true,
+            errors: false
+        }
+    },
 };

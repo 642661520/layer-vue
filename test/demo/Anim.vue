@@ -1,6 +1,6 @@
 <template>
   <div>
-    <layer-vue :visible.sync="visible1" :anim="0"  destroyOnClose append-to-body>:anim="0"</layer-vue>
+    <layer-vue :visible.sync="visible1" :anim="0"  destroyOnClose appendToBody>:anim="0"</layer-vue>
     <layer-vue :visible.sync="visible2" :anim="1">:anim="1"</layer-vue>
     <layer-vue :visible.sync="visible3" :anim="2">:anim="2"</layer-vue>
     <layer-vue :visible.sync="visible4" :anim="3">:anim="3"</layer-vue>

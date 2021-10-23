@@ -1,6 +1,6 @@
 <template>
   <div>
-    <LayerVue :visible.sync="visible6" :settop="true"><div>300*158（内容区加标题的最小高度是200px）</div></LayerVue>
+    <LayerVue :visible.sync="visible6" :setTop="true"><div>300*158（内容区加标题的最小高度是200px）</div></LayerVue>
     <h2>窗口大小</h2>
     <el-row>
       <el-col :span="3">
@@ -40,7 +40,7 @@ export default {
     open2() {
       this.$layer.closeAll();
       this.$layer({
-        settop: true,
+        setTop: true,
         content: `窗口大小：宽度:${this.inputwidth === "" || this.inputwidth < 300 ? 300 : this.inputwidth},高度:${this.inputheight === "" || this.inputheight < 200 ? 200 : this.inputheight}；layer未限制最小高宽大小，请勿设置离谱儿的数值`,
         id: "open2",
         destroyOnClose: true,

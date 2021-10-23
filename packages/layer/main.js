@@ -4,7 +4,7 @@ import LayerVue, {
 LayerVue.install = function (Vue) {
   Vue.component(LayerVue.name, LayerVue);
 };
-const version = "0.3.11";
+const version = "0.4.0";
 const versions = [
   "0.0.1",
   "0.0.2",
@@ -40,7 +40,8 @@ const versions = [
   "0.3.7",
   "0.3.8",
   "0.3.10",
-  "0.3.11"
+  "0.3.11",
+  "0.4.0"
 ];
 const findIndex = (id, Vue) => {
   let index = -1;
@@ -74,11 +75,11 @@ const LayerBox = function (Vue) {
         let instance = Vue.prototype.$layer.o.instances[index].instance;
         if (!instance.destroyOnClose) {
           if (instance.model) {
-            instance.defvisible = true;
+            instance.defVisible = true;
           } else {
             instance.$emit("update:visible", true);
-            if (!instance.defvisible) {
-              instance.defvisible = true;
+            if (!instance.defVisible) {
+              instance.defVisible = true;
             }
           }
         }
@@ -135,7 +136,6 @@ const LayerBox = function (Vue) {
         ...options
       }
     });
-    instance._el = options.el ? options.el : '#app';
     instance._ishtml = options.ishtml;
     instance._isnewDOM = options.isnewDOM;
     instance._isComponent = options.isComponent;
@@ -149,20 +149,16 @@ const LayerBox = function (Vue) {
     if (instance._ishtml) {
       if (options.content.parentNode) {
         let parentDiv = options.content.parentNode;
-        if (document.querySelector(options.el)) {
+        if (options.appendToBody) {
           const solt = document.createElement("div");
           solt.className = 'layer-vue-solt-' + index;
           parentDiv.insertBefore(solt, options.content)
-          document.querySelector(options.el).appendChild(instance.vm.$el);
+          document.body.appendChild(instance.vm.$el);
         } else {
           parentDiv.insertBefore(instance.vm.$el, options.content);
         }
       } else {
-        if (document.querySelector(instance._el)) {
-          document.querySelector(instance._el).appendChild(instance.vm.$el);
-        } else {
-          document.body.appendChild(instance.vm.$el);
-        }
+        document.body.appendChild(instance.vm.$el);
       }
       instance.vm.$el
         .querySelector(".layer-vue-content")
@@ -184,11 +180,7 @@ const LayerBox = function (Vue) {
             console.warn("[layer warn]:Incorrect content type");
           break;
       }
-      if (document.querySelector(instance._el)) {
-        document.querySelector(instance._el).appendChild(instance.vm.$el);
-      } else {
-        document.body.appendChild(instance.vm.$el);
-      }
+      document.body.appendChild(instance.vm.$el);
     }
     Vue.prototype.$layer.o.instances.push({
       instance
@@ -245,7 +237,7 @@ const LayerBox = function (Vue) {
       return false;
     }
     const instances = Vue.prototype.$layer.o.instances[index];
-    if (instances && instances.instance.maxbtn === false) {
+    if (instances && instances.instance.maxBtn === false) {
       instances.instance.maxfun();
       return true;
     } else {
@@ -262,7 +254,7 @@ const LayerBox = function (Vue) {
       return false;
     }
     const instances = Vue.prototype.$layer.o.instances[index];
-    if (instances && instances.instance.minbtn === false) {
+    if (instances && instances.instance.minBtn === false) {
       instances.instance.minfun();
       return true;
     } else {
@@ -295,13 +287,13 @@ const LayerBox = function (Vue) {
       index = findIndex(index, Vue);
       if (index >= 0 && index < Vue.prototype.$layer.o.instances.length) {
         let instance = Vue.prototype.$layer.o.instances[index].instance;
-        if (!instance.destroyOnClose && instance.defvisible === false) {
+        if (!instance.destroyOnClose && instance.defVisible === false) {
           if (instance.model) {
-            instance.defvisible = true;
+            instance.defVisible = true;
           } else {
             instance.$emit("update:visible", true);
-            if (!instance.defvisible) {
-              instance.defvisible = true;
+            if (!instance.defVisible) {
+              instance.defVisible = true;
             }
           }
           return true;
@@ -320,7 +312,7 @@ const LayerBox = function (Vue) {
     }
     const instance = Vue.prototype.$layer.o.instances[index].instance;
     if (instance.model) {
-      instance.$data.deftitle = value;
+      instance.$data.defTitle = value;
       return true;
     }
     return false;

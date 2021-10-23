@@ -1,6 +1,6 @@
 <template>
   <div>
-    <LayerVue :visible.sync="visible1" :settop="true" :content="inputcontent"></LayerVue>
+    <LayerVue :visible.sync="visible1" :setTop="true" :content="inputcontent"></LayerVue>
     <h2>内容区</h2>
     <div id="content1" style="display: none; color: #409EFF;padding: 20px; background: #444;text-align: center;line-height: 30px;  border-radius:5px;width: 500px;overflow: hidden;box-sizing:border-box">
       111111111111111
@@ -43,7 +43,7 @@ export default {
     async open() {
       await this.$layer.closeAll();
       this.layer3 = await this.$layer({
-        settop: true,
+        setTop: true,
         content: document.getElementById("content1"),
       });
     },

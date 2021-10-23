@@ -50,11 +50,11 @@ const install = function(Vue, options={}) {
   Vue.prototype.$layer.o = {
     log: options && options.log ? options.log : false,
     title:options && options.title ? options.title : '信息',
-    zindex: options && options.zindex ? options.zindex : 100,
+    zIndex: options && options.zIndex ? options.zIndex : 100,
     skin: newskin,
-    settop: () => {
-      Vue.prototype.$layer.o.zindex = Vue.prototype.$layer.o.zindex + 1;
-      return Vue.prototype.$layer.o.zindex;
+    setTop: () => {
+      Vue.prototype.$layer.o.zIndex = Vue.prototype.$layer.o.zIndex + 1;
+      return Vue.prototype.$layer.o.zIndex;
     },
     instances: []
   };

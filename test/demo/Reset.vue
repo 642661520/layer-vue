@@ -1,6 +1,6 @@
 <template>
   <div>
-    <layer-vue :visible.sync="visible1" :settop="true" :reset='reset' id="reset">
+    <layer-vue :visible.sync="visible1" :setTop="true" :reset='reset' id="reset">
       移动或拉伸窗口后点击<el-button type="primary"  @click="reset">重置窗口</el-button>
     </layer-vue>
     <h2>重置窗口</h2>
