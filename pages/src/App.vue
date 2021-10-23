@@ -69,7 +69,9 @@ export default {
       this.$store.commit("settheme", newvalue);
     }
   },
-  mounted() {},
+  mounted() {
+    this.openLayer();
+  },
   methods: {
     openLayer() {
       this.$layer({
