@@ -933,7 +933,7 @@ export default {
     lbresizefun(e1) {
       e1.preventDefault();
       const { minwidth, minheight, width, height, x, ratio } = this;
-      const { witdh: maxWidth, height: maxHeight } = this.maxareainit();
+      const { width: maxWidth, height: maxHeight } = this.maxareainit();
       const clientX = e1.clientX;
       const clientY = e1.clientY;
       document.onmousemove = (e2) => {
@@ -969,16 +969,21 @@ export default {
           this.l.height = ((this.l.width * (this.initdata.height-titleheight)) / this.initdata.width)+titleheight;
           if (!parseInt(this.moveOut[3]) && this.l.height + this.y >= docelm.clientHeight) {
             this.l.height = docelm.clientHeight - this.y;
-            this.l.width = (this.l.height * this.initdata.width) / this.initdata.height;
+            this.l.width = ((this.l.height-titleheight) * this.initdata.width) / (this.initdata.height-titleheight);
             newX = x - (this.l.width - width);
           }
           if (this.l.height <= minheight) {
             this.l.height = minheight;
             this.l.width = (this.l.height * this.initdata.width) / this.initdata.height;
+            this.l.width = ((this.l.height-titleheight) * this.initdata.width) / (this.initdata.height-titleheight);
+            newX = x - (this.l.width - width);
+          }
+          if (this.l.height >= maxHeight) {
+            this.l.height = maxHeight;
+            this.l.width = ((this.l.height-titleheight) * this.initdata.width) / (this.initdata.height-titleheight);
             newX = x - (this.l.width - width);
           }
         }
-
         this.width = this.l.width;
         this.height = this.l.height;
         this.x = newX;
@@ -993,7 +998,7 @@ export default {
     rbresizefun(e1) {
       e1.preventDefault();
       const { width, height, x, y, minwidth, minheight, ratio } = this;
-      const { witdh: maxWidth, height: maxHeight } = this.maxareainit();
+      const { width: maxWidth, height: maxHeight } = this.maxareainit();
       const clientX = e1.clientX;
       const clientY = e1.clientY;
       document.onmousemove = (e2) => {
@@ -1025,11 +1030,15 @@ export default {
           this.l.height = ((this.l.width * (this.initdata.height-titleheight)) / this.initdata.width)+titleheight;
           if (!parseInt(this.moveOut[3]) && this.l.height + y >= docelm.clientHeight) {
             this.l.height = docelm.clientHeight - y;
-            this.l.width = (this.l.height * this.initdata.width) / this.initdata.height;
+            this.l.width = ((this.l.height-titleheight) * this.initdata.width) / (this.initdata.height-titleheight);
           }
           if (this.l.height <= minheight) {
             this.l.height = minheight;
-            this.l.width = (this.l.height * this.initdata.width) / this.initdata.height;
+            this.l.width = ((this.l.height-titleheight) * this.initdata.width) / (this.initdata.height-titleheight);
+          }
+          if (this.l.height >= maxHeight) {
+            this.l.height = maxHeight;
+            this.l.width = ((this.l.height-titleheight) * this.initdata.width) / (this.initdata.height-titleheight);
           }
         }
         this.width = this.l.width;
