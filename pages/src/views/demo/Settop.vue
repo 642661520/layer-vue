@@ -6,7 +6,7 @@
         <el-button type="primary" @click="open">打开一个置顶窗口</el-button>
       </el-col>
     </el-row>
-    <show-code codename="setTop"/>
+    <show-code codename="settop"/>
   </div>
 </template>
 
