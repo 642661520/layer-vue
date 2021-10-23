@@ -3,13 +3,16 @@
     id="app"
     :class="{
       sunny: theme,
-      moon: !theme,
+      moon: !theme
     }"
   >
     <header class="header">
       <div id="nav">
         <div class="title">
           <router-link to="/"><div>LayerVue</div></router-link>
+        </div>
+        <div class="important" @click="$layer.openAgain('重要提示')">
+          重要提示
         </div>
         <div class="title-menu">
           <router-link to="/doc">文档</router-link>
@@ -58,14 +61,15 @@
 export default {
   data() {
     return {
-      theme: true,
+      theme: true
     };
   },
   watch: {
-    theme: function (newvalue) {
+    theme: function(newvalue) {
       this.$store.commit("settheme", newvalue);
-    },
+    }
   },
+  mounted() {}
 };
 </script>
 <style lang="less">
@@ -106,6 +110,7 @@ export default {
       line-height: 60px;
       display: flex;
       justify-content: center;
+      align-items: center;
       .title {
         min-width: 200px;
         display: block;
@@ -149,6 +154,32 @@ export default {
       a {
         font-weight: bold;
         color: rgb(0, 0, 0);
+      }
+    }
+    .important {
+      min-width: 100px;
+      height: 30px;
+      line-height: 30px;
+      color: #07a;
+      border-radius: 3px;
+      cursor: pointer;
+      animation: aaa 3s ease infinite;
+      background: linear-gradient(45deg, #bfa, #19a );
+      background-size: 200% 200%;
+      &:hover {
+        color: #0fa;
+        box-shadow: #19a  0px 0px 20px;
+      }
+      @keyframes aaa {
+        0% {
+          background-position: 0 0%;
+        }
+        50% {
+          background-position: 100% 0%;
+        }
+        100% {
+          background-position: 0 0%;
+        }
       }
     }
   }
@@ -431,24 +462,23 @@ export default {
 @media only screen and (max-width: 540px) {
   #app {
     min-width: 0px;
-   .header #nav  .title{
+    .header #nav .title {
       min-width: 100px;
       font-size: 20px;
-
     }
     .header {
       width: 100vw !important;
       #nav .title-menu {
         padding: 0 !important;
-        a[href="#/demo"]{
+        a[href="#/demo"] {
           display: none;
         }
         a,
         #theme {
           padding-left: 5px !important;
           margin: 0px !important;
-          .el-icon-sunny{
-            right:20px;
+          .el-icon-sunny {
+            right: 20px;
           }
         }
       }
@@ -457,20 +487,21 @@ export default {
 
   .main {
     width: 100vw !important;
-    .home-bg{
-      background-image: url('./assets/bg2.jpg') !important;
+    .home-bg {
+      background-image: url("./assets/bg2.jpg") !important;
     }
   }
   .menu {
     display: none;
   }
-  .footer{
-    span{
+  .footer {
+    span {
       display: none;
     }
     a {
-    font-size: 10px;
-    overflow: hidden !important;
-  }}
+      font-size: 10px;
+      overflow: hidden !important;
+    }
+  }
 }
 </style>

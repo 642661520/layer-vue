@@ -16,7 +16,7 @@ Vue.use(Clipboard);
 Vue.use(mavonEditor);
 // Vue.use(hljs.vuePlugin);
 Vue.use(ElementUI);
-Vue.use(LayerVue,{zIndex:2000});
+Vue.use(LayerVue,{zIndex:3000});
 Vue.config.productionTip = false;
 new Vue({
   router,

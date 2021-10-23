@@ -25,7 +25,7 @@
       <a href="javascript:void(0)" @click="goconfig(109)" :class="{ active: active === 109 }"><span>maxmin</span></a>
       <a href="javascript:void(0)" @click="goconfig(110)" :class="{ active: active === 110 }"><span>resize</span></a>
       <a href="javascript:void(0)" @click="goconfig(111)" :class="{ active: active === 111 }"><span>zIndex</span></a>
-      <a href="javascript:void(0)" @click="goconfig(112)" :class="{ active: active === 112 }"><span>settop</span></a>
+      <a href="javascript:void(0)" @click="goconfig(112)" :class="{ active: active === 112 }"><span>setTop</span></a>
       <a href="javascript:void(0)" @click="goconfig(113)" :class="{ active: active === 113 }"><span>move</span></a>
       <a href="javascript:void(0)" @click="goconfig(114)" :class="{ active: active === 114 }"><span>moveOut</span></a>
       <a href="javascript:void(0)" @click="goconfig(115)" :class="{ active: active === 115 }"><span>reset</span></a>

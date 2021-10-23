@@ -12,8 +12,10 @@
       <Anim />
       <Skin />
       <Settop />
+      <Shade />
       <Callback />
       <Globalmethod />
+      <Other />
       <msg-no />
       <div id="closeallbtn" @click="closeAll">关闭全部</div>
     </div>
@@ -34,7 +36,9 @@ import Settop from "./Settop.vue";
 import Reset from "./Reset.vue";
 import Resize from "./Resize.vue";
 import Callback from "./Callback.vue";
-import Globalmethod from './Globalmethod.vue'
+import Globalmethod from './Globalmethod.vue';
+import Shade from './Shade.vue';
+import Other from './Other.vue'
 export default {
   components: {
     Offset,
@@ -50,7 +54,9 @@ export default {
     Reset,
     Resize,
     Callback,
-    Globalmethod
+    Globalmethod,
+    Shade,
+    Other
   },
   created() {
     this.$layer && this.$layer.closeAll();

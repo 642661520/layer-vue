@@ -124,7 +124,7 @@ export default {
     open1() {
       this.layer1 = this.$layer({
         id: "this.layer1",
-        settop:true,
+        setTop:true,
         maxmin: [1, 1],
         destroyOnClose: true,
         success: (el, index) => {
@@ -210,4 +210,5 @@ export default {
 </script>
 
 <style></style>
+
 ```

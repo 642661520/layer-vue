@@ -30,7 +30,7 @@ export default {
       aData: [],
       active: undefined,
       loading: true,
-      versions: this.$layer.versions.reverse(),
+      versions: [],
       version: this.$layer.version,
       zxtsshow:false,
       textarea: `{
@@ -40,6 +40,8 @@ export default {
     };
   },
 created() {
+    const versions=[...this.$layer.versions].reverse();
+    this.versions=versions;
     this.$layer.o.instances=[]
     this.getdoc();
   },

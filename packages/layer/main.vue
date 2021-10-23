@@ -1,6 +1,6 @@
 <template>
   <div v-cloak v-if="destroyOnClose ? defVisible : true" :data-index="index" :data-id="id" class="layer-vue" :id="'layer-vue-' + index" :data-skin="typeof defSkin === 'string' ? defSkin : ''" :style="{ display: defVisible ? '' : 'none' }">
-    <div class="layer-vue-shade" v-if="shade" :style="{ background: defShade }" @mousedown="shadeClosefun"></div>
+    <div class="layer-vue-shade" v-if="shade" :style="{ background: defShade,'z-index': defZIndex }" @mousedown="shadeClosefun"></div>
     <div
       οndragstart="return false;"
       class="layer-vue-box"
@@ -232,7 +232,7 @@ export default {
     // 是否保持高宽比例
     ratio: { type: Boolean, default: false },
     // 阴影
-    shade: { type: [String, Number, Array], default: 0 },
+    shade: { type: [String, Number, Array, Boolean], default: false },
     // 点击阴影关闭
     shadeClose: { type: Boolean, default: false },
     // 是否添加到body
@@ -322,19 +322,6 @@ export default {
       }
     } else {
       this.defBorderWidth = this.borderWidth;
-    }
-    if (this.shade) {
-      if (typeof this.shade === "number") {
-        if (this.shade !== 1) {
-          this.defShade = `rgba(0, 0, 0,${this.shade})`;
-        }
-      } else if (this.shade instanceof Array && this.shade.length >= 2) {
-        this.defShade = `${this.shade[1]}${(this.shade[0] * 255).toString(16)}`;
-      } else if (typeof this.shade === "string") {
-        if (!this.shade === "1") {
-          this.defShade = this.shade;
-        }
-      }
     }
     window.addEventListener("resize", this.resizefun);
     if (this.visible || this.visible === undefined) {
@@ -505,7 +492,19 @@ export default {
         //   this.$refs.content.children[0].style.display = "block";
         // }
       }
-
+      if (this.shade) {
+      if (typeof this.shade === "number") {
+        if (this.shade !== 1) {
+          this.defShade = `rgba(0, 0, 0,${this.shade})`;
+        }
+      } else if (this.shade instanceof Array && this.shade.length >= 2) {
+        this.defShade = `${this.shade[1]}${(this.shade[0] * 255).toString(16)}`;
+      } else if (typeof this.shade === "string") {
+        if (this.shade !== "1") {
+          this.defShade = this.shade;
+        }
+      }
+    }
       const { height, width } = this.areainit();
       const { x, y } = this.offsetinit(this.offset, width, height);
       this.initData = { width, height, x, y };

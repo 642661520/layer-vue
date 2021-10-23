@@ -8,12 +8,15 @@
         <el-button type="primary" @click="open">打开一个置顶窗口</el-button>
       </el-col>
     </el-row>
+    <show-code codename="setTop"/>
   </div>
 </template>
 
 <script>
+import showCode from '../../components/show-code.vue';
 import Settop2 from './Settop2.vue';
 export default {
+  components: { showCode },
   data() {
     return {
       c:1
@@ -24,7 +27,7 @@ export default {
       this.$layer({
         parent:this,
         offset: [Math.random() * 90 + "%", Math.random() * 90 + "%"],
-        settop:1,
+        setTop:1,
         content:{
           component:Settop2,
         }
@@ -33,6 +36,9 @@ export default {
   },
 };
 </script>
+
+<style></style>
+
 
 <!-- Settop2.vue -->
 <template>

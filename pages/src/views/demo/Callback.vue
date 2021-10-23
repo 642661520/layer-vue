@@ -1,6 +1,6 @@
 <template>
   <div>
-    <layer-vue :visible.sync="visible1" :resizing="resizing">
+    <layer-vue :visible.sync="visible1" setTop @resizing="resizing" @cancel="width=300;height=200;">
       拉伸窗口，下列大小同步变化<br />
       当前宽度:{{ width }}px,当前高度:{{ height }}px</layer-vue
     >

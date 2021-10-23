@@ -1,12 +1,12 @@
 <template>
   <div>
-    <LayerVue :visible.sync="visible1" :settop="true" :title='false'><div>没有标题栏时</div></LayerVue>
-    <LayerVue :visible.sync="visible2" :settop="true" :closeBtn="false"><div>不显示关闭按钮
+    <LayerVue :visible.sync="visible1" :setTop="true" :title='false'><div>没有标题栏时</div></LayerVue>
+    <LayerVue :visible.sync="visible2" :setTop="true" :closeBtn="false"><div>不显示关闭按钮
       <el-button type="primary" @click="visible2=false">关闭</el-button>
       </div></LayerVue>
-    <LayerVue :visible.sync="visible3" :settop="true" :maxmin="[1, 0]"><div>显示最大化按钮</div></LayerVue>
-    <LayerVue :visible.sync="visible4" :settop="true" :maxmin="[0, 1]"><div>显示最小化按钮</div></LayerVue>
-    <LayerVue :visible.sync="visible5" :settop="true" :maxmin="[1, 1]"><div>同时显示最大最小化</div></LayerVue>
+    <LayerVue :visible.sync="visible3" :setTop="true" :maxmin="[1, 0]"><div>显示最大化按钮</div></LayerVue>
+    <LayerVue :visible.sync="visible4" :setTop="true" :maxmin="[0, 1]"><div>显示最小化按钮</div></LayerVue>
+    <LayerVue :visible.sync="visible5" :setTop="true" :maxmin="[1, 1]"><div>同时显示最大最小化</div></LayerVue>
     <h2>自带按钮</h2>
     <el-row>
       <el-col :span="4">

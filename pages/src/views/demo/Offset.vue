@@ -1,10 +1,10 @@
 <template>
   <div>
-    <LayerVue :visible.sync="visible1" :settop="true"><div>offset="auto"</div></LayerVue>
-    <LayerVue :visible.sync="visible2" offset="lt" :settop="true"><div>offset="lt"</div></LayerVue>
-    <LayerVue :visible.sync="visible3" offset="rt" :settop="true"><div>offset="rt"</div></LayerVue>
-    <LayerVue :visible.sync="visible4" offset="lb" :settop="true"><div>offset="lb"</div></LayerVue>
-    <LayerVue :visible.sync="visible5" offset="rb" :settop="true"><div>offset="rb"</div></LayerVue>
+    <LayerVue :visible.sync="visible1" :setTop="true"><div>offset="auto"</div></LayerVue>
+    <LayerVue :visible.sync="visible2" offset="lt" :setTop="true"><div>offset="lt"</div></LayerVue>
+    <LayerVue :visible.sync="visible3" offset="rt" :setTop="true"><div>offset="rt"</div></LayerVue>
+    <LayerVue :visible.sync="visible4" offset="lb" :setTop="true"><div>offset="lb"</div></LayerVue>
+    <LayerVue :visible.sync="visible5" offset="rb" :setTop="true"><div>offset="rb"</div></LayerVue>
     <h2>打开位置</h2>
     <el-row>
       <el-col :span="5">
@@ -24,8 +24,14 @@
       </el-col>
     </el-row>
     <el-row>
+      <el-col :span="1">
+        top
+      </el-col>
       <el-col :span="4">
         <el-input v-model="inputtop" placeholder="请输入top"></el-input>
+      </el-col>
+      <el-col :span="1">
+        left
       </el-col>
       <el-col :span="4">
         <el-input v-model="inputleft" placeholder="请输入left"></el-input>
@@ -49,15 +55,15 @@ export default {
       visible3: false,
       visible4: false,
       visible5: false,
-      inputtop: "",
-      inputleft: "",
+      inputtop: "10%",
+      inputleft: "100",
     };
   },
   methods: {
     open1() {
       this.$layer.closeAll();
       this.$layer({
-        settop: true,
+        setTop: true,
         content: `打开位置：top:${this.inputtop === "" ? "auto" : this.inputtop},left:${this.inputleft === "" ? "auto" : this.inputleft}`,
         id: "open1",
         destroyOnClose: true,

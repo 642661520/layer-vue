@@ -816,9 +816,9 @@ finalsummer
 
 ## 链接
 
-gitee https://gitee.com/finalsummer/vuelayer
+gitee https://gitee.com/finalsummer/layer-vue
 
-github https://github.com/642661520/vuelayer
+github https://github.com/642661520/layer-vue
 
 npm https://www.npmjs.com/package/layer-vue
 

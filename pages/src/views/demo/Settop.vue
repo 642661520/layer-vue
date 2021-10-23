@@ -6,7 +6,7 @@
         <el-button type="primary" @click="open">打开一个置顶窗口</el-button>
       </el-col>
     </el-row>
-    <show-code codename="settop"/>
+    <show-code codename="setTop"/>
   </div>
 </template>
 
@@ -25,7 +25,7 @@ export default {
       this.$layer({
         parent:this,
         offset: [Math.random() * 90 + "%", Math.random() * 90 + "%"],
-        settop:1,
+        setTop:1,
         content:{
           component:Settop2,
         }

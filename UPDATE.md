@@ -6,6 +6,8 @@
 
 2.☆☆☆☆☆ 规范配置项为驼峰命名，影响的配置有：minArea,maxArea,zIndex,setTop,borderWidth;
 
+3.修复shade为string时不生效
+
 ## 0.3.11
 
 修复minarea拉伸时无效
