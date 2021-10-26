@@ -1,10 +1,10 @@
-import LayerVue, {
-  merge
-} from "./main.vue";
-LayerVue.install = function (Vue) {
+import LayerVue, { merge } from "./main.vue";
+LayerVue.install = function(Vue) {
   Vue.component(LayerVue.name, LayerVue);
 };
-const version = "0.4.0";
+// 当前版本
+const version = "0.4.1";
+// 版本记录
 const versions = [
   "0.0.1",
   "0.0.2",
@@ -41,30 +41,33 @@ const versions = [
   "0.3.8",
   "0.3.10",
   "0.3.11",
-  "0.4.0"
+  "0.4.0",
+  "0.4.1"
 ];
+// 查找layer函数
 const findIndex = (id, Vue) => {
   let index = -1;
   if (typeof id === "number") {
     index = id;
   } else if (typeof id === "string") {
-    const arr = [...Vue.prototype.$layer.o.instances]
+    const arr = [...Vue.prototype.$layer.o.instances];
     index = arr.reverse().findIndex(value => {
       if (value) {
         return value.instance.id === id;
       }
     });
     if (index >= 0) {
-      index = arr.length - 1 - index
+      index = arr.length - 1 - index;
     }
   }
   return index;
 };
-const LayerBox = function (Vue) {
+const LayerBox = function(Vue) {
   const LayerBoxConstructor = Vue.extend(LayerVue);
-  const layer = function (options) {
+  const layer = function(options) {
     return layer.open(options);
   };
+  // 新建layer
   layer.open = (options = {}) => {
     if (typeof options.title === "object") {
       options.title = options.parent.title;
@@ -91,11 +94,10 @@ const LayerBox = function (Vue) {
     // 强制删除传入的visible属性
     delete options.visible;
     // 合并全局皮肤配置到默认配置
-    const {
-      skin
-    } = Vue.prototype.$layer.o;
+    const { skin } = Vue.prototype.$layer.o;
     if (options.skin) {
-      if (typeof options.skin === "string") {} else {
+      if (typeof options.skin === "string") {
+      } else {
         options.skin = merge(options.skin, skin);
       }
     } else {
@@ -151,8 +153,8 @@ const LayerBox = function (Vue) {
         let parentDiv = options.content.parentNode;
         if (options.appendToBody) {
           const solt = document.createElement("div");
-          solt.className = 'layer-vue-solt-' + index;
-          parentDiv.insertBefore(solt, options.content)
+          solt.className = "layer-vue-solt-" + index;
+          parentDiv.insertBefore(solt, options.content);
           document.body.appendChild(instance.vm.$el);
         } else {
           parentDiv.insertBefore(instance.vm.$el, options.content);
@@ -187,6 +189,7 @@ const LayerBox = function (Vue) {
     });
     return index;
   };
+  // 关闭layer
   layer.close = async index => {
     index = findIndex(index, Vue);
     if (index < 0) {
@@ -194,7 +197,7 @@ const LayerBox = function (Vue) {
     }
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
-      let result = await instances.instance.closefun();
+      let result = await instances.instance.beforeCloseFun();
       return result;
     } else {
       Vue.prototype.$layer.o.log &&
@@ -204,6 +207,7 @@ const LayerBox = function (Vue) {
       return false;
     }
   };
+  // 重置layer窗口大小和定位的方法
   layer.reset = index => {
     index = findIndex(index, Vue);
     if (index < 0) {
@@ -211,7 +215,7 @@ const LayerBox = function (Vue) {
     }
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
-      instances.instance.resetfun();
+      instances.instance.resetFun();
       return true;
     } else {
       Vue.prototype.$layer.o.log &&
@@ -221,16 +225,18 @@ const LayerBox = function (Vue) {
       return false;
     }
   };
+  // 关闭所有layer窗口的方法
   layer.closeAll = async () => {
     let closeAll = [];
     Vue.prototype.$layer.o.instances.forEach(element => {
       if (element) {
-        closeAll.push(element.instance.closefun());
+        closeAll.push(element.instance.beforeCloseFun());
       }
     });
     let result = await Promise.all(closeAll);
     return result;
   };
+  // 最大化layer窗口大小
   layer.full = index => {
     index = findIndex(index, Vue);
     if (index < 0) {
@@ -238,7 +244,7 @@ const LayerBox = function (Vue) {
     }
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances && instances.instance.maxBtn === false) {
-      instances.instance.maxfun();
+      instances.instance.maxFun();
       return true;
     } else {
       Vue.prototype.$layer.o.log &&
@@ -248,6 +254,7 @@ const LayerBox = function (Vue) {
       return false;
     }
   };
+  // 最小化layer窗口大小
   layer.min = index => {
     index = findIndex(index, Vue);
     if (index < 0) {
@@ -255,7 +262,7 @@ const LayerBox = function (Vue) {
     }
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances && instances.instance.minBtn === false) {
-      instances.instance.minfun();
+      instances.instance.minFun();
       return true;
     } else {
       Vue.prototype.$layer.o.log &&
@@ -265,6 +272,7 @@ const LayerBox = function (Vue) {
       return false;
     }
   };
+  // 退出最大、最小化
   layer.restore = index => {
     index = findIndex(index, Vue);
     if (index < 0) {
@@ -272,7 +280,7 @@ const LayerBox = function (Vue) {
     }
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances) {
-      instances.instance.restorefun();
+      instances.instance.restoreFun();
       return true;
     } else {
       Vue.prototype.$layer.o.log &&
@@ -282,6 +290,7 @@ const LayerBox = function (Vue) {
       return false;
     }
   };
+  // 重新打开指定的layer窗口
   layer.openAgain = index => {
     if (typeof index !== "object") {
       index = findIndex(index, Vue);
@@ -305,6 +314,7 @@ const LayerBox = function (Vue) {
       }
     }
   };
+  // 重新设置title
   layer.setTitle = (index, value) => {
     index = findIndex(index, Vue);
     if (index < 0) {
@@ -317,6 +327,7 @@ const LayerBox = function (Vue) {
     }
     return false;
   };
+  // 重新设置内容
   layer.setContent = (index, value) => {
     index = findIndex(index, Vue);
     if (index < 0) {
@@ -324,14 +335,15 @@ const LayerBox = function (Vue) {
     }
     const instances = Vue.prototype.$layer.o.instances[index];
     if (instances.instance.model) {
-      if (instances.instance._ishtml) {} else if (instances.instance._isComponent) {
+      if (instances.instance._ishtml) {
+      } else if (instances.instance._isComponent) {
         document
           .getElementById("layer-vue-" + instances.instance.index)
           .querySelector(".layer-vue-content")
           .removeChild(
             document
-            .getElementById("layer-vue-" + instances.instance.index)
-            .querySelector(".layer-vue-content").children[0]
+              .getElementById("layer-vue-" + instances.instance.index)
+              .querySelector(".layer-vue-content").children[0]
           );
         let chlidinstance = new instances.instance.content.component({
           parent: instances.instance,
@@ -358,6 +370,7 @@ const LayerBox = function (Vue) {
       return false;
     }
   };
+  // 手动重置窗口大小，只在area为默认值时有效
   layer.reloadAutoArea = index => {
     index = findIndex(index, Vue);
     if (index < 0) {
@@ -365,20 +378,15 @@ const LayerBox = function (Vue) {
     }
     const instance = Vue.prototype.$layer.o.instances[index].instance;
     if (instance) {
-      instance.reloadAutoAreafun();
+      instance.reloadAutoAreaFun();
       return true;
     }
     return false;
-  }
+  };
   layer.version = version;
   layer.versions = versions;
   return layer;
 };
 
 export default LayerBox;
-export {
-  LayerVue,
-  merge,
-  version,
-  versions
-};
+export { LayerVue, merge, version, versions };

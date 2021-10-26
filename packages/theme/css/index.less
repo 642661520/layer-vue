@@ -71,16 +71,12 @@
   .layer-vue-close2 {
     display: none;
     position: absolute;
-    right: -15px;
-    top: -15px;
-    border-radius: 50%;
+    right: 0px;
+    top: 0px;
     width: 25px;
     height: 25px;
     z-index: 1;
     line-height: 21px;
-    background-color: #777;
-    border: 2px solid #FFF;
-
     svg {
       fill: var(--cc);
       line-height: 21px;
@@ -90,7 +86,9 @@
 
     &:hover {
       background: var(--cbch);
-      color: var(--cch);
+      svg {
+        fill: var(--cch);
+      }
     }
   }
 
@@ -98,33 +96,89 @@
     display: block;
   }
 
-
   .layer-vue-resize {
     user-select: none;
     position: absolute;
+    z-index: 19950328;
+  }
+
+  .layer-vue-resize-rb {
     cursor: se-resize;
     width: 10px;
     height: 10px;
-    bottom: 0px;
-    right: 0px;
-    z-index: 1;
+    bottom: -2.5px;
+    right: -2.5px;
+
   }
 
-  .layer-vue-lbresize {
-    user-select: none;
-    position: absolute;
+  .layer-vue-resize-lb {
     cursor: sw-resize;
     width: 10px;
     height: 10px;
-    bottom: 0px;
-    left: 0px;
-    z-index: 1;
+    bottom: -2.5px;
+    left: -2.5px;
+  }
+
+  .layer-vue-resize-lt {
+    cursor: nw-resize;
+    width: 10px;
+    height: 10px;
+    top: -2.5px;
+    left: -2.5px;
+  }
+
+  .layer-vue-resize-rt {
+    cursor: ne-resize;
+    width: 10px;
+    height: 10px;
+    top: -2.5px;
+    right: -2.5px;
+  }
+
+  .layer-vue-resize-l {
+    top: 7.5px;
+    width: 5px;
+    left: -2.5px;
+    cursor: w-resize;
+  }
+
+  .layer-vue-resize-r {
+    top: 7.5px;
+    width: 5px;
+    right: -2.5px;
+    cursor: e-resize;
+  }
+
+  .layer-vue-resize-t {
+    top: -2.5px;
+    height: 5px;
+    width: calc(100% - 15px);
+    left: 7.5px;
+    cursor: n-resize;
+  }
+
+  .layer-vue-resize-b {
+    bottom: -2.5px;
+    height: 5px;
+    width: calc(100% - 15px);
+    left: 7.5px;
+    cursor: s-resize;
   }
 
   .layer-vue-content {
     border-radius: 0 0 2px 2px;
     position: relative;
-    overflow: hidden;
+
+    &::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+
+    /* 滚动条滑块 */
+    &::-webkit-scrollbar-thumb {
+      border-radius: 5px;
+      background: var(--sliderColor);
+    }
   }
 
   &[data-skin='winxp'] {
@@ -261,7 +315,7 @@
       }
 
       .layer-vue-max {
-        
+
         box-shadow: inset 0 0 2px 0px white;
         border-style: solid;
         border-width: 0px 1px 0px 0px;
@@ -325,6 +379,7 @@
         height: 25px;
         width: 25px;
         border-radius: 50%;
+
         svg {
           fill: #FFF;
           padding-top: 5px;

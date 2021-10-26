@@ -4,6 +4,7 @@
     <layer-vue
       :visible.sync="visible1"
       :destroyOnClose="true"
+      setTop
       title="切换标签页触发reloadAutoArea"
       :resizing="resizing"
       id="reloadAutoArea"
@@ -52,7 +53,7 @@
         >
       </el-col>
       <el-col :span="4">
-        <el-button type="primary" @click="visible1 = true"
+        <el-button type="success" @click="visible1 = true"
           >reloadAutoArea</el-button
         >
       </el-col>

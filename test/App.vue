@@ -1,14 +1,16 @@
 <template>
   <div>
     <Demo />
-    <layer-vue
-      move=".layer-vue-content"
+    <!-- <layer-vue
       :maxmin="[1, 1]"
       destroyOnClose
-      :area="[700,300]"
+      :area="[700, 300]"
+      :minArea="[400,400]"
+      :maxArea='[900,900]'
       :anim="0"
       ratio
       id="test"
+      slider
       append-to-body
       @cancel="cancel"
       @success="success"
@@ -19,6 +21,38 @@
       @min="min"
       @restore="restore"
       @resizeEnd="resizeEnd"
+      shade="#1233"
+      :skin="{
+        shade: {
+          background: '#59a',
+        },
+        slider:{
+          background: '#59a',
+        },
+      }"
+    >
+      <video style="width: 100%"></video>
+    </layer-vue> -->
+    <layer-vue
+      :maxmin="[1, 1]"
+      destroyOnClose
+      :area="[700, 300]"
+      :minArea="[400, 100]"
+      :maxArea="[900, 900]"
+      :moveOutPadding="[10, 20, 30, 40]"
+      :anim="0"
+      id="test"
+      slider
+      append-to-body
+      shade="#1233"
+      :skin="{
+        shade: {
+          background: '#59a',
+        },
+        slider: {
+          background: '#59a',
+        },
+      }"
     >
       <video style="width: 100%"></video>
     </layer-vue>

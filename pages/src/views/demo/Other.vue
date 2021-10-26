@@ -12,16 +12,21 @@
     <layer-vue :visible.sync="visible4" isMax :maxmin="[1,1]">
     isMax 以最大化打开
     </layer-vue>
+    <layer-vue :visible.sync="visible5" :area="[300,300]">
+    <div style="width: 500px;height: 500px;background: #0fa;">
+    slider 默认开启，避免某些情况下内容区比layer下时，内容被裁剪后，无法显示
+    </div>
+    </layer-vue>
     <h2>其他</h2>
     <el-row>
       <el-col :span="3">
         <el-button type="primary" @click="visible3=true">visible</el-button>
       </el-col>
       <el-col :span="4">
-        <el-button type="primary" @click="visible1=true">插入到body</el-button>
+        <el-button type="success" @click="visible1=true">插入到body</el-button>
       </el-col>
       <el-col :span="3">
-        <el-button type="primary" @click="visible2=true">设置ID</el-button>
+        <el-button type="success" @click="visible2=true">设置ID</el-button>
       </el-col>
       <el-col :span="4">
         <el-button type="primary" @click="openLayer">设置parent</el-button>
@@ -29,7 +34,9 @@
       <el-col :span="4">
         <el-button type="primary" @click="visible4=true"> isMax</el-button>
       </el-col>
-
+      <el-col :span="4">
+        <el-button type="success" @click="visible5=true">滑动条</el-button>
+      </el-col>
     </el-row>
     <show-code codename="other" />
   </div>
@@ -44,7 +51,8 @@ data() {
     visible1:false,
     visible2:false,
     visible3:false,
-    visible4:false
+    visible4:false,
+    visible5:false,
   }
 },
 methods: {

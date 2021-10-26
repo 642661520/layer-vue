@@ -19,7 +19,7 @@
         <el-button type="primary" @click="visible2=true">自定义遮罩颜色和透明度</el-button>
       </el-col>
       <el-col :span="4">
-        <el-button type="primary" @click="visible3=true">点击遮罩触发关闭</el-button>
+        <el-button type="success" @click="visible3=true">点击遮罩触发关闭</el-button>
       </el-col>
     </el-row>
     <show-code codename="shade" />

@@ -126,10 +126,14 @@ export default {
             colorHover: "#f00"
           }
         },
-        content: `<div>&nbsp;&nbsp;&nbsp;&nbsp;0.4.0版本 不兼容修改：</div>
+        content: `
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;0.4.0版本 不兼容修改：</div>
 <div>&nbsp;&nbsp;1.删除el配置项,可使用appendToBody;</div>
 <div>&nbsp;&nbsp;2.☆☆☆☆☆ 规范配置项为驼峰命名，影响的配置有：</div>
-<div>&nbsp;&nbsp;minArea,maxArea,zIndex,setTop,borderWidth;</div>`
+<div>&nbsp;&nbsp;minArea,maxArea,zIndex,setTop,borderWidth;</div>
+<div>&nbsp;&nbsp;&nbsp;&nbsp;0.4.1版本 不兼容修改：</div>
+<div>&nbsp;&nbsp;添加其他6个方向的拉伸，默认开启；</div>
+`
       });
     }
   }

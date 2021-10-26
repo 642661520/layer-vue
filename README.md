@@ -22,7 +22,7 @@ import LayerVue from 'layer-vue';
 import 'layer-vue/lib/index.css';
 Vue.use(LayerVue,{
     //此项设置置顶窗口的初始值，默认为100，一般无需配置，和其他组件冲突时可在此配置
-    zindex:100,
+    zIndex:100,
     //全局配置窗口皮肤
     skin:{
     	//具体参数参见配置项：skin
@@ -33,7 +33,7 @@ Vue.use(LayerVue,{
 new Vue({render: h => h(App)}).$mount('#app')
 ```
 
-### CDN 方式
+### CDN方式
 
 使用CDN引入layer时，需要注意是的，仍需手动挂载，需写在html模版中
 
@@ -52,7 +52,7 @@ new Vue({render: h => h(App)}).$mount('#app')
       Vue.use(LayerVue,{
       //此项设置置顶窗口的初始值，默认为100，一般无需配置，和其他组件冲突时可在此配置
       // 非置顶窗口请使用时单独设置
-      zindex:100,
+      zIndex:100,
       //全局配置窗口皮肤
       skin:{
       	//具体参数参见配置项：skin
@@ -361,11 +361,17 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
 
 默认不显示最大小化按钮。需要显示配置*maxmin: [1,1]*即可
 
-### resize - 是否允许拉伸
+### resize - 是否允许4角拉伸
 
-类型：Number/Boolean，默认：[1,1]（右下角，左下角）
+类型：Number/Boolean，默认：[1,1,1,1]（右下角，左下角,左上角,右上角）
 
-默认情况下，你可以在弹层右下角和左下角拖动来拉伸尺寸。如果对指定的弹层屏蔽该功能，设置 [0,0]即可。
+默认情况下，你可以在弹层右下角，左下角,左上角,右上角拖动来拉伸尺寸。如果对指定的layer屏蔽该功能，设置 [0,0,0,0]即可。
+
+### borderResize - 是否允许4边拉伸
+
+类型：Number/Boolean，默认：[1,1,1,1]（右,下,左,上）
+
+默认情况下，你可以在弹层右,下,左,上拖动来拉伸尺寸。如果对指定的layer屏蔽该功能，设置 [0,0,0,0]即可。
 
 ### ratio - 拉伸时是否保持原始比例
 
@@ -385,7 +391,7 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
 
 类型：Boolean，默认：false
 
-当你的页面有很多很多 layer 窗口，你需要像 Window 窗体那样，点击某个窗口，该窗体就置顶在上面，那么 settop 可以来轻松实现。
+当你的页面有很多很多 layer 窗口，你需要像 Window 窗体那样，点击某个窗口，该窗体就置顶在上面，那么 setTop 可以来轻松实现。
 
 ### shade - 遮罩
 
@@ -404,49 +410,35 @@ offset默认情况下不用设置。但如果你不想垂直水平居中，你�
 类型：Object，默认：
 
 ```js
-{
-  //窗口阴影
-  boxShadow:'1px 1px 50px rgb(0 0 0 / 30%)',
-  background:"#fff",
-  //标题栏
+ skin = {
+  background: "#fff",
+  boxShadow: "1px 1px 50px rgb(0 0 0 / 30%)",
   title: {
-     //标题栏背景
-    background: "#fff",
-     //标题栏文本色
+    background: "transparent",
     color: "#000",
-     //标题栏和内容区分割线
-    borderBottom:"1px solid #f0f0f0",
+    borderBottom: "1px solid #f0f0f0"
   },
-  //内容区
   content: {
-	//内容区背景
-    background: "#fff",
-    //内容区文本色   
-    color: "#000",
+    background: "transparent",
+    color: "#000"
   },
-  //最大化最小化按钮
+  slider: {
+    background: "rgba(153, 153, 153, 0.5)"
+  },
+  shade: { background: "rgba(0, 0, 0, 0.3)" },
   maxmin: {
-    //最大化最小化按钮背景
-    background: "#fff",
-    //最大化最小化按钮
+    background: "transparent",
     color: "#000",
-    //鼠标移入时最大化最小化按钮文本色
     backgroundHover: "#6666",
-    //鼠标移入时最大化最小化按钮
-    colorHover: "#008afc",
+    colorHover: "#008afc"
   },
-  //关闭按钮
   close: {
-    //关闭按钮背景
-    background: "#fff",
-    //关闭按钮文本色
+    background: "transparent",
     color: "#000",
-    //鼠标移入时关闭按钮背景
     backgroundHover: "#f00",
-    //鼠标移入时关闭按钮文本色
-    colorHover: "#fff",
-  },
-}
+    colorHover: "#fff"
+  }
+};
 ```
 
 Layer提供了灵活的皮肤配置方案，只需配置需要修改的内容，不修改的无需传递。
@@ -467,7 +459,7 @@ import LayerVue from 'layer-vue';
 import 'layer-vue/lib/index.css';
 Vue.use(LayerVue,{
     //此项设置置顶窗口的初始值，默认为100，一般无需配置，和其他组件冲突时可在此配置
-    zindex:100,
+    zIndex:100,
     //全局配置窗口皮肤
     skin:{
   		maxmin: {
@@ -508,11 +500,25 @@ this.$layer({
 
 默认是触发标题区域拖拽。如果你想单独定义，指向元素的选择器或者DOM即可。如*move: '.move'*。你还配置设定*move: false*来禁止拖拽。
 
-### moveOut - 是否允许拖拽到窗口外
+### moveOut - 是否允许拖拽(拉伸)到窗口外
 
-类型：*Array*，默认：[0, 0, 0, 0]（上，右，下，左）
+类型：*Array*，默认：[0, 0, 0, 0]（右,下,左,上）
 
-默认只能在窗口内拖拽，如果你想让拖到窗外，那么设定*moveOut: [1, 1, 1, 1]*即可。
+默认只能在窗口内拖拽(拉伸)，如果你想让拖拽(拉伸) 到窗外，那么设定*moveOut: [1, 1, 1, 1]*即可。
+
+### moveOutPadding - 针对moveOut设置4个方向的附加像素值
+
+类型：*Array[number]*，默认：[0, 0, 0, 0]（右,下,左,上）
+
+设置拖拽(拉伸)时，可活动区域距离页面4边的距离，仅适用于设置了moveOut的对应方向；
+
+如页面header部分高50px,可设置moveOutPadding=[0,0,0,50],来避免layer在非最大化时，拖拽(拉伸)到header区域内。
+
+### slider - 内容区是否会出现滑动条
+
+类型：Boolean，默认：true
+
+默认会出现滑动条
 
 ### borderWidth - 边框大小修正值
 
@@ -559,7 +565,7 @@ Vue.use(LayerVue,{
 Vue.use(LayerVue,{
     //此项设置置顶窗口的初始值，默认为100，一般无需配置，和其他组件冲突时可在此配置
     // 非置顶窗口请使用时单独设置
-    zindex:100,
+    zIndex:100,
 })
 
 ```

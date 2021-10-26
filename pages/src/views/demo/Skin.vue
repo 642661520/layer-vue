@@ -19,7 +19,7 @@
         <el-button type="primary" @click="visible4 = !visible4">{{ !visible4 ? "默认皮肤" : "关闭" }}</el-button>
       </el-col>
       <el-col :span="3">
-        <el-button type="primary" @click="open">自定义皮肤</el-button>
+        <el-button type="success" @click="open">自定义皮肤</el-button>
       </el-col>
     </el-row>
     <el-row>
@@ -42,15 +42,48 @@ export default {
       visible3: false,
       visible4: false,
       skin:`{
-  title: {
-    background: "#888",
-    color: "#000",
-    borderColor:"#888",
-  },
-  content: {
-    background: "#ddd",
-  },
-}`
+          //窗口阴影
+          boxShadow: "1px 1px 50px rgb(0 0 0 / 30%)",
+          background: "linear-gradient(to right, #bfa , #5ba)",
+          //标题栏
+          title: {
+            //标题栏背景
+            background: "transparent",
+            //标题栏文本色
+            color: "#07a",
+            //标题栏和内容区分割线
+            borderBottom: "1px solid transparent"
+          },
+          //内容区
+          content: {
+            //内容区背景
+            background: "transparent",
+            //内容区文本色
+            color: "#07a"
+          },
+          //最大化最小化按钮
+          maxmin: {
+            //最大化最小化按钮背景
+            background: "#fff",
+            //最大化最小化按钮
+            color: "#000",
+            //鼠标移入时最大化最小化按钮文本色
+            backgroundHover: "#6666",
+            //鼠标移入时最大化最小化按钮
+            colorHover: "#008afc"
+          },
+          //关闭按钮
+          close: {
+            //关闭按钮背景
+            background: "transparent",
+            //关闭按钮文本色
+            color: "#07a",
+            //鼠标移入时关闭按钮背景
+            backgroundHover: "transparent",
+            //鼠标移入时关闭按钮文本色
+            colorHover: "#f00"
+          }
+        }`
     }
   },
   methods: {
@@ -71,7 +104,10 @@ export default {
     open(){
       let {skin}=this
       eval(`Vue.prototype.$layer({
-        skin:${skin}
+        skin:${skin},
+        content:'<div>{boxShadow: "1px 1px 50px rgb(0 0 0 / 30%)"}</div>',
+        area:[500,300],
+        title:'自定义皮肤',
       })`)
       
     }
