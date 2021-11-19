@@ -1,9 +1,10 @@
 import LayerVue, { merge } from "./main.vue";
+
 LayerVue.install = function(Vue) {
   Vue.component(LayerVue.name, LayerVue);
 };
 // 当前版本
-const version = "0.4.1";
+const version = "0.4.2";
 // 版本记录
 const versions = [
   "0.0.1",
@@ -42,7 +43,8 @@ const versions = [
   "0.3.10",
   "0.3.11",
   "0.4.0",
-  "0.4.1"
+  "0.4.1",
+  "0.4.2"
 ];
 // 查找layer函数
 const findIndex = (id, Vue) => {

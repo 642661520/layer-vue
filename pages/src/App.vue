@@ -457,7 +457,7 @@ export default {
           color: rgb(255, 255, 255);
         }
       }
-      .demo h2,
+      .demo h2,h1,.el-col,
       #closeallbtn,
       #zxtsbtn {
         color: #fff;

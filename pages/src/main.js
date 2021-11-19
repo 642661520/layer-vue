@@ -2,7 +2,7 @@ import Vue from "vue";
 import App from "./App.vue";
 // import LayerVue from "layer-vue";
 // import "./assets/packages/theme/css/index.css";
-import LayerVue from '../../src/index';
+import LayerVue from '../../packages/src/index';
 import ElementUI from "element-ui";
 // import "element-ui/lib/theme-chalk/index.css";
 // import hljs from "highlight.js";

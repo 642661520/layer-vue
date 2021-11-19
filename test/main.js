@@ -1,5 +1,5 @@
 import App from './App.vue'
-import LayerVue from '../src/index'
+import LayerVue from '../packages/src/index'
 import './index.css'
 Vue.use(LayerVue, { log: false,title:'test'})
 Vue.config.productionTip = false

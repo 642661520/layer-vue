@@ -1,6 +1,9 @@
 <template>
   <div class="demo">
     <div class="demo_main">
+    <h1>msg</h1>
+    <Msg />
+    <h1>layer</h1>
       <Offset />
       <Area />
       <Move />
@@ -39,6 +42,7 @@ import Callback from "./Callback.vue";
 import Globalmethod from './Globalmethod.vue';
 import Shade from './Shade.vue';
 import Other from './Other.vue'
+import Msg from "./Msg.vue";
 export default {
   components: {
     Offset,
@@ -56,8 +60,9 @@ export default {
     Callback,
     Globalmethod,
     Shade,
-    Other
-  },
+    Other,
+    Msg
+},
   created() {
     this.$layer && this.$layer.closeAll();
   },

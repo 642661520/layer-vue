@@ -1,5 +1,11 @@
 <template>
   <div>
+      <el-button @click="openMsg">
+      按钮
+    </el-button>
+    <el-button @click="openMsgSuccess">
+      按钮
+    </el-button>
     <Demo />
     <!-- <layer-vue
       :maxmin="[1, 1]"
@@ -33,7 +39,7 @@
     >
       <video style="width: 100%"></video>
     </layer-vue> -->
-    <layer-vue
+    <!-- <layer-vue
       :maxmin="[1, 1]"
       destroyOnClose
       :area="[700, 300]"
@@ -55,7 +61,7 @@
       }"
     >
       <video style="width: 100%"></video>
-    </layer-vue>
+    </layer-vue> -->
     <!--  // 关闭窗口回调
     // 移动结束回调
     moveEnd: { type: Function },
@@ -74,6 +80,7 @@
     resizing: { type: Function },
     // 拉伸结束回调
     resizeEnd: { type: Function }, -->
+
   </div>
 </template>
 <script>
@@ -85,8 +92,19 @@ export default {
   name: "app",
   mounted() {
     console.log(this.$layer.reloadAutoArea("13222222222222"));
+    setTimeout(()=>{
+      this.$layer.msg('信息')
+    },1000)
   },
   methods: {
+    openMsg(){
+        this.$layer.msg();
+this.$layer.msg.error();
+    },
+    openMsgSuccess(){
+        this.$layer.msg.success();
+this.$layer.msg.warning();
+    },
     cancel(a, b, c) {
       console.log("cancel", a, b, c);
     },

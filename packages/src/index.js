@@ -3,8 +3,10 @@ import LayerBox, {
   merge,
   version,
   versions
-} from "../packages/layer/main";
-import "../packages/theme/css/index.css";
+} from "../LayerVue/layer/main";
+import MsgBox from "../LayerVue/msg/main";
+import "../theme/css/layer/index.css";
+import "../theme/css/msg/index.css";
 const skin = {
   background: "#fff",
   boxShadow: "1px 1px 50px rgb(0 0 0 / 30%)",
@@ -43,6 +45,7 @@ const install = function(Vue, options = {}) {
   );
   Vue.component(LayerVue.name, LayerVue);
   Vue.prototype.$layer = LayerBox(Vue);
+  Vue.prototype.$msg = MsgBox(Vue);
   let newSkin = skin;
   if (options.skin) {
     if (typeof options.skin === "object") {

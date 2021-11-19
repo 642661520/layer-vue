@@ -1,6 +1,8 @@
 <template>
   <div class="demo">
     <div class="demo_main">
+      <h1>msg</h1>
+      <h1>layer</h1>
       <Offset />
       <Area />
       <Move />
@@ -31,7 +33,7 @@ import setTop from "./setTop.vue";
 import Reset from "./Reset.vue";
 import Resize from "./Resize.vue";
 import Callback from "./Callback.vue";
-import Globalmethod from './Globalmethod.vue'
+import Globalmethod from "./Globalmethod.vue";
 export default {
   components: {
     Offset,
@@ -46,11 +48,10 @@ export default {
     Reset,
     Resize,
     Callback,
-    Globalmethod
+    Globalmethod,
   },
   created() {
     this.$layer && this.$layer.closeAll();
   },
 };
 </script>
-

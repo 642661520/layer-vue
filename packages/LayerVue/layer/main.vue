@@ -95,11 +95,10 @@
   </div>
 </template>
 <script>
-import IconClose from "../theme/icon/IconClose.vue";
-import IconMax from "../theme/icon/IconMax.vue";
-import IconMin from "../theme/icon/IconMin.vue";
-import IconRestroe from "../theme/icon/IconRestroe.vue";
-
+import IconClose from "../../theme/icon/IconClose.vue";
+import IconMax from "../../theme/icon/IconMax.vue";
+import IconMin from "../../theme/icon/IconMin.vue";
+import IconRestroe from "../../theme/icon/IconRestroe.vue";
 /**
  * 合并函数
  * @param {Object} options 配置
@@ -114,7 +113,7 @@ const merge = (options, def) => {
       merge(options[key], def[key]);
     }
   }
-  return options;
+  return { ...options };
 };
 /**document.documentElement  */
 const docelm = document.documentElement;
@@ -337,7 +336,7 @@ export default {
     } else {
       this.defTitle = this.title;
     }
-    this.defSkin = this.$layer.o.skin;
+    this.defSkin = {...this.$layer.o.skin};
     if (this.borderWidth === 0) {
       if (typeof this.skin === "string") {
         this.defBorderWidth = 3;
@@ -376,7 +375,7 @@ export default {
         if (this.borderWidth) this.borderWidth = 3;
       }
     } else if (typeof this.skin === "string") {
-      this.defSkin = this.skin;
+      this.defSkin = `${this.skin}`;
     }
     this.$nextTick(() => {
       if (this.content && this.content.component) {
@@ -522,7 +521,7 @@ export default {
           this.defSkin.shade.background = `${this.shade[1]}${(this.shade[0] * 255).toString(16)}`;
         } else if (typeof this.shade === "string") {
           if (this.shade !== "1") {
-            this.defSkin.shade.background = this.shade;
+            this.defSkin.shade = { background: this.shade };
           }
         }
       }
@@ -1543,7 +1542,6 @@ export default {
           this.x = this.l.x;
         }
         this.y = this.l.y;
-        this.width = this.l.width;
         this.height = this.l.height;
         if (this.model) {
           this.resizing && this.resizing(this.$el, this.width, this.height);
