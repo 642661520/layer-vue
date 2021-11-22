@@ -1,7 +1,7 @@
 {
   "name": "layer-vue",
   "description": "layer-vue component",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "author": "'finalsummer' <'642661520de@gmail.com'>",
   "license": "MIT",
   "private": false,
@@ -9,11 +9,16 @@
   "files": [
     "lib",
     "packages",
+    "vetur",
     "UPDATE.md"
   ],
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server  test/main.js  --open --hot",
     "build": "cross-env NODE_ENV=production webpack --progress"
+  },
+  "vetur": {
+    "tags": "vetur/tags.json",
+    "attributes": "vetur/attributes.json"
   },
   "dependencies": {
     "vue": "^2.5.11"

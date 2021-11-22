@@ -4,7 +4,7 @@ LayerVue.install = function(Vue) {
   Vue.component(LayerVue.name, LayerVue);
 };
 // 当前版本
-const version = "0.4.2";
+const version = "0.4.3";
 // 版本记录
 const versions = [
   "0.0.1",
@@ -44,7 +44,8 @@ const versions = [
   "0.3.11",
   "0.4.0",
   "0.4.1",
-  "0.4.2"
+  "0.4.2",
+  "0.4.3"
 ];
 // 查找layer函数
 const findIndex = (id, Vue) => {

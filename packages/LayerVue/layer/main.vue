@@ -1,6 +1,20 @@
 <template>
-  <div v-cloak v-if="destroyOnClose ? defVisible : true" :data-index="index" :data-id="id" class="layer-vue" :id="'layer-vue-' + index" :data-skin="typeof defSkin === 'string' ? defSkin : ''" :style="{ display: defVisible ? '' : 'none' }">
-    <div class="layer-vue-shade" v-if="shade" :style="{ background: defSkin.shade ? defSkin.shade.background : '', 'z-index': defZIndex }" @mousedown="shadeCloseFun"></div>
+  <div
+    v-cloak
+    v-if="destroyOnClose ? defVisible : true"
+    :data-index="index"
+    :data-id="id"
+    class="layer-vue"
+    :id="'layer-vue-' + index"
+    :data-skin="typeof defSkin === 'string' ? defSkin : ''"
+    :style="{ display: defVisible ? '' : 'none' }"
+  >
+    <div
+      class="layer-vue-shade"
+      v-if="shade"
+      :style="{ background: defSkin.shade ? defSkin.shade.background : '', 'z-index': defZIndex }"
+      @mousedown="shadeCloseFun"
+    ></div>
     <div
       οndragstart="return false;"
       class="layer-vue-box"
@@ -44,9 +58,7 @@
           'line-height': titleHeight + 'px',
         }"
       >
-        <div class="layer-vue-title-text" :style="{ width: textWidth + 'px' }">
-          {{ defTitle }}
-        </div>
+        <div class="layer-vue-title-text" :style="{ width: textWidth + 'px' }">{{ defTitle }}</div>
         <div
           class="layer-vue-tools"
           :style="{
@@ -67,17 +79,55 @@
           </span>
         </div>
       </div>
-      <span v-if="closeBtn && !title" :class="{ 'layer-vue-close2': !title }" @click="beforeCloseFun">
+      <span
+        v-if="closeBtn && !title"
+        :class="{ 'layer-vue-close2': !title }"
+        @click="beforeCloseFun"
+      >
         <IconClose />
       </span>
-      <div v-if="resize[0] && !maxBtn" class="layer-vue-resize layer-vue-resize-rb" @mousedown="rbResiezFun"></div>
-      <div v-if="resize[1] && !maxBtn" class="layer-vue-resize layer-vue-resize-lb" @mousedown="lbResiezFun"></div>
-      <div v-if="resize[2] && !maxBtn" class="layer-vue-resize layer-vue-resize-lt" @mousedown="ltResiezFun"></div>
-      <div v-if="resize[3] && !maxBtn" class="layer-vue-resize layer-vue-resize-rt" @mousedown="rtResiezFun"></div>
-      <div v-if="borderResize[0] && !maxBtn" class="layer-vue-resize layer-vue-resize-r" :style="{ height: height - 15 + 'px' }" @mousedown="rightResizeFun"></div>
-      <div v-if="borderResize[2] && !maxBtn" class="layer-vue-resize layer-vue-resize-b" @mousedown="bottomResizeFun"></div>
-      <div v-if="borderResize[1] && !maxBtn" class="layer-vue-resize layer-vue-resize-l" :style="{ height: height - 15 + 'px' }" @mousedown="leftResizeFun"></div>
-      <div v-if="borderResize[3] && !maxBtn" class="layer-vue-resize layer-vue-resize-t" @mousedown="topResizeFun"></div>
+      <div
+        v-if="resize[0] && !maxBtn"
+        class="layer-vue-resize layer-vue-resize-rb"
+        @mousedown="rbResiezFun"
+      ></div>
+      <div
+        v-if="resize[1] && !maxBtn"
+        class="layer-vue-resize layer-vue-resize-lb"
+        @mousedown="lbResiezFun"
+      ></div>
+      <div
+        v-if="resize[2] && !maxBtn"
+        class="layer-vue-resize layer-vue-resize-lt"
+        @mousedown="ltResiezFun"
+      ></div>
+      <div
+        v-if="resize[3] && !maxBtn"
+        class="layer-vue-resize layer-vue-resize-rt"
+        @mousedown="rtResiezFun"
+      ></div>
+      <div
+        v-if="borderResize[0] && !maxBtn"
+        class="layer-vue-resize layer-vue-resize-r"
+        :style="{ height: height - 15 + 'px' }"
+        @mousedown="rightResizeFun"
+      ></div>
+      <div
+        v-if="borderResize[2] && !maxBtn"
+        class="layer-vue-resize layer-vue-resize-b"
+        @mousedown="bottomResizeFun"
+      ></div>
+      <div
+        v-if="borderResize[1] && !maxBtn"
+        class="layer-vue-resize layer-vue-resize-l"
+        :style="{ height: height - 15 + 'px' }"
+        @mousedown="leftResizeFun"
+      ></div>
+      <div
+        v-if="borderResize[3] && !maxBtn"
+        class="layer-vue-resize layer-vue-resize-t"
+        @mousedown="topResizeFun"
+      ></div>
       <div
         ref="content"
         class="layer-vue-content"
@@ -336,7 +386,7 @@ export default {
     } else {
       this.defTitle = this.title;
     }
-    this.defSkin = {...this.$layer.o.skin};
+    this.defSkin = { ...this.$layer.o.skin };
     if (this.borderWidth === 0) {
       if (typeof this.skin === "string") {
         this.defBorderWidth = 3;
@@ -357,17 +407,21 @@ export default {
     }
   },
   mounted() {
-    //判断是否要转移到body
-    if (this.appendToBody && !this.model) {
-      document.body.appendChild(this.$el);
+    if (!this.model) {
+      this.index = this.$layer.o.instances.length;
+      this.$layer.o.instances.push({ instance: this });
+      //判断是否要转移到body
+      if (this.appendToBody) {
+        const solt = document.createElement("div");
+        solt.className = "layer-vue-solt-" + this.index;
+        this.$el.parentNode.insertBefore(solt, this.$el);
+        document.body.appendChild(this.$el);
+      }
     }
     const { width, height } = this.minAreaInit();
     this.minWidth = width;
     this.minHeight = height;
-    if (!this.model) {
-      this.index = this.$layer.o.instances.length;
-      this.$layer.o.instances.push({ instance: this });
-    }
+
     if (typeof this.skin === "object") {
       if (typeof this.defSkin === "object") {
         this.defSkin = merge(this.skin, this.defSkin);
@@ -422,6 +476,16 @@ export default {
     });
   },
   beforeDestroy() {
+    if (this.appendToBody && !this.model) {
+      const solt = document.querySelector(".layer-vue-solt-" + this.index);
+      if (solt) {
+        solt.parentNode.insertBefore(this.$el, solt);
+        solt.parentNode.removeChild(solt);
+      } else {
+        this.$root.$el.appendChild(this.$el);
+        this.$root.$el.removeChild(this.$el);
+      }
+    }
     window.removeEventListener("resize", this.windowResizeFun);
   },
   methods: {
@@ -589,9 +653,9 @@ export default {
             (borderbox
               ? 0
               : parseInt(getComputedStyle(this.$refs.content.children[0]).paddingLeft) +
-                parseInt(getComputedStyle(this.$refs.content.children[0]).paddingRight) +
-                parseInt(getComputedStyle(this.$refs.content.children[0]).borderLeftWidth) +
-                parseInt(getComputedStyle(this.$refs.content.children[0]).borderRightWidth));
+              parseInt(getComputedStyle(this.$refs.content.children[0]).paddingRight) +
+              parseInt(getComputedStyle(this.$refs.content.children[0]).borderLeftWidth) +
+              parseInt(getComputedStyle(this.$refs.content.children[0]).borderRightWidth));
           if (this.childrenW === 0 || isNaN(this.childrenW)) {
             this.childrenW = 0;
             this.childrenH = 0;
@@ -601,9 +665,9 @@ export default {
               (borderbox
                 ? 0
                 : parseInt(getComputedStyle(this.$refs.content.children[0]).paddingTop) +
-                  parseInt(getComputedStyle(this.$refs.content.children[0]).paddingBottom) +
-                  parseInt(getComputedStyle(this.$refs.content.children[0]).borderTopWidth) +
-                  parseInt(getComputedStyle(this.$refs.content.children[0]).borderBottomWidth));
+                parseInt(getComputedStyle(this.$refs.content.children[0]).paddingBottom) +
+                parseInt(getComputedStyle(this.$refs.content.children[0]).borderTopWidth) +
+                parseInt(getComputedStyle(this.$refs.content.children[0]).borderBottomWidth));
           }
         }
       } catch (error) {
@@ -784,7 +848,7 @@ export default {
                     this.$getDom(this.move).style.cursor = "default";
                     this.$getDom(this.move).onmousedown = null;
                   }
-                  const _el = document.querySelector(this.el);
+                  const _el = document.querySelector(this.$el);
                   const solt = document.querySelector(".layer-vue-solt-" + this.index);
                   if (_el && !solt) {
                     console.error("[layer-error] can not find .layer-vue-solt-" + this.index + " dom location error !");
@@ -823,15 +887,10 @@ export default {
             instances.Vuecomponent.$destroy();
           }
         }
-        let node = document.body;
-        //判断el是否存在
-        if (document.querySelector(instances.instance._el)) {
-          node = document.querySelector(instances.instance._el);
-        }
         //判断layer窗口是否存在
         if (layerDOM) {
           //删除layerDOM
-          node.removeChild(layerDOM);
+          document.body.removeChild(layerDOM);
           this.$destroy();
           delete this.$layer.o.instances[this.index];
         } else {
