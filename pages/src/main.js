@@ -1,6 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 // import LayerVue from "layer-vue";
+// import 'layer-vue/lib/index.css';
 // import "./assets/packages/theme/css/index.css";
 import LayerVue from '../../packages/src/index';
 import ElementUI from "element-ui";

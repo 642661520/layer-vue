@@ -1,0 +1,138 @@
+{
+  ":visible": {
+    "description": "layer-vue的显示状态,支持.sync修饰符, 默认: false"
+  },
+  ":visible.sync": {
+    "description": "layer-vue的显示状态,支持.sync修饰符, 默认: false"
+  },
+  "destroy-on-close": {
+    "type": "boolean",
+    "description": "关闭时是否销毁窗口,存在特殊情况,具体请查看文档, 默认: false"
+  },
+  "title": {
+    "description": "标题, 默认：'信息'"
+  },
+  "content": {
+    "description": "内容"
+  },
+  "id": {
+    "description": "窗口唯一性标识"
+  },
+  "append-to-body": {
+    "type": "boolean",
+    "description": "是否插到body, 默认: false"
+  },
+  "area": {
+    "description": "宽高, 默认: auto"
+  },
+  "min-area": {
+    "description": "最小宽高, 默认: [300,200]"
+  },
+  "max-area": {
+    "description": "最小宽高, 默认: ['100%','100%']"
+  },
+  "offset": {
+    "description": "坐标, 默认: auto"
+  },
+  "anim": {
+    "type": "number",
+    "options": [0, 1, 2, 3, 4, 5],
+    "description": "坐标, 默认: auto"
+  },
+  "is-out-anim": {
+    "type": "boolean",
+    "description": "过度动画, 默认: true"
+  },
+  "close-btn": {
+    "type": "boolean",
+    "description": "关闭按钮, 默认: true"
+  },
+  "maxmin": {
+    "type": "boolean",
+    "description": "最大最小化按钮, 默认: [0, 0]"
+  },
+  "resize": {
+    "description": "4角拉伸（右下角,左下角,左上角,右上角, 默认: [1,1,1,1]"
+  },
+  "border-resize": {
+    "description": "4边拉伸（右,下,左,上）, 默认: [1,1,1,1]"
+  },
+  "ratio": {
+    "type": "boolean",
+    "description": "拉伸时是否保持原始比例, 默认:false"
+  },
+  "z-index": {
+    "description": "设置非置顶窗口的zIndex, 默认:1"
+  },
+  "set-top": {
+    "type": "boolean",
+    "description": "窗口是否置顶, 默认:false"
+  },
+  "shade": {
+    "description": "遮罩是否显示, 默认:0"
+  },
+  "shade-close": {
+    "type": "boolean",
+    "description": "是否可以点击遮罩关闭, 默认:false"
+  },
+  "skin": {
+    "description": "自定义皮肤"
+  },
+  "move": {
+    "description": "触发拖动的元素,默认：'.layer-vue-title'"
+  },
+  "move-out": {
+    "description": "是否允许拖拽(拉伸)到窗口外右,下,左,上）,默认：[0, 0, 0, 0]"
+  },
+  "move-out-padding": {
+    "description": "针对 moveOut 设置 4 个方向的附加像素值,默认：[0, 0, 0, 0]"
+  },
+  "slider": {
+    "type": "boolean",
+    "description": "内容区是否会出现滑动条,默认：true"
+  },
+  "border-width": {
+    "type": "boolean",
+    "description": "边框大小修正值,默认：0"
+  },
+  "is-max": {
+    "type": "boolean",
+    "description": "初始化时全屏显示,支持.sync修饰符,默认：false"
+  },
+  "@success": {
+    "type": "event",
+    "description": "层弹出后的成功回调"
+  },
+  "@cancel": {
+    "type": "event",
+    "description": "关闭窗口时触发的回调"
+  },
+  "@end": {
+    "type": "event",
+    "description": "窗口销毁后触发的回调"
+  },
+  "@move-end": {
+    "type": "event",
+    "description": "拖动完毕后的回调"
+  },
+  "@resizing": {
+    "type": "event",
+    "description": "监听窗口拉伸动作"
+  },
+  "@resize-end": {
+    "type": "event",
+    "description": "拉伸完毕后的回调"
+  },
+  "@full": {
+    "type": "event",
+    "description": "最大化的回调"
+  },
+  "@min": {
+    "type": "event",
+    "description": "最小化的回调"
+  },
+  "@restore": {
+    "type": "event",
+    "description": "还原的回调"
+  }
+}

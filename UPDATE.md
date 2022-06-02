@@ -1,5 +1,19 @@
 # 版本更新笔记
 
+## 0.4.3
+
+### 支持vetur
+
+添加 vsCode vetur 代码提示:
+
+1.安装vetur插件;
+
+2.确保在package.json 中引入layer-vue^0.4.3;
+
+### 修复
+
+修复 appendToBody 某些情况的bug；
+
 ## 0.4.2
 
 ### 添加 msg
@@ -42,7 +56,7 @@
 
 ### 修复
 
-7.修复一下bug；
+7.修复一些bug；
 
 ### 修改
 

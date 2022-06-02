@@ -12,7 +12,7 @@
     "core-js": "^3.6.5",
     "element-ui": "^2.15.1",
     "highlight.js": "^10.7.2",
-    "layer-vue": "^0.4.0",
+    "layer-vue": "^0.4.2",
     "less": "^3.5.0",
     "less-loader": "^7.0.0",
     "mavon-editor": "^2.9.1",
